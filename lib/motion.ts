@@ -266,7 +266,7 @@ export function pulseDots(root: HTMLElement) {
   });
 }
 
-/** Header on-load orchestration + scroll blur toggle. §5.8.3. */
+/** Header on-load orchestration (hairline + verticals draw-in). §5.8.3. */
 export function headerIntro(header: HTMLElement) {
   registerGsap();
   const bottom = header.querySelector<HTMLElement>('[data-dec="bottom"]');
@@ -285,7 +285,14 @@ export function headerIntro(header: HTMLElement) {
       gsap.to(v, { scaleY: 1, duration: 0.5, ease: EASE_INOUT, delay: 0.4 + i * 0.1 });
     });
   }
+}
 
+/**
+ * Header scroll blur toggle — transparent over the hero, glass past 20px of
+ * scroll. §5.8.3. Independent of headerIntro so it still runs on viewports
+ * (e.g. phones) that skip the load-in animation.
+ */
+export function headerScrollBlur(header: HTMLElement) {
   const onScroll = () => {
     header.classList.toggle("is-active", window.scrollY > 20);
   };
