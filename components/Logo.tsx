@@ -1,16 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Logo({ className = "" }: { className?: string }) {
+/**
+ * Full lockup — origami mark + "Fairlead" wordmark + "Advisors" — from the
+ * production brand assets (public/brand/logo-white.svg, 167.39×42.75).
+ * `className` controls display height; width follows via `w-auto`.
+ */
+export default function Logo({ className = "h-7" }: { className?: string }) {
   return (
-    <Link href="/" className={`inline-flex items-center gap-3 ${className}`} aria-label="Fairlead Advisors — home">
-      <Image src="/brand/origami-mark.svg" alt="" width={20} height={20} className="h-5 w-5" priority />
-      <span
-        className="font-semibold text-white-100"
-        style={{ fontSize: "1.5rem", letterSpacing: "-2px", lineHeight: 1 }}
-      >
-        Fairlead
-      </span>
+    <Link href="/" className="inline-flex items-center" aria-label="Fairlead Advisors — home">
+      <Image src="/brand/logo-white.svg" alt="Fairlead Advisors" width={167} height={43} className={`w-auto ${className}`} priority />
     </Link>
   );
 }

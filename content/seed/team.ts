@@ -10,7 +10,7 @@ import type { TeamMember } from "@/lib/types";
  * credential format).
  *
  * Photos: drop standardized headshots (one aspect ratio, 4:5) into
- * Supabase Storage and set photo_url; null renders the origami placeholder.
+ * Supabase Storage and set photo_url; null renders the brandmark placeholder.
  */
 export const team: TeamMember[] = [
   {

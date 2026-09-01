@@ -31,7 +31,7 @@ export default function TeamCell({ member, featured = false }: { member: TeamMem
               className="absolute inset-0 flex items-center justify-center bg-blue-900"
               aria-hidden="true"
             >
-              <Image src="/brand/origami-mark.svg" alt="" width={48} height={48} className="opacity-40" />
+              <Image src="/brand/brandmark-white.svg" alt="" width={48} height={48} className="opacity-40" />
             </div>
           )}
           {/* bottom gradient, deepens on hover — §5.9 */}
