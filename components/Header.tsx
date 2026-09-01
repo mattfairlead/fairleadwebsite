@@ -96,7 +96,7 @@ export default function Header() {
               Ask Fairlead
             </button>
           )}
-          <Link href="/contact" className="btn btn-secondary button">
+          <Link href="/contact" className="button text-white-60 transition-colors duration-200 hover:text-white-100">
             Talk to a partner
           </Link>
         </div>
