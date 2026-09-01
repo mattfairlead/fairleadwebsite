@@ -1,16 +1,21 @@
 import clsx from "clsx";
+import BackgroundVideo from "@/components/BackgroundVideo";
 
 /**
  * Full-bleed image section (§5.3). Until production photography lands
  * (blue-hour infrastructure, graded royal blue with gold horizon light —
  * §5.1), this renders a layered gradient stand-in with the same grade and
  * the mandatory bottom dissolve into --blue-950 so sections melt into the
- * page. Pass `src` when real imagery is available; the overlay stays.
+ * page. Pass `src` when real imagery is available, or `video` for a motion
+ * band; the overlay stays either way, and the gradient stays underneath a
+ * video as its poster/fallback.
  *
  * TODO(photography): replace gradient stand-ins with graded stills.
  */
 export default function ImageBand({
   src,
+  video,
+  videoPoster,
   aspect = "1440/922",
   mobileAspect = "375/812",
   minHeight,
@@ -20,6 +25,8 @@ export default function ImageBand({
   children,
 }: {
   src?: string;
+  video?: string;
+  videoPoster?: string;
   aspect?: string;
   mobileAspect?: string;
   minHeight?: string;
@@ -43,8 +50,17 @@ export default function ImageBand({
             : "linear-gradient(180deg, #050E2E 0%, #0A1A4F 45%, #1A3D94 72%, #B59860 98%)",
         }}
       />
+      {/* motion layer — sits over the gradient, which doubles as its poster */}
+      {video && <BackgroundVideo src={video} poster={videoPoster} speed={parallax ? "0.85" : undefined} />}
+      {/* blue-hour wash so footage reads as graded brand imagery, not stock */}
+      {video && (
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "linear-gradient(180deg, rgba(5,14,46,0.45) 0%, rgba(10,26,79,0.28) 55%, rgba(5,14,46,0.5) 100%)" }}
+        />
+      )}
       {/* near layer — foreground silhouette */}
-      {!src && (
+      {!src && !video && (
         <div
           data-speed={parallax ? "1.05" : undefined}
           className="absolute inset-x-0 bottom-0 h-[38%]"
