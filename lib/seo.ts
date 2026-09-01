@@ -1,6 +1,20 @@
 import type { Metadata } from "next";
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://fairleadadvisors.com";
+// An empty or malformed NEXT_PUBLIC_SITE_URL (e.g. env vars imported from
+// .env.example with blank values) must fall back, not reach new URL("").
+function resolveSiteUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (raw) {
+    try {
+      return new URL(raw).toString().replace(/\/$/, "");
+    } catch {
+      console.warn(`[seo] NEXT_PUBLIC_SITE_URL is not a valid URL (${JSON.stringify(raw)}) — using default`);
+    }
+  }
+  return "https://fairleadadvisors.com";
+}
+
+export const SITE_URL = resolveSiteUrl();
 export const SITE_NAME = "Fairlead Advisors";
 export const SITE_TAGLINE = "The embedded operating platform for PE-backed companies";
 export const SITE_DESCRIPTION =

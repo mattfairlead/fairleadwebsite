@@ -14,9 +14,10 @@ export async function sendMail(opts: {
   text: string;
   replyTo?: string;
 }): Promise<{ ok: boolean; skipped?: boolean }> {
-  const key = process.env.SENDGRID_API_KEY;
-  const to = process.env.CONTACT_TO;
-  const from = process.env.CONTACT_FROM ?? "no-reply@fairleadadvisors.com";
+  // `||` not `??` — env vars imported with blank values must fall through
+  const key = process.env.SENDGRID_API_KEY || "";
+  const to = process.env.CONTACT_TO || "";
+  const from = process.env.CONTACT_FROM || "no-reply@fairleadadvisors.com";
 
   if (!key || !to) {
     console.warn("[sendgrid] SENDGRID_API_KEY/CONTACT_TO unset — mail skipped:", opts.subject);
