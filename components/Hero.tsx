@@ -18,6 +18,16 @@ import ImageBand from "@/components/ImageBand";
  * each — the only scrubbed animation on the site (scrub: 0.6, then hold).
  */
 
+/**
+ * Hero background footage. Currently served from the WordPress uploads dir;
+ * set NEXT_PUBLIC_HERO_VIDEO_URL once the file moves to Blob/Supabase Storage
+ * (§9 media plan) — no code change needed. Empty string disables the video and
+ * falls back to the ImageBand gradient.
+ */
+const HERO_VIDEO =
+  process.env.NEXT_PUBLIC_HERO_VIDEO_URL ??
+  "https://fairleadadvisors.com/wp-content/uploads/2026/06/4130872-uhd_3840_2160_25fps.mp4";
+
 const MARKERS = [
   { x: "18%", y: "62%", chip: "Inverter string 14 — 48% failure ratio, 8 matched issues", source: "SCADA + CMMS" },
   { x: "52%", y: "70%", chip: "DSCR 1.31× — covenant headroom 0.11×", source: "Lender model" },
@@ -107,7 +117,13 @@ export default function Hero() {
 
   return (
     <section ref={ref} className="relative">
-      <ImageBand aspect="1440/922" minHeight="min(100svh, 58rem)" parallax overlayStrength={1}>
+      <ImageBand
+        aspect="1440/922"
+        minHeight="min(100svh, 58rem)"
+        parallax
+        overlayStrength={1}
+        video={HERO_VIDEO || undefined}
+      >
         <div className="absolute inset-0 flex flex-col items-center justify-center px-5 pb-32 text-center">
           {/* .h1 clamps to 12vw for short display words; this two-phrase
               headline needs the narrower clamp to hold two lines (caveman rule) */}
