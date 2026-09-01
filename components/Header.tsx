@@ -21,8 +21,9 @@ const ASK_ENABLED = process.env.NEXT_PUBLIC_ASK_ENABLED === "true";
 /**
  * Fixed transparent header, 4.5rem, three segments split by 1px white-20
  * vertical rules: [logo] | [nav] | [Talk to a partner]. Bottom hairline.
- * On load: bottom rule scaleX in, verticals scaleY in (§5.8.3). Past 20px
- * of scroll it gains a 12px backdrop blur — nothing else changes.
+ * On load: bottom rule scaleX in, verticals scaleY in (§5.8.3). Over the
+ * first ~120px of scroll it eases into a 12px backdrop blur — nothing else
+ * changes.
  */
 export default function Header() {
   const pathname = usePathname();
@@ -51,7 +52,9 @@ export default function Header() {
       ref={ref}
       className="site-header fixed inset-x-0 top-0 z-50 h-[4.5rem]"
       style={{
-        transition: "background-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease",
+        // Short: the glass is scroll-driven now, so a long transition would
+        // just trail the scroll position instead of smoothing it.
+        transition: "background-color 0.15s linear, backdrop-filter 0.15s linear, -webkit-backdrop-filter 0.15s linear",
       }}
     >
       <div className="container-page relative flex h-full items-stretch">

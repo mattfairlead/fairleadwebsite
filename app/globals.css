@@ -290,17 +290,24 @@ textarea.field {
   border-color: var(--color-gold);
 }
 
-/* Header — transparent over the hero; glass only after 20px of scroll. §5.8.3 */
+/* Header — transparent over the hero; glass eases in with scroll. §5.8.3.
+   --header-glass is a 0→1 scroll progress written by headerScrollBlur(). */
+.site-header {
+  --header-glass: 0;
+}
 .site-header.is-active {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background: rgba(5, 14, 46, 0.4);
+  /* Prefixed first, standard last: the CSS minifier collapses the pair and
+     keeps whichever comes last, and Chrome only supports the standard one. */
+  -webkit-backdrop-filter: blur(calc(var(--header-glass) * 12px));
+  backdrop-filter: blur(calc(var(--header-glass) * 12px));
+  background: rgba(5, 14, 46, calc(var(--header-glass) * 0.4));
 }
 
 /* Glass strip — §5.3 / §5.8.4 */
 .glass-strip {
-  backdrop-filter: blur(10px);
+  /* Prefixed first, standard last — see .site-header above. */
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 /* Submit spin — the one looping animation besides the live dots (§5.4) */

@@ -287,18 +287,40 @@ export function headerIntro(header: HTMLElement) {
   }
 }
 
+/** Scroll offsets over which the header glass ramps from off to full. §5.8.3 */
+const GLASS_START = 8;
+const GLASS_FULL = 120;
+
 /**
- * Header scroll blur toggle — transparent over the hero, glass past 20px of
- * scroll. §5.8.3. Independent of headerIntro so it still runs on viewports
- * (e.g. phones) that skip the load-in animation.
+ * Header scroll blur — transparent over the hero, then easing into glass as
+ * you scroll rather than snapping on at a threshold. §5.8.3. Writes 0→1
+ * progress to --header-glass; globals.css maps that to blur radius and
+ * background alpha. `is-active` gates the backdrop-filter off entirely at rest
+ * so the header costs no compositing layer over the hero. rAF-throttled, and
+ * independent of headerIntro so it still runs on viewports (e.g. phones) that
+ * skip the load-in animation.
  */
 export function headerScrollBlur(header: HTMLElement) {
-  const onScroll = () => {
-    header.classList.toggle("is-active", window.scrollY > 20);
+  let frame = 0;
+
+  const apply = () => {
+    frame = 0;
+    const raw = (window.scrollY - GLASS_START) / (GLASS_FULL - GLASS_START);
+    const progress = Math.min(1, Math.max(0, raw));
+    header.style.setProperty("--header-glass", progress.toFixed(3));
+    header.classList.toggle("is-active", progress > 0);
   };
-  onScroll();
+
+  const onScroll = () => {
+    if (!frame) frame = requestAnimationFrame(apply);
+  };
+
+  apply();
   window.addEventListener("scroll", onScroll, { passive: true });
-  return () => window.removeEventListener("scroll", onScroll);
+  return () => {
+    window.removeEventListener("scroll", onScroll);
+    if (frame) cancelAnimationFrame(frame);
+  };
 }
 
 /** Smooth anchor scroll — §5.8.7. */
