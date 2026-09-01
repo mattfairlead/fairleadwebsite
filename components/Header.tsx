@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import Logo from "@/components/Logo";
-import { headerIntro, registerGsap } from "@/lib/motion";
+import { headerIntro, headerScrollBlur, registerGsap } from "@/lib/motion";
 import { useGSAP } from "@gsap/react";
 
 const NAV = [
@@ -32,8 +32,12 @@ export default function Header() {
   useGSAP(
     () => {
       registerGsap();
-      if (!ref.current || window.innerWidth < 480) return;
-      return headerIntro(ref.current);
+      if (!ref.current) return;
+      // Scroll-driven glass toggle always runs, even on narrow phones that
+      // skip the load-in animation below.
+      const cleanupScrollBlur = headerScrollBlur(ref.current);
+      if (window.innerWidth >= 480) headerIntro(ref.current);
+      return cleanupScrollBlur;
     },
     { scope: ref }
   );
@@ -46,7 +50,9 @@ export default function Header() {
     <header
       ref={ref}
       className="site-header fixed inset-x-0 top-0 z-50 h-[4.5rem]"
-      style={{ transition: "background-color 0.4s ease" }}
+      style={{
+        transition: "background-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease",
+      }}
     >
       <div className="container-page relative flex h-full items-stretch">
         {/* segment 1: logo */}
