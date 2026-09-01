@@ -1,0 +1,72 @@
+-- Fairlead Advisors content schema — §7 of the redesign plan.
+-- Public read where visible = true; writes only via service role
+-- (the marketing hub, Phase 2).
+
+create type team_group as enum ('partner', 'team');
+create type perspective_kind as enum ('perspective', 'transaction');
+
+create table sectors (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  name text not null,
+  sort int not null default 0
+);
+
+create table team (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  name text not null,
+  title text not null,
+  credentials text,
+  "group" team_group not null default 'team',
+  specialty text not null default '',
+  bio_md text not null default '',
+  photo_url text,
+  linkedin text,
+  visible boolean not null default true,
+  sort int not null default 0,
+  updated_at timestamptz not null default now()
+);
+
+create table engagements (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  company_display text not null,
+  sponsor_display text not null,
+  sponsor_type text not null,
+  sector text not null references sectors (slug),
+  roles text[] not null default '{}',
+  outcome_tags text[] not null default '{}',
+  headline_metric text not null default '',
+  summary_md text not null default '',
+  body_md text,
+  year_start int not null,
+  year_end int,
+  featured boolean not null default false,
+  anonymized boolean not null default false,
+  visible boolean not null default true
+);
+
+create table perspectives (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  title text not null,
+  author_slug text references team (slug),
+  kind perspective_kind not null default 'perspective',
+  published_at date not null,
+  excerpt text not null default '',
+  body_md text,
+  external_url text,
+  visible boolean not null default true
+);
+
+-- Row-level security: public read where visible = true.
+alter table sectors enable row level security;
+alter table team enable row level security;
+alter table engagements enable row level security;
+alter table perspectives enable row level security;
+
+create policy "public read sectors" on sectors for select using (true);
+create policy "public read team" on team for select using (visible = true);
+create policy "public read engagements" on engagements for select using (visible = true);
+create policy "public read perspectives" on perspectives for select using (visible = true);

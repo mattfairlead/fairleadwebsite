@@ -1,0 +1,326 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Fairlead Advisors — design tokens
+   Source: FAIRLEAD_WEBSITE_REDESIGN_PLAN.md §5.1–5.3
+   ========================================================================== */
+
+@theme {
+  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* §5.1 color tokens */
+  --color-blue-950: #050e2e;
+  --color-blue-900: #0a1a4f;
+  --color-blue-800: #0f2a6e;
+  --color-blue-700: #1a3d94;
+  --color-gold: #d5b371;
+  --color-gold-pressed: #b59860;
+  --color-gold-soft: #e6d1aa;
+  --color-white-100: #ffffff;
+  --color-white-60: rgba(255, 255, 255, 0.6);
+  --color-white-50: rgba(255, 255, 255, 0.5);
+  --color-white-40: rgba(255, 255, 255, 0.4);
+  --color-white-20: rgba(255, 255, 255, 0.2);
+  --color-white-10: rgba(255, 255, 255, 0.1);
+  --color-muted: #7c8bb3;
+
+  --radius-pill: 5rem;
+  --radius-card: 3px;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-blue-950);
+}
+
+body {
+  background: var(--color-blue-950);
+  color: var(--color-white-60);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Tabular figures everywhere a number appears — §5.9 */
+.tabular,
+[data-anim="count"] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Selection + scrollbar — §5.9 */
+::selection {
+  background: var(--color-gold);
+  color: var(--color-blue-950);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-white-20) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-white-20);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Focus rings — visible on keyboard only, §5.9 */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--color-blue-700);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Type scale — §5.2. Weight 600 + negative tracking carries the personality.
+   ========================================================================== */
+
+.h1 {
+  font-size: clamp(4.5rem, 12vw, 11.875rem);
+  letter-spacing: -0.06em;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-white-100);
+}
+.h2 {
+  font-size: 3.75rem;
+  letter-spacing: -3.6px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--color-white-100);
+}
+.h3 {
+  font-size: 2.8125rem;
+  letter-spacing: -3px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-white-100);
+}
+.h4 {
+  font-size: 1.75rem;
+  letter-spacing: -2px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-white-100);
+}
+.body-xxl {
+  font-size: 1.75rem;
+  letter-spacing: -2px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.body-xl {
+  font-size: 1.375rem;
+  letter-spacing: -1px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.body-lg {
+  font-size: 1.125rem;
+  letter-spacing: -0.5px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.body-md {
+  font-size: 1rem;
+  letter-spacing: -0.5px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.body-sm {
+  font-size: 0.875rem;
+  letter-spacing: -0.6px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+.button {
+  font-size: 0.875rem;
+  letter-spacing: -0.5px;
+  font-weight: 600;
+  line-height: 0.9;
+}
+.label {
+  font-size: 0.625rem;
+  letter-spacing: 0;
+  font-weight: 600;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+@media (max-width: 767px) {
+  .h1 {
+    font-size: 7.625rem;
+  }
+  .h2 {
+    font-size: 2.8125rem;
+    letter-spacing: -3px;
+  }
+  .h3 {
+    font-size: 1.75rem;
+    letter-spacing: -2px;
+  }
+  .body-xl {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .h1 {
+    font-size: clamp(3.25rem, 15vw, 4.5rem);
+  }
+}
+
+/* ==========================================================================
+   Layout grammar — §5.3
+   ========================================================================== */
+
+.container-page {
+  padding-inline: 2.5rem;
+}
+@media (max-width: 767px) {
+  .container-page {
+    padding-inline: 1.25rem;
+  }
+}
+
+.section {
+  padding-block: 5rem;
+}
+@media (max-width: 767px) {
+  .section {
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* Hairline primitive — never a border, always its own 1px layer. §5.8.1 */
+.dec {
+  position: absolute;
+  background: var(--color-white-10);
+  pointer-events: none;
+}
+.dec-header,
+.dec-footer {
+  background: var(--color-white-20);
+}
+
+/* Buttons — §5.3 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-pill);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--color-white-100);
+  color: var(--color-blue-950);
+  padding: 1.25rem 2rem;
+}
+.btn-primary:hover {
+  background: var(--color-gold);
+  color: var(--color-white-100);
+}
+.btn-primary:focus-visible {
+  background: var(--color-gold-pressed);
+}
+.btn-secondary {
+  background: var(--color-blue-900);
+  color: var(--color-white-100);
+  padding: 0.875rem 1.5rem;
+  min-width: 8.5rem;
+  justify-content: center;
+}
+.btn-secondary:hover {
+  background: var(--color-gold);
+  color: var(--color-blue-950);
+}
+.btn:disabled {
+  background: var(--color-white-10);
+  color: var(--color-white-20);
+  cursor: not-allowed;
+}
+
+/* Inputs — no box, underline only. §5.3 / §5.9 */
+.field {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-white-10);
+  color: var(--color-white-100);
+  font-size: 1.375rem;
+  letter-spacing: -1px;
+  font-weight: 500;
+  padding-bottom: 0.9rem;
+  transition: border-color 0.3s ease;
+}
+.field::placeholder {
+  color: var(--color-muted);
+}
+.field:focus {
+  border-color: var(--color-white-100);
+}
+textarea.field {
+  height: 9.625rem;
+  resize: none;
+}
+
+/* Underline links — never text-decoration */
+.link-underline {
+  border-bottom: 1px solid var(--color-white-100);
+  padding-bottom: 1px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.link-underline:hover {
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+/* Header — transparent over the hero; glass only after 20px of scroll. §5.8.3 */
+.site-header.is-active {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(5, 14, 46, 0.4);
+}
+
+/* Glass strip — §5.3 / §5.8.4 */
+.glass-strip {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Submit spin — the one looping animation besides the live dots (§5.4) */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
+/* Reduced motion — §5.9. The page must read identically, just still. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.2s !important;
+    scroll-behavior: auto !important;
+  }
+}

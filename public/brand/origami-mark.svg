@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <!-- Origami boat mark — placeholder geometry; replace with the production
+       origami set from the deck (boat / bird / plane). -->
+  <path d="M4 26h32l-6 8H10l-6-8z" fill="#D5B371"/>
+  <path d="M20 6v18M20 24H8l12-18v18zM20 24h12L20 6v18z" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>
