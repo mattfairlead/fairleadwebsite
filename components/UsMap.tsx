@@ -84,7 +84,7 @@ export default function UsMap({ cities = [], className = "" }: { cities?: MapCit
 
       {/* the brandmark, laid over the open western states like a watermark */}
       <g
-        transform="translate(118 168) scale(8.8)"
+        transform="translate(168 138) scale(8.8)"
         fill="rgba(230,209,170,0.13)"
         style={{ mixBlendMode: "screen" }}
       >
