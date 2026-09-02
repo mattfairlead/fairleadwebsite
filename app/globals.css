@@ -279,6 +279,15 @@ body {
   }
 }
 
+/* Hero band floor — the hero copy is vertically centered in the band, but
+   on short viewports (laptop windows, landscape phones/tablets, and short
+   phones in portrait) that centering can push it up far enough to render
+   behind the fixed header, overlapping the logo/nav. Force enough height
+   to clear the header regardless of viewport height. */
+.hero-band {
+  min-height: max(50rem, min(100svh, 58rem)) !important;
+}
+
 /* Hairline primitive — never a border, always its own 1px layer. §5.8.1 */
 .dec {
   position: absolute;

@@ -134,6 +134,7 @@ export default function Hero() {
       <ImageBand
         aspect="1440/922"
         minHeight="min(100svh, 58rem)"
+        className="hero-band"
         parallax
         overlayStrength={1}
         video={HERO_VIDEO || undefined}
