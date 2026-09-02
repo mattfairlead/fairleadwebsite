@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
 import HairlineFrame from "@/components/HairlineFrame";
@@ -32,6 +33,15 @@ export default function CareersPage() {
             Senior finance and operating people who want to sit in the seat — with fifteen years of
             operating intelligence and the tools to match. If that&rsquo;s the work you want, tell us.
           </>
+        }
+        aside={
+          <Image
+            src="/brand/origami-house.svg"
+            alt=""
+            width={820}
+            height={660}
+            className="h-auto w-64 max-md:mx-auto md:w-80 lg:w-96"
+          />
         }
       />
       <SectionReveal className="container-page pb-24">
