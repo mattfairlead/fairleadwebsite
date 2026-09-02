@@ -19,6 +19,7 @@ export function registerGsap() {
  */
 export const EASE_OUT = "power3.out";
 export const EASE_INOUT = "power2.inOut";
+export const EASE_EXPO = "expo.out";
 export const D_REVEAL = 0.8; // primary reveal
 export const D_FAST = 0.7; // secondary / cards
 export const D_MICRO = 0.6;
@@ -57,9 +58,9 @@ export function initSmoother() {
 
 /**
  * Generic reveal recipes keyed by `data-anim`. Applied once per element via
- * ScrollTrigger, `once: true`. Initial ("from") states are set inline by
- * `setInitialState` before first paint so SSR/no-JS/reduced-motion always
- * renders the resolved layout — nothing "jumps to hidden."
+ * ScrollTrigger, `once: true`. The "from" state is applied by the tween
+ * itself (fromTo) the moment it is wired, after fonts are ready, so SSR /
+ * no-JS / reduced-motion always paint the resolved layout.
  */
 export const REVEAL_FROM: Record<string, gsap.TweenVars> = {
   "fade-up": { opacity: 0, y: 30 },
@@ -69,20 +70,23 @@ export const REVEAL_FROM: Record<string, gsap.TweenVars> = {
   "blur-in": { opacity: 0, filter: "blur(12px)" },
   "zoom-in": { opacity: 0, scale: 0.85 },
   "zoom-out": { opacity: 0, scale: 1.15 },
-  pop: { opacity: 0, scale: 0 },
+  pop: { opacity: 0, scale: 0.6 },
 };
 
 export const REVEAL_TO: Record<string, gsap.TweenVars> = {
   "fade-up": { opacity: 1, y: 0, duration: D_REVEAL, ease: EASE_OUT },
   "fade-down": { opacity: 1, y: 0, duration: D_REVEAL, ease: EASE_OUT },
   "slide-in": { opacity: 1, x: 0, duration: D_FAST, ease: EASE_OUT },
-  "scale-in": { scale: 1, duration: D_REVEAL, ease: EASE_OUT },
+  "scale-in": { scale: 1, duration: 1.2, ease: EASE_EXPO },
   "blur-in": { opacity: 1, filter: "blur(0px)", duration: D_REVEAL, ease: EASE_OUT, clearProps: "filter" },
   "zoom-in": { opacity: 1, scale: 1, duration: D_REVEAL, ease: EASE_OUT },
   "zoom-out": { opacity: 1, scale: 1, duration: D_REVEAL, ease: EASE_OUT },
-  pop: { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out", transformOrigin: "center" },
+  pop: { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)", transformOrigin: "center" },
 };
 
+const SIMPLE = new Set(Object.keys(REVEAL_FROM));
+
+/** Legacy helper kept for callers that want the from-state applied early. */
 export function setInitialState(el: Element) {
   const anim = el.getAttribute("data-anim");
   if (!anim || !(anim in REVEAL_FROM)) return;
@@ -90,30 +94,30 @@ export function setInitialState(el: Element) {
 }
 
 /**
- * Wires every plain `data-anim` element on the page (excluding the ones
- * handled by a dedicated component: count, draw-x, draw-y, split-*, type,
- * read, parallax, pin-steps, pulse). Call once, after fonts are ready.
+ * Wires every plain `data-anim` element under `root` (excluding the ones
+ * handled by a dedicated component: count, eyebrow/h2/title/subtitle/visual,
+ * pulse). Idempotent — an element is wired once, so the root provider and
+ * the per-route template can both call it safely.
  */
 export function reveal(root: ParentNode = document) {
+  registerGsap();
   const reduced = prefersReducedMotion();
   const mobile = isMobile();
-  const simple = new Set(["fade-up", "fade-down", "slide-in", "scale-in", "blur-in", "zoom-in", "zoom-out", "pop"]);
 
   root.querySelectorAll<HTMLElement>("[data-anim]").forEach((el) => {
     const anim = el.getAttribute("data-anim");
-    if (!anim || !simple.has(anim)) return;
+    if (!anim || !SIMPLE.has(anim)) return;
+    if (el.dataset.animWired) return;
+    el.dataset.animWired = "1";
 
-    // Under 480px, char/line-split treatments are skipped for plain fade-up —
-    // but simple recipes already degrade gracefully, so only clamp mobile here.
-    const key = mobile && anim !== "fade-up" ? "fade-up" : anim;
+    // Under 480px, transforms that read as "big" collapse to a plain fade-up
+    // so nothing stutters on a phone.
+    const key = mobile && anim !== "fade-up" && anim !== "pop" ? "fade-up" : anim;
 
-    if (reduced) {
-      gsap.set(el, REVEAL_TO[key] ?? { opacity: 1 });
-      return;
-    }
+    if (reduced) return; // resolved layout already painted — leave it
 
     const delay = Number(el.getAttribute("data-anim-delay") ?? 0);
-    gsap.to(el, {
+    gsap.fromTo(el, REVEAL_FROM[key], {
       ...REVEAL_TO[key],
       delay,
       scrollTrigger: { trigger: el, start: TRIGGER, once: ONCE },
@@ -121,25 +125,35 @@ export function reveal(root: ParentNode = document) {
   });
 }
 
-/** Numeric count-up for stat strips. `data-count-to` holds the target value. */
+/**
+ * Numeric count-up for stat strips. `data-count-to` holds the target value.
+ * Writes into a `[data-count-value]` child when present (so a styled suffix
+ * survives), otherwise into the element itself.
+ */
 export function animateCounts(root: ParentNode = document) {
+  registerGsap();
   const reduced = prefersReducedMotion();
   root.querySelectorAll<HTMLElement>('[data-anim="count"]').forEach((el) => {
+    if (el.dataset.animWired) return;
+    el.dataset.animWired = "1";
     const to = Number(el.getAttribute("data-count-to") ?? 0);
     const suffix = el.getAttribute("data-count-suffix") ?? "";
+    const target = el.querySelector<HTMLElement>("[data-count-value]");
+    const write = (v: number) => {
+      if (target) target.textContent = String(v);
+      else el.textContent = `${v}${suffix}`;
+    };
     if (reduced) {
-      el.textContent = `${to}${suffix}`;
+      write(to);
       return;
     }
     const obj = { val: 0 };
     gsap.to(obj, {
       val: to,
       duration: 2,
-      ease: "none",
+      ease: "power2.out",
       scrollTrigger: { trigger: el, start: TRIGGER, once: ONCE },
-      onUpdate: () => {
-        el.textContent = `${Math.round(obj.val)}${suffix}`;
-      },
+      onUpdate: () => write(Math.round(obj.val)),
     });
   });
 }
@@ -149,9 +163,15 @@ export function animateCounts(root: ParentNode = document) {
  * One timeline per section: eyebrow lifts, H2 types on char-by-char,
  * hairline horizontals draw at `e` (half the headline typed), verticals
  * drop at `e+.48`, then cells fill in while the frame is still closing.
+ *
+ * Reduced motion: nothing is hidden, nothing is drawn — the resolved layout
+ * simply stays put (§5.9).
  */
 export function sectionReveal(section: HTMLElement) {
   registerGsap();
+  if (section.dataset.sectionWired) return null;
+  section.dataset.sectionWired = "1";
+
   const q = <T extends Element>(sel: string) => section.querySelector<T>(sel);
   const qa = <T extends Element>(sel: string) => Array.from(section.querySelectorAll<T>(sel));
 
@@ -161,17 +181,19 @@ export function sectionReveal(section: HTMLElement) {
   const vLines = qa<HTMLElement>('[data-dec="v"]');
   const cells = qa<HTMLElement>("[data-cell]");
 
+  if (prefersReducedMotion()) return null;
+
   const tl = gsap.timeline({
     scrollTrigger: { trigger: section, start: TRIGGER, once: ONCE },
   });
 
   if (eyebrow) {
-    gsap.set(eyebrow, { opacity: 0, y: 40 });
+    gsap.set(eyebrow, { opacity: 0, y: 24 });
     tl.to(eyebrow, { opacity: 1, y: 0, duration: 0.8, ease: EASE_OUT }, 0);
   }
 
   let e = 0.3;
-  if (h2El && !prefersReducedMotion() && !isMobile()) {
+  if (h2El && !isMobile()) {
     // "words,chars" — chars alone drops the whitespace between words
     const split = new SplitText(h2El, { type: "words,chars" });
     gsap.set(split.chars, { opacity: 0 });
@@ -186,10 +208,10 @@ export function sectionReveal(section: HTMLElement) {
       },
       0
     );
-    e = split.chars.length * 0.03 * 0.5;
+    e = Math.min(split.chars.length * 0.03 * 0.5, 0.9);
   } else if (h2El) {
-    gsap.set(h2El, { opacity: 0 });
-    tl.to(h2El, { opacity: 1, duration: 0.4 }, 0);
+    gsap.set(h2El, { opacity: 0, y: 16 });
+    tl.to(h2El, { opacity: 1, y: 0, duration: 0.6, ease: EASE_OUT }, 0);
   }
 
   gsap.set(hLines, { width: "0%" });
@@ -201,10 +223,10 @@ export function sectionReveal(section: HTMLElement) {
     const title = cell.querySelector<HTMLElement>('[data-anim="title"]');
     const subtitle = cell.querySelector<HTMLElement>('[data-anim="subtitle"]');
     const visual = cell.querySelector<HTMLElement>('[data-anim="visual"]');
-    gsap.set([title, subtitle].filter(Boolean) as HTMLElement[], { opacity: 0, y: 30 });
+    gsap.set([title, subtitle].filter(Boolean) as HTMLElement[], { opacity: 0, y: 24 });
     if (visual) gsap.set(visual, { opacity: 0, x: -40 });
 
-    const o = e + 0.24 + 0.3 * i;
+    const o = e + 0.24 + 0.22 * i;
     if (title) tl.to(title, { opacity: 1, y: 0, duration: 0.6, ease: EASE_OUT }, o);
     if (subtitle) tl.to(subtitle, { opacity: 1, y: 0, duration: 0.6, ease: EASE_OUT }, o + 0.1);
     if (visual) tl.to(visual, { opacity: 1, x: 0, duration: 0.8, ease: EASE_OUT }, o + 0.15);
@@ -222,20 +244,24 @@ export function pulseDots(root: HTMLElement) {
   registerGsap();
   const dots = Array.from(root.querySelectorAll<HTMLElement>("[data-dot]"));
   const glows = Array.from(root.querySelectorAll<HTMLElement>("[data-glow]"));
+  const rings = Array.from(root.querySelectorAll<HTMLElement>("[data-ring]"));
   const order = dots.map((_, i) => i).sort(() => Math.random() - 0.5);
 
   if (prefersReducedMotion()) {
     gsap.set(dots, { scale: 1, opacity: 1 });
     gsap.set(glows, { scale: 0.6, opacity: 0.1 });
+    gsap.set(rings, { opacity: 0 });
     return;
   }
 
   gsap.set(dots, { scale: 0 });
   gsap.set(glows, { scale: 0, opacity: 0, filter: "blur(2px)" });
+  gsap.set(rings, { scale: 0.4, opacity: 0 });
 
   order.forEach((idx, i) => {
     const dot = dots[idx];
     const glow = glows[idx];
+    const ring = rings[idx];
     const tl = gsap.timeline({
       scrollTrigger: { trigger: root, start: TRIGGER, once: ONCE },
       delay: i * STAGGER_EL,
@@ -262,6 +288,22 @@ export function pulseDots(root: HTMLElement) {
           delay: Math.random() * 2,
         });
       }
+      if (ring) {
+        // a slow sonar ring — every few seconds, never in sync
+        gsap.fromTo(
+          ring,
+          { scale: 0.4, opacity: 0.5 },
+          {
+            scale: 2.6,
+            opacity: 0,
+            duration: 2.4,
+            ease: "power2.out",
+            repeat: -1,
+            repeatDelay: 2 + Math.random() * 4,
+            delay: Math.random() * 4,
+          }
+        );
+      }
     });
   });
 }
@@ -271,10 +313,12 @@ export function headerIntro(header: HTMLElement) {
   registerGsap();
   const bottom = header.querySelector<HTMLElement>('[data-dec="bottom"]');
   const verticals = Array.from(header.querySelectorAll<HTMLElement>('[data-dec="v"]'));
+  const items = Array.from(header.querySelectorAll<HTMLElement>("[data-header-item]"));
 
   if (prefersReducedMotion()) {
     if (bottom) gsap.set(bottom, { scaleX: 1 });
     gsap.set(verticals, { scaleY: 1 });
+    gsap.set(items, { opacity: 1, y: 0 });
   } else {
     if (bottom) {
       gsap.set(bottom, { scaleX: 0, transformOrigin: "left center" });
@@ -284,6 +328,10 @@ export function headerIntro(header: HTMLElement) {
       gsap.set(v, { scaleY: 0, transformOrigin: "center top" });
       gsap.to(v, { scaleY: 1, duration: 0.5, ease: EASE_INOUT, delay: 0.4 + i * 0.1 });
     });
+    if (items.length) {
+      gsap.set(items, { opacity: 0, y: -10 });
+      gsap.to(items, { opacity: 1, y: 0, duration: 0.7, ease: EASE_OUT, stagger: 0.05, delay: 0.35 });
+    }
   }
 }
 
@@ -323,9 +371,44 @@ export function headerScrollBlur(header: HTMLElement) {
   };
 }
 
-/** Smooth anchor scroll — §5.8.7. */
+/**
+ * Spotlight tracker — one passive pointermove listener for the whole page.
+ * Writes the cursor position (in element-local px) to --mx/--my on the
+ * nearest `.spot` cell so the CSS radial can follow it. Zero cost at rest.
+ */
+export function trackSpotlight(root: HTMLElement = document.body) {
+  if (typeof window === "undefined" || !window.matchMedia("(hover: hover)").matches) return () => {};
+  let frame = 0;
+  let last: PointerEvent | null = null;
+
+  const apply = () => {
+    frame = 0;
+    if (!last) return;
+    const target = (last.target as Element | null)?.closest<HTMLElement>(".spot");
+    if (!target) return;
+    const r = target.getBoundingClientRect();
+    target.style.setProperty("--mx", `${last.clientX - r.left}px`);
+    target.style.setProperty("--my", `${last.clientY - r.top}px`);
+  };
+  const onMove = (e: PointerEvent) => {
+    last = e;
+    if (!frame) frame = requestAnimationFrame(apply);
+  };
+  root.addEventListener("pointermove", onMove, { passive: true });
+  return () => {
+    root.removeEventListener("pointermove", onMove);
+    if (frame) cancelAnimationFrame(frame);
+  };
+}
+
+/** Smooth anchor scroll — §5.8.7. Routes through ScrollSmoother when present. */
 export function scrollToHash(hash: string, headerHeight = 72) {
   registerGsap();
+  const smoother = ScrollSmoother.get();
+  if (smoother) {
+    smoother.scrollTo(hash, true, `top ${headerHeight + 20}px`);
+    return;
+  }
   gsap.to(window, {
     duration: 0.8,
     ease: EASE_INOUT,
@@ -333,4 +416,4 @@ export function scrollToHash(hash: string, headerHeight = 72) {
   });
 }
 
-export { gsap };
+export { gsap, ScrollTrigger, ScrollSmoother };

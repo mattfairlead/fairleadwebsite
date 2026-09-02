@@ -4,6 +4,7 @@ import clsx from "clsx";
 import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
 import EngagementRow from "@/components/EngagementRow";
+import Btn from "@/components/Btn";
 import { getEngagements, getSectors } from "@/lib/data";
 import { pageMetadata } from "@/lib/seo";
 
@@ -47,25 +48,30 @@ function FilterGroup({
   paramKey: keyof Search;
   current: Search;
 }) {
+  const activeValue = current[paramKey];
   return (
-    <div className="flex flex-col gap-3">
-      <span className="label text-white-50">{label}</span>
+    <div className="grid gap-3 py-5 md:grid-cols-[9rem_1fr] md:gap-8">
+      <span className="label flex items-center gap-2 pt-2.5 text-white-50">
+        {label}
+        {activeValue && <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" aria-hidden="true" />}
+      </span>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => {
-          const active = current[paramKey] === option.value;
+          const active = activeValue === option.value;
           return (
             <Link
               key={option.value}
               href={filterHref(current, paramKey, option.value)}
-              className={clsx(
-                "button rounded-pill px-4 py-2 transition-all duration-200",
-                active
-                  ? "bg-gold text-blue-950"
-                  : "bg-blue-900 text-white-60 hover:bg-blue-800 hover:text-white-100"
-              )}
+              className={clsx("chip button", active && "is-active")}
               aria-pressed={active}
+              scroll={false}
             >
               {option.label}
+              {active && (
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                  <path d="M2 2l6 6M8 2L2 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              )}
             </Link>
           );
         })}
@@ -84,7 +90,8 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
     outcome: sp.outcome,
   });
 
-  const hasFilter = Boolean(sp.sector || sp.role || sp.sponsor || sp.outcome);
+  const activeCount = [sp.sector, sp.role, sp.sponsor, sp.outcome].filter(Boolean).length;
+  const hasFilter = activeCount > 0;
 
   return (
     <>
@@ -92,33 +99,66 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
         eyebrow="Engagements"
         title={<>The proof, filterable.</>}
         lead={<>Sixty-plus embedded engagements across sixteen sectors since 2010. Filter by what you&rsquo;re working through.</>}
+        aside={
+          <dl className="grid grid-cols-3 gap-8 md:gap-10">
+            {[
+              ["60+", "engagements"],
+              ["16", "sectors"],
+              ["2010", "since"],
+            ].map(([n, l]) => (
+              <div key={l} className="flex flex-col gap-1">
+                <dt className="h3 text-white-100 tabular">{n}</dt>
+                <dd className="label text-white-40">{l}</dd>
+              </div>
+            ))}
+          </dl>
+        }
       />
 
-      <section className="container-page flex flex-col gap-8 pb-6">
-        <FilterGroup
-          label="Sector"
-          paramKey="sector"
-          current={sp}
-          options={sectors.map((s) => ({ value: s.slug, label: s.name }))}
-        />
-        <FilterGroup label="Role" paramKey="role" current={sp} options={ROLES.map((r) => ({ value: r, label: r }))} />
-        <FilterGroup
-          label="Sponsor type"
-          paramKey="sponsor"
-          current={sp}
-          options={SPONSOR_TYPES.map((s) => ({ value: s, label: s }))}
-        />
-        <FilterGroup
-          label="Outcome"
-          paramKey="outcome"
-          current={sp}
-          options={OUTCOMES.map((o) => ({ value: o, label: o }))}
-        />
-        {hasFilter && (
-          <Link href="/engagements" className="body-sm link-underline self-start text-white-60">
-            Clear filters
-          </Link>
-        )}
+      <section className="container-page relative pb-8" aria-label="Filters">
+        <span className="dec left-0 top-0 h-px w-full" />
+        <div className="flex items-center justify-between gap-4 py-5">
+          <span className="body-sm text-white-50">
+            <span className="text-white-100 tabular">{engagements.length}</span>{" "}
+            {engagements.length === 1 ? "engagement" : "engagements"}
+            {hasFilter && (
+              <>
+                {" "}
+                · <span className="tabular">{activeCount}</span> {activeCount === 1 ? "filter" : "filters"} on
+              </>
+            )}
+          </span>
+          {hasFilter && (
+            <Link href="/engagements" className="chip button" scroll={false}>
+              Clear all
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M2 2l6 6M8 2L2 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </Link>
+          )}
+        </div>
+        <div className="relative">
+          <span className="dec left-0 top-0 h-px w-full" />
+          <FilterGroup
+            label="Sector"
+            paramKey="sector"
+            current={sp}
+            options={sectors.map((s) => ({ value: s.slug, label: s.name }))}
+          />
+          <FilterGroup label="Role" paramKey="role" current={sp} options={ROLES.map((r) => ({ value: r, label: r }))} />
+          <FilterGroup
+            label="Sponsor type"
+            paramKey="sponsor"
+            current={sp}
+            options={SPONSOR_TYPES.map((s) => ({ value: s, label: s }))}
+          />
+          <FilterGroup
+            label="Outcome"
+            paramKey="outcome"
+            current={sp}
+            options={OUTCOMES.map((o) => ({ value: o, label: o }))}
+          />
+        </div>
       </section>
 
       <SectionReveal className="container-page pb-20">
@@ -134,11 +174,20 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
           <div className="relative px-6 py-24 text-center md:px-10">
             <span className="dec left-0 top-0 h-px w-full" />
             <span className="dec bottom-0 left-0 h-px w-full" />
-            <h2 className="h2">Nothing matches that combination — yet.</h2>
-            <p className="body-lg mt-4 text-white-60">The full engagement summary goes deeper than the site.</p>
-            <Link href="/contact?subject=engagement-summary" className="btn btn-primary button mt-8">
-              Request the engagement summary
-            </Link>
+            <span className="label text-gold">No match — yet</span>
+            <h2 className="h2 mt-4">Nothing matches that combination.</h2>
+            <p className="body-lg mx-auto mt-4 max-w-md text-white-60">
+              The site shows a selection. The full engagement summary goes deeper — sixty-plus engagements,
+              every role and outcome.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Btn href="/contact?subject=engagement-summary" arrow>
+                Request the engagement summary
+              </Btn>
+              <Link href="/engagements" className="btn btn-ghost button">
+                Clear filters
+              </Link>
+            </div>
           </div>
         )}
 

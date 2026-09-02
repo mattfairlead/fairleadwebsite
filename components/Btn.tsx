@@ -1,9 +1,9 @@
 import Link from "next/link";
 import clsx from "clsx";
 
-type Variant = "primary" | "secondary";
+type Variant = "primary" | "secondary" | "ghost";
 
-const ARROW = (
+export const ARROW = (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
@@ -30,7 +30,7 @@ export default function Btn({
   onClick?: () => void;
   dataAnim?: string;
 }) {
-  const cls = clsx("btn button", variant === "primary" ? "btn-primary" : "btn-secondary", className);
+  const cls = clsx("btn button", `btn-${variant}`, className);
 
   if (href) {
     return (

@@ -7,7 +7,7 @@ import MotionProvider from "@/components/MotionProvider";
 import { organizationJsonLd, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/seo";
 
 // Inter is the only typeface — §5.2. Personality comes from weight 600 +
-// negative tracking, not a second face.
+// negative tracking (and Inter's cv11/ss03 alternates), not a second face.
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -35,9 +35,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable}>
       <body>
+        {/* Ambient ground — two slow light sources + film grain behind everything */}
+        <div className="ambient" aria-hidden="true" />
+        <a href="#main" className="skip-link button">
+          Skip to content
+        </a>
         <Header />
         <MotionProvider>
-          <main>{children}</main>
+          <main id="main">{children}</main>
           <Footer />
         </MotionProvider>
         <script

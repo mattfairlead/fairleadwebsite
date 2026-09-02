@@ -2,32 +2,34 @@ import Link from "next/link";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import HairlineFrame from "@/components/HairlineFrame";
+import { ARROW } from "@/components/Btn";
 
 /**
  * Home §4.1 row 5 — the four pillars in a 4-col hairline grid: .label
  * counter, line icon, .h4, .body-md. Counters are legitimate here — it's
- * the delivery sequence. Each cell links to its /platform anchor.
+ * the delivery sequence. Each cell links to its /platform anchor; the cell
+ * is a spotlight surface and the arrow at its foot signals the link.
  */
 
 const ICONS: Record<string, React.ReactNode> = {
   seat: (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M7 14V6a2 2 0 012-2h10a2 2 0 012 2v8M5 14h18v4a2 2 0 01-2 2H7a2 2 0 01-2-2v-4zM9 20v4M19 20v4" />
     </svg>
   ),
   gauge: (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M14 22a10 10 0 1110-10M14 22l6-8" />
     </svg>
   ),
   eye: (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 14s4.5-7 12-7 12 7 12 7-4.5 7-12 7-12-7-12-7z" />
       <circle cx="14" cy="14" r="3.5" />
     </svg>
   ),
   exit: (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M4 22V6a2 2 0 012-2h8M17 9l5 5-5 5M22 14H11" />
     </svg>
   ),
@@ -71,18 +73,29 @@ export default function Pillars() {
               key={pillar.id}
               href={`/platform#${pillar.id}`}
               data-cell
-              className="group flex flex-col gap-4 p-6 transition-colors duration-200 hover:bg-blue-900/40 md:p-10"
+              className="spot group flex min-h-[20rem] flex-col gap-5 p-6 md:p-10"
             >
-              <span className="label text-white-50 tabular">0{i + 1}</span>
-              <span className="text-muted transition-colors duration-200 group-hover:text-gold">
-                {ICONS[pillar.icon]}
+              <span className="ghost-num" aria-hidden="true">
+                0{i + 1}
               </span>
-              <h3 data-anim="title" className="h4">
+              <span
+                className="flex h-12 w-12 items-center justify-center rounded-full text-muted transition-all duration-500 group-hover:text-gold"
+                style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1)", transitionTimingFunction: "var(--ease-out-expo)" }}
+              >
+                <span className="-mt-px transition-transform duration-500 group-hover:scale-110" style={{ transitionTimingFunction: "var(--ease-spring)" }}>
+                  {ICONS[pillar.icon]}
+                </span>
+              </span>
+              <h3 data-anim="title" className="h4 mt-2">
                 {pillar.title}
               </h3>
               <p data-anim="subtitle" className="body-md text-white-60">
                 {pillar.body}
               </p>
+              <span className="row-arrow mt-auto flex items-center gap-2 pt-4 text-white-40">
+                <span className="button">Read more</span>
+                {ARROW}
+              </span>
             </Link>
           ))}
         </div>

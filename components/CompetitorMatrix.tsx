@@ -5,8 +5,9 @@ import HairlineFrame from "@/components/HairlineFrame";
 
 /**
  * Home §4.1 row 3 — hairline-divided rows (the reference's .featured-item
- * pattern). Fairlead's row is the only filled one: --blue-900 with gold
- * checks that pop last. Row highlight on hover.
+ * pattern). Fairlead's row is the only filled one: a gold-edged blue-900
+ * wash with gold checks that pop last. Every other row lights under the
+ * cursor.
  */
 
 const COLUMNS = ["Senior operators", "Live visibility"];
@@ -24,25 +25,33 @@ const ROWS: { who: string; note: string; has: [boolean, boolean]; fairlead?: boo
   },
 ];
 
-function Check({ on, gold }: { on: boolean; gold?: boolean }) {
+function Mark({ on, gold }: { on: boolean; gold?: boolean }) {
   if (!on)
     return (
-      <span className="body-md text-white-20" aria-label="No">
-        —
+      <span
+        className="flex h-8 w-8 items-center justify-center rounded-full text-white-20"
+        style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)" }}
+        aria-label="No"
+      >
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M2 6h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
       </span>
     );
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      aria-label="Yes"
+    <span
+      className={clsx("flex h-8 w-8 items-center justify-center rounded-full", gold ? "text-blue-950" : "text-white-80")}
+      style={{
+        background: gold ? "var(--color-gold)" : "rgba(255,255,255,0.06)",
+        boxShadow: gold ? "0 0 20px -4px rgba(213,179,113,0.7)" : "inset 0 0 0 1px rgba(255,255,255,0.1)",
+      }}
       data-anim={gold ? "pop" : undefined}
-      className={gold ? "text-gold" : "text-white-60"}
+      aria-label="Yes"
     >
-      <path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <path d="M3.5 9.5l3.5 3.5 7.5-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
   );
 }
 
@@ -52,7 +61,7 @@ export default function CompetitorMatrix() {
       <SectionHead eyebrow="The field" title={<>No competitor solves both halves.</>} />
       <HairlineFrame className="mt-14">
         {/* column heads */}
-        <div className="grid grid-cols-[1fr_6rem_6rem] items-center gap-4 px-4 py-4 md:grid-cols-[14rem_1fr_8rem_8rem] md:px-6">
+        <div className="grid grid-cols-[1fr_5rem_5rem] items-center gap-4 px-4 py-4 md:grid-cols-[14rem_1fr_9rem_9rem] md:px-6">
           <span className="label text-white-50">Who</span>
           <span className="label hidden text-white-50 md:block" />
           {COLUMNS.map((c) => (
@@ -64,17 +73,26 @@ export default function CompetitorMatrix() {
         {ROWS.map((row) => (
           <div key={row.who} data-anim="slide-in" className="relative">
             <span className="dec left-0 top-0 h-px w-full" />
+            {row.fairlead && <span className="absolute inset-y-0 left-0 w-0.5 bg-gold" aria-hidden="true" />}
             <div
               className={clsx(
-                "grid grid-cols-[1fr_6rem_6rem] items-center gap-4 px-4 py-6 transition-colors duration-200 md:grid-cols-[14rem_1fr_8rem_8rem] md:px-6",
-                row.fairlead ? "bg-blue-900" : "hover:bg-blue-900/40"
+                "grid grid-cols-[1fr_5rem_5rem] items-center gap-4 px-4 py-6 md:grid-cols-[14rem_1fr_9rem_9rem] md:px-6",
+                row.fairlead ? "" : "spot"
               )}
+              style={
+                row.fairlead
+                  ? { background: "linear-gradient(90deg, rgba(213,179,113,0.14) 0%, rgba(10,26,79,0.9) 34%, rgba(10,26,79,0.6) 100%)" }
+                  : undefined
+              }
             >
-              <span className={clsx("body-lg", row.fairlead ? "text-gold" : "text-white-100")}>{row.who}</span>
-              <span className="body-md hidden text-white-50 md:block">{row.note}</span>
+              <span className="flex flex-col gap-1">
+                <span className={clsx("body-lg", row.fairlead ? "text-gold" : "text-white-100")}>{row.who}</span>
+                <span className="body-sm text-white-40 md:hidden">{row.note}</span>
+              </span>
+              <span className={clsx("body-md hidden md:block", row.fairlead ? "text-white-80" : "text-white-50")}>{row.note}</span>
               {row.has.map((on, i) => (
                 <span key={i} className="flex justify-center">
-                  <Check on={on} gold={row.fairlead} />
+                  <Mark on={on} gold={row.fairlead} />
                 </span>
               ))}
             </div>

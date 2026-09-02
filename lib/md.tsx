@@ -27,7 +27,7 @@ export function Markdown({ children, className = "" }: { children: string; class
   return (
     <div className={`flex flex-col gap-5 ${className}`}>
       {blocks.map((block, i) => (
-        <p key={i} className="body-lg text-white-60">
+        <p key={i} className="body-lg text-white-60" style={{ lineHeight: 1.6 }}>
           {renderInline(block.trim(), `b${i}`)}
         </p>
       ))}

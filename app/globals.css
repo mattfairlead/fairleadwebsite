@@ -2,7 +2,8 @@
 
 /* ==========================================================================
    Fairlead Advisors — design tokens
-   Source: FAIRLEAD_WEBSITE_REDESIGN_PLAN.md §5.1–5.3
+   Source: FAIRLEAD_WEBSITE_REDESIGN_PLAN.md §5.1–5.3, with the craft layer
+   (spring physics, tinted depth, ambient ground, spotlight cells) on top.
    ========================================================================== */
 
 @theme {
@@ -17,19 +18,30 @@
   --color-gold-pressed: #b59860;
   --color-gold-soft: #e6d1aa;
   --color-white-100: #ffffff;
+  --color-white-80: rgba(255, 255, 255, 0.8);
   --color-white-60: rgba(255, 255, 255, 0.6);
   --color-white-50: rgba(255, 255, 255, 0.5);
   --color-white-40: rgba(255, 255, 255, 0.4);
   --color-white-20: rgba(255, 255, 255, 0.2);
   --color-white-10: rgba(255, 255, 255, 0.1);
+  --color-white-6: rgba(255, 255, 255, 0.06);
   --color-muted: #7c8bb3;
 
   --radius-pill: 5rem;
   --radius-card: 3px;
+
+  /* Motion — spring for anything that moves, expo-out for anything that settles */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 :root {
   color-scheme: dark;
+  --gold-rgb: 213, 179, 113;
+  --blue-950-rgb: 5, 14, 46;
+  --blue-700-rgb: 26, 61, 148;
+  --header-h: 4.5rem;
 }
 
 * {
@@ -38,20 +50,67 @@
 
 html {
   background: var(--color-blue-950);
+  scroll-padding-top: calc(var(--header-h) + 1.25rem);
 }
 
 body {
-  background: var(--color-blue-950);
+  /* transparent so the fixed .ambient layer paints between the root ground
+     and the page content */
+  background: transparent;
   color: var(--color-white-60);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  font-feature-settings: "cv11", "ss03", "calt";
+}
+
+/* ==========================================================================
+   Ambient ground — the flat blue-950 gets two very slow light sources and a
+   4% film grain. Perceived as depth, not as decoration; the eye notices its
+   absence before its presence.
+   ========================================================================== */
+
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(55% 45% at 12% -5%, rgba(var(--blue-700-rgb), 0.34) 0%, rgba(var(--blue-700-rgb), 0) 60%),
+    radial-gradient(40% 40% at 88% 108%, rgba(var(--gold-rgb), 0.075) 0%, rgba(var(--gold-rgb), 0) 60%),
+    radial-gradient(45% 40% at 78% 18%, rgba(15, 42, 110, 0.32) 0%, rgba(15, 42, 110, 0) 60%);
+  animation: ambient-drift 36s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 240px 240px;
+  mix-blend-mode: overlay;
+}
+@keyframes ambient-drift {
+  from {
+    transform: translate3d(-2%, -1.5%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(2%, 2%, 0) scale(1.06);
+  }
 }
 
 /* Tabular figures everywhere a number appears — §5.9 */
 .tabular,
 [data-anim="count"] {
   font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 
 /* Selection + scrollbar — §5.9 */
@@ -70,111 +129,123 @@ body {
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-white-20);
+  border-radius: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* Focus rings — visible on keyboard only, §5.9 */
+/* Focus rings — keyboard only, gold on blue for real contrast. §5.9 */
 :focus {
   outline: none;
 }
 :focus-visible {
-  outline: 2px solid var(--color-blue-700);
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Skip link — invisible until it has keyboard focus */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-gold);
+  color: var(--color-blue-950);
+  transform: translateY(-200%);
+  transition: transform 0.3s var(--ease-out-expo);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
   outline-offset: 2px;
 }
 
 /* ==========================================================================
    Type scale — §5.2. Weight 600 + negative tracking carries the personality.
+   Display sizes are fluid; headings balance, paragraphs avoid orphans.
    ========================================================================== */
 
+.h1,
+.h2,
+.h3,
+.h4 {
+  color: var(--color-white-100);
+  font-weight: 600;
+  text-wrap: balance;
+}
 .h1 {
   font-size: clamp(4.5rem, 12vw, 11.875rem);
   letter-spacing: -0.06em;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--color-white-100);
+  line-height: 0.98;
 }
 .h2 {
-  font-size: 3.75rem;
-  letter-spacing: -3.6px;
-  font-weight: 600;
-  line-height: 1.1;
-  color: var(--color-white-100);
+  font-size: clamp(2.8125rem, 2rem + 2.6vw, 3.75rem);
+  letter-spacing: -0.06em;
+  line-height: 1.06;
 }
 .h3 {
-  font-size: 2.8125rem;
-  letter-spacing: -3px;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--color-white-100);
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.8125rem);
+  letter-spacing: -0.05em;
+  line-height: 1.04;
 }
 .h4 {
   font-size: 1.75rem;
-  letter-spacing: -2px;
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--color-white-100);
+  letter-spacing: -0.04em;
+  line-height: 1.16;
 }
 .body-xxl {
   font-size: 1.75rem;
-  letter-spacing: -2px;
+  letter-spacing: -0.04em;
   font-weight: 600;
   line-height: 1.3;
 }
 .body-xl {
-  font-size: 1.375rem;
-  letter-spacing: -1px;
+  font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem);
+  letter-spacing: -0.025em;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.35;
+  text-wrap: pretty;
 }
 .body-lg {
   font-size: 1.125rem;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.02em;
   font-weight: 500;
-  line-height: 1.3;
+  line-height: 1.45;
+  text-wrap: pretty;
 }
 .body-md {
   font-size: 1rem;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.015em;
   font-weight: 500;
-  line-height: 1.3;
+  line-height: 1.5;
+  text-wrap: pretty;
 }
 .body-sm {
   font-size: 0.875rem;
-  letter-spacing: -0.6px;
+  letter-spacing: -0.01em;
   font-weight: 400;
-  line-height: 1.3;
+  line-height: 1.45;
 }
 .button {
   font-size: 0.875rem;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.02em;
   font-weight: 600;
-  line-height: 0.9;
+  line-height: 1;
 }
 .label {
-  font-size: 0.625rem;
-  letter-spacing: 0;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
   font-weight: 600;
   line-height: 1.1;
   text-transform: uppercase;
 }
 
-@media (max-width: 767px) {
-  .h1 {
-    font-size: 7.625rem;
-  }
-  .h2 {
-    font-size: 2.8125rem;
-    letter-spacing: -3px;
-  }
-  .h3 {
-    font-size: 1.75rem;
-    letter-spacing: -2px;
-  }
-  .body-xl {
-    font-size: 1.125rem;
-  }
+/* Reading measure for long-form */
+.prose-measure {
+  max-width: 68ch;
 }
 
 @media (max-width: 480px) {
@@ -184,7 +255,7 @@ body {
 }
 
 /* ==========================================================================
-   Layout grammar — §5.3
+   Layout grammar — §5.3, with 1.5× the breathing room.
    ========================================================================== */
 
 .container-page {
@@ -197,12 +268,12 @@ body {
 }
 
 .section {
-  padding-block: 5rem;
+  padding-block: 7rem;
 }
 @media (max-width: 767px) {
   .section {
-    padding-top: 4rem;
-    padding-bottom: 2rem;
+    padding-top: 4.5rem;
+    padding-bottom: 2.5rem;
   }
 }
 
@@ -216,46 +287,214 @@ body {
 .dec-footer {
   background: var(--color-white-20);
 }
+/* Gold accent rule — used once per composition, never as a border */
+.dec-gold {
+  background: linear-gradient(90deg, var(--color-gold), rgba(var(--gold-rgb), 0));
+}
 
-/* Buttons — §5.3 */
+/* Ghost numerals — the oversized index that sits behind a cell's content */
+.ghost-num {
+  position: absolute;
+  right: 1.25rem;
+  top: 0.75rem;
+  font-size: 5rem;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  color: var(--color-white-6);
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.4s ease;
+}
+.spot:hover .ghost-num {
+  color: rgba(var(--gold-rgb), 0.14);
+}
+
+/* ==========================================================================
+   Spotlight cells — a gold-tinted light that follows the cursor across any
+   hairline cell. --mx/--my are written by MotionProvider's pointer tracker.
+   ========================================================================== */
+
+.spot {
+  position: relative;
+  isolation: isolate;
+}
+.spot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  background: radial-gradient(
+    28rem circle at var(--mx, 50%) var(--my, 50%),
+    rgba(var(--gold-rgb), 0.085) 0%,
+    rgba(var(--blue-700-rgb), 0.16) 32%,
+    rgba(var(--blue-700-rgb), 0) 68%
+  );
+}
+.spot:hover::before,
+.spot:focus-within::before {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Buttons — §5.3, with physics. Hover prepares (lift + glow), click confirms
+   (compress). Arrows travel with the hover.
+   ========================================================================== */
+
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   border-radius: var(--radius-pill);
-  transition: all 0.2s ease;
   white-space: nowrap;
+  cursor: pointer;
+  transform: translateZ(0);
+  transition:
+    transform 0.45s var(--ease-spring),
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.35s ease,
+    border-color 0.2s ease;
 }
+.btn:hover {
+  transform: translateY(-1px) scale(1.02);
+}
+.btn:active {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+.btn svg {
+  transition: transform 0.35s var(--ease-spring);
+}
+.btn:hover svg {
+  transform: translateX(3px);
+}
+
 .btn-primary {
   background: var(--color-white-100);
   color: var(--color-blue-950);
   padding: 1.25rem 2rem;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 10px 30px -14px rgba(var(--gold-rgb), 0);
 }
 .btn-primary:hover {
   background: var(--color-gold);
-  color: var(--color-white-100);
+  color: var(--color-blue-950);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 14px 36px -10px rgba(var(--gold-rgb), 0.55),
+    0 0 0 1px rgba(var(--gold-rgb), 0.35);
 }
 .btn-primary:focus-visible {
   background: var(--color-gold-pressed);
 }
+
 .btn-secondary {
   background: var(--color-blue-900);
   color: var(--color-white-100);
   padding: 0.875rem 1.5rem;
   min-width: 8.5rem;
-  justify-content: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 .btn-secondary:hover {
   background: var(--color-gold);
   color: var(--color-blue-950);
-}
-.btn:disabled {
-  background: var(--color-white-10);
-  color: var(--color-white-20);
-  cursor: not-allowed;
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--gold-rgb), 0.6),
+    0 12px 30px -12px rgba(var(--gold-rgb), 0.5);
 }
 
-/* Inputs — no box, underline only. §5.3 / §5.9 */
+.btn-ghost {
+  background: transparent;
+  color: var(--color-white-80);
+  padding: 0.75rem 1.25rem;
+  box-shadow: inset 0 0 0 1px var(--color-white-20);
+}
+.btn-ghost:hover {
+  color: var(--color-gold);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--gold-rgb), 0.7),
+    0 0 24px -8px rgba(var(--gold-rgb), 0.45);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  background: var(--color-white-10);
+  color: var(--color-white-20);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Pill chips — filters, role selectors */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: var(--radius-pill);
+  padding: 0.5rem 0.875rem 0.5625rem;
+  background: rgba(10, 26, 79, 0.7);
+  color: var(--color-white-60);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  transition:
+    transform 0.4s var(--ease-spring),
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.chip:hover {
+  background: var(--color-blue-800);
+  color: var(--color-white-100);
+  transform: translateY(-1px);
+}
+.chip:active {
+  transform: scale(0.96);
+  transition-duration: 0.08s;
+}
+.chip[aria-pressed="true"],
+.chip.is-active {
+  background: var(--color-gold);
+  color: var(--color-blue-950);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--gold-rgb), 0.6),
+    0 8px 20px -10px rgba(var(--gold-rgb), 0.6);
+}
+
+/* ==========================================================================
+   Inputs — no box, underline only. Focus grows a gold rule from the left.
+   ========================================================================== */
+
+.field-wrap {
+  position: relative;
+}
+.field-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--color-gold), var(--color-gold-soft));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.55s var(--ease-out-expo);
+}
+.field-wrap:focus-within::after {
+  transform: scaleX(1);
+}
+.field-wrap .label {
+  transition: color 0.2s ease;
+}
+.field-wrap:focus-within .label {
+  color: var(--color-gold);
+}
+
 .field {
   width: 100%;
   background: transparent;
@@ -263,51 +502,243 @@ body {
   border-bottom: 1px solid var(--color-white-10);
   color: var(--color-white-100);
   font-size: 1.375rem;
-  letter-spacing: -1px;
+  letter-spacing: -0.025em;
   font-weight: 500;
   padding-bottom: 0.9rem;
+  border-radius: 0;
   transition: border-color 0.3s ease;
 }
 .field::placeholder {
   color: var(--color-muted);
 }
+.field:hover {
+  border-color: var(--color-white-20);
+}
 .field:focus {
-  border-color: var(--color-white-100);
+  border-color: var(--color-white-20);
 }
 textarea.field {
   height: 9.625rem;
   resize: none;
 }
+.field:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-white-100);
+  box-shadow: 0 0 0 1000px var(--color-blue-950) inset;
+  transition: background-color 9999s ease-out;
+}
 
-/* Underline links — never text-decoration */
+/* Underline links — a gold rule draws in from the left over the resting one */
 .link-underline {
-  border-bottom: 1px solid var(--color-white-100);
-  padding-bottom: 1px;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  background-image:
+    linear-gradient(var(--color-gold), var(--color-gold)),
+    linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35));
+  background-size:
+    0 1px,
+    100% 1px;
+  background-position:
+    0 100%,
+    0 100%;
+  background-repeat: no-repeat;
+  padding-bottom: 2px;
+  transition:
+    background-size 0.4s var(--ease-out-expo),
+    color 0.2s ease;
 }
 .link-underline:hover {
   color: var(--color-gold);
-  border-color: var(--color-gold);
+  background-size:
+    100% 1px,
+    100% 1px;
 }
 
-/* Header — transparent over the hero; glass eases in with scroll. §5.8.3.
-   --header-glass is a 0→1 scroll progress written by headerScrollBlur(). */
+/* Row links — the arrow that appears when a hairline row is hoverable */
+.row-arrow {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.45s var(--ease-spring),
+    color 0.2s ease;
+  color: var(--color-white-40);
+}
+.group:hover .row-arrow,
+.group:focus-within .row-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--color-gold);
+}
+
+/* ==========================================================================
+   Header — transparent over the hero; glass eases in with scroll. §5.8.3.
+   --header-glass is a 0→1 scroll progress written by headerScrollBlur().
+   ========================================================================== */
+
 .site-header {
   --header-glass: 0;
 }
 .site-header.is-active {
   /* Prefixed first, standard last: the CSS minifier collapses the pair and
      keeps whichever comes last, and Chrome only supports the standard one. */
-  -webkit-backdrop-filter: blur(calc(var(--header-glass) * 12px));
-  backdrop-filter: blur(calc(var(--header-glass) * 12px));
-  background: rgba(5, 14, 46, calc(var(--header-glass) * 0.4));
+  -webkit-backdrop-filter: blur(calc(var(--header-glass) * 14px)) saturate(160%);
+  backdrop-filter: blur(calc(var(--header-glass) * 14px)) saturate(160%);
+  background: rgba(5, 14, 46, calc(var(--header-glass) * 0.55));
 }
 
-/* Glass strip — §5.3 / §5.8.4 */
+/* Nav hover pill — slides between links (position written by Header.tsx) */
+.nav-pill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 2.25rem;
+  width: var(--pill-w, 0px);
+  transform: translate(var(--pill-x, 0px), -50%);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.5s var(--ease-spring),
+    width 0.5s var(--ease-spring),
+    opacity 0.25s ease;
+}
+.nav-pill.is-visible {
+  opacity: 1;
+}
+.nav-link {
+  position: relative;
+  z-index: 1;
+  padding: 0.625rem 0.875rem;
+  border-radius: var(--radius-pill);
+}
+.nav-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0.125rem;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  transform: translateX(-50%);
+  box-shadow: 0 0 10px rgba(var(--gold-rgb), 0.8);
+}
+
+/* Scroll progress — 1px gold rule along the header's bottom edge, driven by
+   the scroll timeline where supported, invisible otherwise. */
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--color-gold), var(--color-gold-soft));
+  transform-origin: left center;
+  transform: scaleX(0);
+  opacity: 0.9;
+  pointer-events: none;
+}
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: scroll-progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes scroll-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Mobile menu — glass sheet, links stagger in and reverse out */
+.mobile-menu {
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  background: rgba(5, 14, 46, 0.86);
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s;
+}
+.mobile-menu[data-open="false"] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.mobile-menu .menu-item {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.5s var(--ease-out-expo);
+  transition-delay: 0s;
+}
+.mobile-menu[data-open="true"] .menu-item {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: calc(60ms + var(--i, 0) * 45ms);
+}
+
+/* Glass strip — §5.3 / §5.8.4, with saturate() so the footage behind it pops */
 .glass-strip {
-  /* Prefixed first, standard last — see .site-header above. */
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(12px) saturate(170%);
+  backdrop-filter: blur(12px) saturate(170%);
+  background: linear-gradient(180deg, rgba(5, 14, 46, 0.12), rgba(5, 14, 46, 0.42));
+}
+
+/* Data chips over the hero footage */
+.data-chip {
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  background: rgba(5, 14, 46, 0.55);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 12px 32px -16px rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+}
+
+/* Gold display text with a soft halo — the one headline phrase in gold */
+.text-gold-glow {
+  color: var(--color-gold);
+  text-shadow: 0 0 48px rgba(var(--gold-rgb), 0.28);
+}
+
+/* Route enter — the new page rises in. Backwards fill so the transform
+   clears once it lands (no stray containing block for fixed children). */
+.page-enter {
+  animation: page-in 0.7s var(--ease-out-expo) backwards;
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Success check — stroke draws itself, once */
+.check-draw {
+  stroke-dasharray: 32;
+  stroke-dashoffset: 32;
+  animation: check-draw 0.6s var(--ease-out-expo) 0.15s forwards;
+}
+@keyframes check-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Monogram placeholder for team photos until headshots land */
+.monogram {
+  background:
+    radial-gradient(80% 60% at 30% 20%, rgba(var(--blue-700-rgb), 0.55) 0%, rgba(var(--blue-700-rgb), 0) 60%),
+    radial-gradient(60% 50% at 85% 95%, rgba(var(--gold-rgb), 0.16) 0%, rgba(var(--gold-rgb), 0) 60%),
+    linear-gradient(180deg, #0a1a4f 0%, #071338 100%);
 }
 
 /* Submit spin — the one looping animation besides the live dots (§5.4) */
@@ -327,7 +758,14 @@ textarea.field {
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.2s !important;
+    transition-duration: 0.15s !important;
     scroll-behavior: auto !important;
+  }
+  .ambient::before {
+    animation: none !important;
+  }
+  .scroll-progress {
+    animation: none !important;
+    opacity: 0;
   }
 }

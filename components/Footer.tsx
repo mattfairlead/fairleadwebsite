@@ -20,7 +20,10 @@ const NAV = [
   { href: "/team", label: "Team" },
   { href: "/perspectives", label: "Perspectives" },
   { href: "/contact", label: "Contact" },
+  { href: "/careers", label: "Careers" },
 ];
+
+const linkCls = "body-sm text-white-40 transition-colors duration-200 hover:text-white-100";
 
 /**
  * Footer — §5.5 last row. A blue-hour image band (21rem) with the four
@@ -32,60 +35,67 @@ export default function Footer() {
     <footer>
       <ImageBand minHeight="21rem" overlayStrength={0.8} className="mt-20">
         <LiveDots pins={CITY_PINS} showLabels />
+        <div className="absolute bottom-8 left-6 flex items-center gap-2 md:left-10" aria-hidden="true">
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
+          <span className="label text-white-40">Four offices · one platform</span>
+        </div>
       </ImageBand>
 
       <div className="container-page relative">
         <span className="dec dec-footer left-0 top-0 h-px w-full" />
 
-        <div className="grid gap-10 py-14 md:grid-cols-[1fr_auto_auto] md:gap-20">
+        <div className="grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr] md:gap-20">
           <div className="flex flex-col gap-6">
             <Logo />
-            <p className="body-sm max-w-xs text-white-40">
-              The embedded operating platform for PE-backed companies.
+            <p className="body-md max-w-xs text-white-50">
+              The embedded operating platform for PE-backed companies. Executive intelligence + artificial
+              intelligence, working inside your portfolio.
             </p>
+            <a
+              href="tel:+16173154822"
+              className="body-lg self-start text-white-100 transition-colors duration-200 hover:text-gold tabular"
+            >
+              (617) 315-4822
+            </a>
           </div>
 
           <nav className="flex flex-col gap-3" aria-label="Footer">
+            <span className="label mb-1 text-white-50">Site</span>
             {NAV.map((item) => (
-              <Link key={item.href} href={item.href} className="body-sm text-white-40 transition-colors duration-200 hover:text-white-100">
+              <Link key={item.href} href={item.href} className={linkCls}>
                 {item.label}
               </Link>
             ))}
-            <Link href="/careers" className="body-sm text-white-40 transition-colors duration-200 hover:text-white-100">
-              Careers
-            </Link>
-            <a
-              href="https://tools.fairleadadvisors.com"
-              className="body-sm text-white-40 transition-colors duration-200 hover:text-white-100"
-            >
+            <a href="https://tools.fairleadadvisors.com" className={`${linkCls} mt-2 flex items-center gap-2`}>
               Client portal
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M2 8l6-6M3 2h5v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </a>
           </nav>
 
           <div className="flex flex-col gap-3">
-            <span className="label text-white-50">Offices</span>
+            <span className="label mb-1 text-white-50">Offices</span>
             {CITIES.map((city) => (
               <span key={city} className="body-sm text-white-40">
                 {city}
               </span>
             ))}
-            <a href="tel:+16173154822" className="body-sm mt-2 text-white-60 transition-colors duration-200 hover:text-gold tabular">
-              (617) 315-4822
+            <a
+              href="https://www.linkedin.com/company/fairlead-advisors"
+              rel="noopener noreferrer"
+              target="_blank"
+              className={`${linkCls} mt-2`}
+            >
+              LinkedIn
             </a>
           </div>
         </div>
 
-        <div className="relative flex flex-wrap items-center gap-x-8 gap-y-2 py-6">
+        <div className="relative flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-6">
           <span className="dec dec-footer left-0 top-0 h-px w-full" />
           <span className="body-sm text-white-40">© {new Date().getFullYear()} Fairlead Advisors</span>
-          <a
-            href="https://www.linkedin.com/company/fairlead-advisors"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="body-sm text-white-40 transition-colors duration-200 hover:text-white-100"
-          >
-            LinkedIn
-          </a>
+          <span className="label text-white-20">Operating inside portfolios since 2010</span>
           {/* TODO(§9): mailing address small print — keep or drop, pending decision */}
         </div>
       </div>

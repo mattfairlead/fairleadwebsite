@@ -1,7 +1,7 @@
-import Link from "next/link";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import EngagementRow from "@/components/EngagementRow";
+import Btn from "@/components/Btn";
 import { getEngagements } from "@/lib/data";
 
 /**
@@ -18,7 +18,12 @@ export default async function EngagementCards() {
 
   return (
     <SectionReveal className="section container-page">
-      <SectionHead eyebrow="Proof" title={<>Selected engagements.</>} />
+      <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <SectionHead eyebrow="Proof" title={<>Selected engagements.</>} />
+        <p className="body-md max-w-sm text-white-50" data-anim="fade-up">
+          Three of sixty-plus. Metric first, in the operator&rsquo;s vocabulary.
+        </p>
+      </div>
       <div className="relative mt-14">
         {rows.map((engagement) => (
           <EngagementRow key={engagement.slug} engagement={engagement} />
@@ -26,9 +31,9 @@ export default async function EngagementCards() {
         <span className="dec bottom-0 left-0 h-px w-full" />
       </div>
       <div className="mt-10">
-        <Link href="/engagements" className="btn btn-secondary button">
+        <Btn href="/engagements" variant="secondary" arrow dataAnim="pop">
           All engagements
-        </Link>
+        </Btn>
       </div>
     </SectionReveal>
   );

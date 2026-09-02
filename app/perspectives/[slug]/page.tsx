@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
+import Btn from "@/components/Btn";
 import { Markdown } from "@/lib/md";
 import { getPerspective, getPerspectives, getTeam } from "@/lib/data";
 import { articleJsonLd, pageMetadata } from "@/lib/seo";
@@ -43,8 +44,10 @@ export default async function PerspectivePage({ params }: { params: Promise<{ sl
         lead={author ? `${author.name} — ${author.title}` : undefined}
       />
 
-      <article className="container-page max-w-3xl pb-16">
-        <Markdown>{post.body_md}</Markdown>
+      <article className="container-page pb-16">
+        <div className="prose-measure">
+          <Markdown>{post.body_md}</Markdown>
+        </div>
       </article>
 
       <SectionReveal className="container-page pb-20">
@@ -52,9 +55,9 @@ export default async function PerspectivePage({ params }: { params: Promise<{ sl
           <Link href="/perspectives" className="btn btn-secondary button">
             All perspectives
           </Link>
-          <Link href="/contact" className="btn btn-primary button">
+          <Btn href="/contact" arrow>
             Talk to a partner
-          </Link>
+          </Btn>
         </div>
       </SectionReveal>
 
