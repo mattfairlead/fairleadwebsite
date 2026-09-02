@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MotionProvider from "@/components/MotionProvider";
+import RouteTheme from "@/components/RouteTheme";
+import { ROUTE_THEME_SCRIPT } from "@/lib/theme";
 import { organizationJsonLd, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/seo";
 
 // Inter is the only typeface — §5.2. Personality comes from weight 600 +
@@ -33,8 +35,13 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    // suppressHydrationWarning: the route-theme script below may add
+    // data-theme to <html> before React hydrates.
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body>
+        {/* Light routes (lib/theme.ts) flip the ground before first paint */}
+        <script dangerouslySetInnerHTML={{ __html: ROUTE_THEME_SCRIPT }} />
+        <RouteTheme />
         {/* Ambient ground — two slow light sources + film grain behind everything */}
         <div className="ambient" aria-hidden="true" />
         <a href="#main" className="skip-link button">

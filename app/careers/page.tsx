@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import PageIntro from "@/components/PageIntro";
@@ -12,6 +12,9 @@ export const metadata: Metadata = pageMetadata(
   "We're hiring operators who work AI-first — senior finance and operating people who want the tools to match the work.",
   "/careers"
 );
+
+// Light route (lib/theme.ts) — the browser chrome should match the white ground.
+export const viewport: Viewport = { themeColor: "#ffffff" };
 
 const TRAITS = [
   ["In the seat", "You've run a finance or operating function, not advised one."],

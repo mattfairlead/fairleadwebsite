@@ -10,6 +10,10 @@ import BackgroundVideo from "@/components/BackgroundVideo";
  * band; the overlay stays either way, and the gradient stays underneath a
  * video as its poster/fallback.
  *
+ * The band is always dark imagery, so it carries `theme-dark` to keep white
+ * ink for anything laid over it. What it dissolves into is the page ground:
+ * --ground-rgb, blue-950 by default and white on light routes (globals.css).
+ *
  * TODO(photography): replace gradient stand-ins with graded stills.
  */
 export default function ImageBand({
@@ -37,7 +41,7 @@ export default function ImageBand({
 }) {
   return (
     <div
-      className={clsx("relative w-full overflow-hidden", className)}
+      className={clsx("theme-dark relative w-full overflow-hidden", className)}
       style={{ aspectRatio: minHeight ? undefined : aspect, minHeight }}
     >
       {/* far layer — sky */}
@@ -66,7 +70,7 @@ export default function ImageBand({
           className="absolute inset-x-0 bottom-0 h-[38%]"
           style={{
             background:
-              "linear-gradient(180deg, rgba(5,14,46,0) 0%, rgba(5,14,46,0.85) 55%, #050E2E 100%)",
+              "linear-gradient(180deg, rgba(var(--ground-rgb),0) 0%, rgba(var(--ground-rgb),0.85) 55%, rgb(var(--ground-rgb)) 100%)",
             clipPath:
               "polygon(0 62%, 8% 55%, 16% 60%, 27% 48%, 38% 58%, 50% 44%, 61% 56%, 72% 47%, 84% 57%, 93% 50%, 100% 58%, 100% 100%, 0 100%)",
           }}
@@ -76,7 +80,7 @@ export default function ImageBand({
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `linear-gradient(180deg, rgba(5,14,46,${0.2 * overlayStrength}) 0%, rgba(5,14,46,0) 40%, rgba(5,14,46,${overlayStrength}) 100%)`,
+          background: `linear-gradient(180deg, rgba(5,14,46,${0.2 * overlayStrength}) 0%, rgba(5,14,46,0) 40%, rgba(var(--ground-rgb),${overlayStrength}) 100%)`,
         }}
       />
       {children}

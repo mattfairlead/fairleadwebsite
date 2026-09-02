@@ -21,7 +21,7 @@
   </defs>
 
   <!-- ground shadow -->
-  <ellipse cx="720" cy="690" rx="470" ry="118" fill="url(#shadow)"/>
+  <ellipse cx="640" cy="690" rx="370" ry="58" fill="url(#shadow)"/>
 
   <!-- walls -->
   <polygon points="640,425 870,405 870,640 640,700" fill="url(#rightWall)"/>
