@@ -80,3 +80,25 @@ export function articleJsonLd(a: { title: string; slug: string; published_at: st
     publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
   };
 }
+
+/** JSON-LD VideoObject — client testimonial embeds, so the still shows in video results. */
+export function videoJsonLd(v: {
+  name: string;
+  description: string;
+  contentUrl: string;
+  thumbnailPath: string;
+  uploadDate: string; // ISO date
+  path: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: v.name,
+    description: v.description,
+    contentUrl: v.contentUrl,
+    thumbnailUrl: `${SITE_URL}${v.thumbnailPath}`,
+    uploadDate: v.uploadDate,
+    url: `${SITE_URL}${v.path}`,
+    publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+  };
+}

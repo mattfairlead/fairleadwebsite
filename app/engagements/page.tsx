@@ -4,15 +4,28 @@ import clsx from "clsx";
 import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
 import EngagementRow from "@/components/EngagementRow";
+import TestimonialFeature from "@/components/TestimonialFeature";
 import Btn from "@/components/Btn";
 import { getEngagements, getSectors } from "@/lib/data";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, videoJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Engagements",
   "Selected from 60+ embedded engagements across 16 sectors since 2010 — by sector, role, sponsor type, and outcome.",
   "/engagements"
 );
+
+/**
+ * Dion Leadership testimonial — Steve Dion on the sale to Gallagher. Served
+ * from the "Reviews" GitHub release (H.264 + AAC QuickTime, fast-start, so it
+ * streams on click). Set NEXT_PUBLIC_DION_TESTIMONIAL_URL once the file moves
+ * to Blob/Supabase Storage (§9 media plan) — no code change needed.
+ */
+const DION_VIDEO =
+  process.env.NEXT_PUBLIC_DION_TESTIMONIAL_URL ||
+  "https://github.com/mattfairlead/fairleadwebsite/releases/download/Reviews/dionleadership.mov";
+const DION_POSTER = "/engagements/dion-leadership-steve.jpg";
+const DION_LABEL = "Steve Dion, Dion Leadership, on working with Fairlead through the sale to Gallagher";
 
 const ROLES = [
   "Interim CEO",
@@ -113,6 +126,37 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
             ))}
           </dl>
         }
+      />
+
+      <TestimonialFeature
+        eyebrow="In their words"
+        title={<>Hear it from the founder.</>}
+        metric="Sold to Gallagher · 2025"
+        body={
+          <>
+            Steve Dion built Dion Leadership and sold it to Gallagher in 2025. Fairlead ran the process from
+            preparation to close. Here he describes what that was like from the founder&rsquo;s chair.
+          </>
+        }
+        speaker={{ name: "Steve Dion", title: "Founder & CEO, Dion Leadership" }}
+        tags={["M&A", "Sale", "Professional services"]}
+        video={{ src: DION_VIDEO, poster: DION_POSTER, label: DION_LABEL }}
+        href="/engagements/dion-leadership"
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            videoJsonLd({
+              name: "Dion Leadership — client testimonial",
+              description: DION_LABEL,
+              contentUrl: DION_VIDEO,
+              thumbnailPath: DION_POSTER,
+              uploadDate: "2026-09-02",
+              path: "/engagements",
+            })
+          ),
+        }}
       />
 
       <section className="container-page relative pb-8" aria-label="Filters">

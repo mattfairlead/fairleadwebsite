@@ -113,7 +113,9 @@ the resolved layout.
 
 Search the repo for `TODO` — every open item is marked in place. Highlights:
 photography (blue-hour infrastructure stills replace the gradient stand-ins
-in `components/ImageBand.tsx`), the confirmed 16-sector list, the full team
+in `components/ImageBand.tsx`), the Dion Leadership testimonial still
+(`public/engagements/dion-leadership-steve.jpg` — the graded monogram stands in
+until it lands), the confirmed 16-sector list, the full team
 roster + bios, GRP's tax-equity figure, Cottonwood/Dominion naming clearance,
 the `info@` distribution list (then set `CONTACT_TO`), and the transaction
 archive import.
