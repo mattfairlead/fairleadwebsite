@@ -878,6 +878,61 @@ textarea.field {
   }
 }
 
+/* ==========================================================================
+   Video lightbox — glass sheet over the page, the video framed at exactly
+   its own aspect ratio (--ar = width / height, written by VideoLightbox).
+   Height governs a portrait clip, width a landscape one; either way the
+   frame is the video, so there are no bars. Enter rises in; exit reverses.
+   ========================================================================== */
+
+.lightbox-backdrop {
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  background: rgba(5, 14, 46, 0.88);
+  animation: lightbox-fade 0.4s var(--ease-out-expo) both;
+}
+.lightbox-frame {
+  aspect-ratio: var(--ar, 0.5625);
+  height: min(84svh, calc(92vw / var(--ar, 0.5625)));
+  max-width: 92vw;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--color-blue-950);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 40px 120px -30px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(var(--gold-rgb), 0.12);
+  animation: lightbox-rise 0.6s var(--ease-out-expo) both;
+}
+.lightbox-ui {
+  animation: lightbox-fade 0.5s var(--ease-out-expo) 0.1s both;
+}
+.lightbox.is-closing .lightbox-backdrop,
+.lightbox.is-closing .lightbox-ui {
+  animation: lightbox-fade 0.22s ease-in reverse both;
+}
+.lightbox.is-closing .lightbox-frame {
+  animation: lightbox-rise 0.22s ease-in reverse both;
+}
+@keyframes lightbox-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes lightbox-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* Submit spin — the one looping animation besides the live dots (§5.4) */
 @keyframes spin {
   to {

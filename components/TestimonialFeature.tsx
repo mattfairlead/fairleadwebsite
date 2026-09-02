@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import clsx from "clsx";
 import SectionReveal from "@/components/SectionReveal";
 import HairlineFrame from "@/components/HairlineFrame";
+import VideoLightbox from "@/components/VideoLightbox";
 import { ARROW } from "@/components/Btn";
 
 export interface TestimonialFeatureProps {
@@ -20,7 +20,15 @@ export interface TestimonialFeatureProps {
   metric: string;
   /** Role / outcome tags rendered as hairline labels */
   tags: string[];
-  video: { src: string; poster: string; label: string };
+  video: {
+    src: string;
+    poster: string;
+    label: string;
+    /** intrinsic display size, used to frame the lightbox — e.g. { w: 720, h: 1280 } */
+    aspect: { w: number; h: number };
+    /** "2:10" — shown in the stage's corner hint so the ask is explicit */
+    duration?: string;
+  };
   /** Where "See the engagement" goes */
   href: string;
 }
@@ -47,12 +55,11 @@ function initialsOf(name: string): string {
  * speaker (graded into the §5.1 palette, dissolving into blue-950 at the foot
  * so the caption reads) with a glass play control, and the context column.
  *
- * Click anywhere on the still to play: the still fades, the <video> mounts in
- * place with native controls and sound (the click is the user gesture, so
- * autoplay with audio is allowed). Nothing downloads until the click — the
- * source is a 180MB QuickTime release asset (H.264 + AAC, fast-start) that
- * streams progressively. When the video ends the still returns with a
- * "Watch again" affordance. No modal (§5.9).
+ * Click anywhere on the still to play: a VideoLightbox opens framed at the
+ * video's own aspect ratio (the clip is portrait, so an inline landscape
+ * stage would pillarbox it). Nothing downloads until the click — the source
+ * is a 180MB QuickTime release asset (H.264 + AAC, fast-start) that streams
+ * progressively. After the clip ends the CTA reads "Watch again".
  *
  * The still is optional at runtime: if the poster 404s, a graded monogram
  * stands in so the composition never breaks.
@@ -67,27 +74,18 @@ export default function TestimonialFeature({
   video,
   href,
 }: TestimonialFeatureProps) {
-  const [playing, setPlaying] = useState(false);
+  const [open, setOpen] = useState(false);
   const [ended, setEnded] = useState(false);
   const [posterMissing, setPosterMissing] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   const play = useCallback(() => {
     setEnded(false);
-    setPlaying(true);
+    setOpen(true);
   }, []);
-
-  useEffect(() => {
-    if (!playing) return;
-    const v = videoRef.current;
-    if (!v) return;
-    // Explicit play() covers browsers that ignore the autoplay attribute on a
-    // freshly inserted element; a rejection leaves the native controls up.
-    const p = v.play();
-    if (p) p.catch(() => {});
-  }, [playing]);
+  const close = useCallback(() => setOpen(false), []);
 
   const cta = ended ? "Watch again" : "Watch the testimonial";
+  const hint = ended ? "Watch again" : "Play with sound";
 
   return (
     <SectionReveal className="container-page pb-16 md:pb-20">
@@ -101,12 +99,8 @@ export default function TestimonialFeature({
             >
               {/* still — graded, scales on hover like the team cells */}
               <div
-                className={clsx(
-                  "absolute inset-0 transition-[opacity,transform] duration-[1200ms]",
-                  playing ? "scale-[1.04] opacity-0" : "opacity-100 group-hover:scale-[1.03]"
-                )}
+                className="absolute inset-0 transition-transform duration-[1200ms] group-hover:scale-[1.03]"
                 style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
-                aria-hidden={playing}
               >
                 {!posterMissing ? (
                   <Image
@@ -139,60 +133,47 @@ export default function TestimonialFeature({
                 />
               </div>
 
-              {/* video — mounts on demand, sits over the still */}
-              {playing && (
-                <video
-                  ref={videoRef}
-                  src={video.src}
-                  autoPlay
-                  controls
-                  playsInline
-                  preload="auto"
-                  controlsList="nodownload"
-                  onEnded={() => {
-                    setPlaying(false);
-                    setEnded(true);
-                  }}
-                  className="absolute inset-0 h-full w-full bg-blue-950 object-contain"
-                  aria-label={video.label}
-                />
-              )}
-
               {/* click target — the whole still is the button */}
-              {!playing && (
-                <button
-                  type="button"
-                  onClick={play}
-                  aria-label={`${cta} — ${video.label}`}
-                  className="absolute inset-0 block cursor-pointer text-left"
-                >
-                  {/* play control — bottom-right, opposite the caption, so it never covers the face.
-                      Glass at rest, gold under the cursor, a slow sonar ring says "live". */}
-                  <span className="absolute bottom-5 right-5 flex items-center justify-center md:bottom-7 md:right-7">
-                    <span className="play-ring absolute inset-0 rounded-full" aria-hidden="true" />
-                    <span className="play-ring play-ring-2 absolute inset-0 rounded-full" aria-hidden="true" />
-                    <span className="play-btn relative flex h-[4.75rem] w-[4.75rem] items-center justify-center rounded-full text-white-100">
-                      {PLAY}
-                    </span>
+              <button
+                type="button"
+                onClick={play}
+                aria-haspopup="dialog"
+                aria-expanded={open}
+                aria-label={`${cta} — ${video.label}`}
+                className="absolute inset-0 block cursor-pointer text-left"
+              >
+                {/* play control — bottom-right, opposite the caption, so it never covers the face.
+                    Glass at rest, gold under the cursor, a slow sonar ring says "live". */}
+                <span className="absolute bottom-5 right-5 flex items-center justify-center md:bottom-7 md:right-7">
+                  <span className="play-ring absolute inset-0 rounded-full" aria-hidden="true" />
+                  <span className="play-ring play-ring-2 absolute inset-0 rounded-full" aria-hidden="true" />
+                  <span className="play-btn relative flex h-[4.75rem] w-[4.75rem] items-center justify-center rounded-full text-white-100">
+                    {PLAY}
                   </span>
+                </span>
 
-                  {/* caption — mirrors the team-cell typography */}
-                  <span className="absolute inset-x-0 bottom-0 flex flex-col gap-0.5 p-5 pr-28 md:p-7 md:pr-32">
-                    <span className="label mb-2 flex items-center gap-3 text-white-50">
-                      <span className="inline-block h-px w-6 bg-gold" aria-hidden="true" />
-                      Client testimonial
-                    </span>
-                    <span className="body-xl text-white-100">{speaker.name}</span>
-                    <span className="body-sm text-gold/90">{speaker.title}</span>
+                {/* caption — mirrors the team-cell typography */}
+                <span className="absolute inset-x-0 bottom-0 flex flex-col gap-0.5 p-5 pr-28 md:p-7 md:pr-32">
+                  <span className="label mb-2 flex items-center gap-3 text-white-50">
+                    <span className="inline-block h-px w-6 bg-gold" aria-hidden="true" />
+                    Client testimonial
                   </span>
+                  <span className="body-xl text-white-100">{speaker.name}</span>
+                  <span className="body-sm text-gold/90">{speaker.title}</span>
+                </span>
 
-                  {/* corner hint — reads as a state, not a second button */}
-                  <span className="label absolute right-5 top-5 flex items-center gap-2 text-white-50 transition-colors duration-300 group-hover:text-gold md:right-7 md:top-7">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold shadow-[0_0_10px_rgba(213,179,113,0.8)]" aria-hidden="true" />
-                    {ended ? "Watch again" : "Play with sound"}
-                  </span>
-                </button>
-              )}
+                {/* corner hint — reads as a state, not a second button */}
+                <span className="label absolute right-5 top-5 flex items-center gap-2 text-white-50 transition-colors duration-300 group-hover:text-gold md:right-7 md:top-7">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold shadow-[0_0_10px_rgba(213,179,113,0.8)]" aria-hidden="true" />
+                  {hint}
+                  {video.duration && (
+                    <>
+                      <span aria-hidden="true">·</span>
+                      <span className="tabular">{video.duration}</span>
+                    </>
+                  )}
+                </span>
+              </button>
             </div>
           </div>
 
@@ -226,9 +207,9 @@ export default function TestimonialFeature({
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <button type="button" onClick={play} className="btn btn-primary button" disabled={playing} aria-disabled={playing}>
-                {playing ? "Now playing" : cta}
-                {!playing && PLAY}
+              <button type="button" onClick={play} aria-haspopup="dialog" aria-expanded={open} className="btn btn-primary button">
+                {cta}
+                {PLAY}
               </button>
               <Link href={href} className="btn btn-ghost button">
                 See the engagement
@@ -238,6 +219,22 @@ export default function TestimonialFeature({
           </div>
         </div>
       </HairlineFrame>
+
+      <VideoLightbox
+        open={open}
+        onClose={close}
+        onEnded={() => setEnded(true)}
+        src={video.src}
+        label={video.label}
+        aspect={video.aspect}
+        caption={
+          <>
+            <span className="text-white-100">{speaker.name}</span>
+            <span aria-hidden="true">·</span>
+            {speaker.title}
+          </>
+        }
+      />
     </SectionReveal>
   );
 }
