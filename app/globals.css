@@ -741,6 +741,69 @@ textarea.field {
     linear-gradient(180deg, #0a1a4f 0%, #071338 100%);
 }
 
+/* ==========================================================================
+   Testimonial stage — the play control on a client still. Glass at rest,
+   gold under the cursor (the btn-primary hover language), and a slow sonar
+   ring borrowed from the live dots (§5.8.6) so the still reads as playable
+   before anyone reaches for it. Reduced motion collapses the ring to one
+   pass that ends invisible.
+   ========================================================================== */
+
+.play-btn {
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  background: rgba(5, 14, 46, 0.5);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 18px 44px -18px rgba(0, 0, 0, 0.7);
+  transition:
+    transform 0.45s var(--ease-spring),
+    background-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.35s ease;
+}
+.play-btn svg {
+  transition: transform 0.35s var(--ease-spring);
+}
+.stage:hover .play-btn,
+.stage:focus-within .play-btn {
+  background: var(--color-gold);
+  color: var(--color-blue-950);
+  transform: translateY(-1px) scale(1.06);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--gold-rgb), 0.6),
+    0 18px 48px -14px rgba(var(--gold-rgb), 0.6);
+}
+.stage:hover .play-btn svg {
+  transform: scale(1.08);
+}
+.stage:active .play-btn {
+  transform: scale(0.96);
+  transition-duration: 0.08s;
+}
+.play-ring {
+  box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb), 0.7);
+  opacity: 0;
+  animation: play-ring 4.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+.play-ring-2 {
+  animation-delay: 1.4s;
+}
+.stage:hover .play-ring {
+  animation-duration: 2.4s;
+}
+@keyframes play-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
 /* Submit spin — the one looping animation besides the live dots (§5.4) */
 @keyframes spin {
   to {
