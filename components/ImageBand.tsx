@@ -16,6 +16,9 @@ import BackgroundVideo from "@/components/BackgroundVideo";
  *
  * TODO(photography): replace gradient stand-ins with graded stills.
  */
+/** Height of the water when `horizon="water"` — export so what floats on it can line up. */
+export const WATERLINE = "36%";
+
 export default function ImageBand({
   src,
   video,
@@ -26,6 +29,7 @@ export default function ImageBand({
   className = "",
   overlayStrength = 1,
   parallax = false,
+  horizon = "ridge",
   children,
 }: {
   src?: string;
@@ -37,6 +41,7 @@ export default function ImageBand({
   className?: string;
   overlayStrength?: number;
   parallax?: boolean;
+  horizon?: "ridge" | "water";
   children?: React.ReactNode;
 }) {
   return (
@@ -63,8 +68,15 @@ export default function ImageBand({
           style={{ background: "linear-gradient(180deg, rgba(5,14,46,0.45) 0%, rgba(10,26,79,0.28) 55%, rgba(5,14,46,0.5) 100%)" }}
         />
       )}
-      {/* near layer — foreground silhouette */}
-      {!src && !video && (
+      {/* near layer — foreground silhouette: a ridge, or flat water */}
+      {!src && !video && horizon === "water" && (
+        <div
+          data-speed={parallax ? "1.05" : undefined}
+          className="absolute inset-x-0 bottom-0 bg-blue-950"
+          style={{ height: WATERLINE }}
+        />
+      )}
+      {!src && !video && horizon === "ridge" && (
         <div
           data-speed={parallax ? "1.05" : undefined}
           className="absolute inset-x-0 bottom-0 h-[38%]"
