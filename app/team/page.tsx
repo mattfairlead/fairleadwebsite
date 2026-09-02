@@ -54,7 +54,7 @@ export default async function TeamPage() {
       <PageIntro
         eyebrow="Team"
         title={<>Operators, in the seat.</>}
-        lead={<>The team behind every engagement — partners who sit in the seat, and the bench that scales with it.</>}
+        lead={<>The team behind every engagement — partners who sit in the seat, and the operators who scale with it.</>}
         aside={
           <dl className="grid grid-cols-2 gap-10">
             {[
@@ -89,7 +89,7 @@ export default async function TeamPage() {
 
       {rest.length > 0 && (
         <SectionReveal className="section container-page">
-          <SectionHead eyebrow="Team" title={<>The bench.</>} titleClass="h3" />
+          <SectionHead eyebrow="Team" title={<>The operators.</>} titleClass="h3" />
           <HairlineFrame columns={4} className="mt-10">
             <div className="grid sm:grid-cols-2 md:grid-cols-4">
               {rest.map((member, i) => (
