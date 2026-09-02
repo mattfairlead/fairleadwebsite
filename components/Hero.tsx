@@ -54,10 +54,9 @@ export default function Hero() {
         const eyebrow = root.querySelector<HTMLElement>("[data-hero-eyebrow]");
         const sub = root.querySelector<HTMLElement>("[data-hero-sub]");
         const cta = root.querySelector<HTMLElement>("[data-hero-cta]");
-        const cue = root.querySelector<HTMLElement>("[data-hero-cue]");
 
         if (reduced) {
-          gsap.set([eyebrow, sub, cta, cue].filter(Boolean), { opacity: 1, y: 0 });
+          gsap.set([eyebrow, sub, cta].filter(Boolean), { opacity: 1, y: 0 });
         } else {
           const tl = gsap.timeline({ delay: 0.15 });
           if (eyebrow) {
@@ -80,10 +79,6 @@ export default function Hero() {
           if (cta) {
             gsap.set(cta, { opacity: 0, y: 16, scale: 0.9 });
             tl.to(cta, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "back.out(1.6)" }, 0.8);
-          }
-          if (cue) {
-            gsap.set(cue, { opacity: 0 });
-            tl.to(cue, { opacity: 1, duration: 0.8, ease: EASE_OUT }, 1.3);
           }
         }
 
@@ -181,16 +176,6 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* scroll cue — sits just above the stat strip on desktop */}
-        <div data-hero-cue className="pointer-events-none absolute inset-x-0 bottom-[8.5rem] hidden justify-center md:flex" aria-hidden="true">
-          <span className="label flex flex-col items-center gap-2 text-white-40">
-            Scroll
-            <span className="block h-8 w-px overflow-hidden bg-white-10">
-              <span className="block h-full w-full origin-top bg-gold" style={{ animation: "cue-drop 1.8s cubic-bezier(0.16,1,0.3,1) infinite" }} />
-            </span>
-          </span>
-        </div>
-
         {/* Hero stats strip — the 60+ / 16 / 2010 trio lives here, §5.5 */}
         <GlassStrip
           cells={[
@@ -200,7 +185,6 @@ export default function Hero() {
           ]}
         />
       </ImageBand>
-      <style>{`@keyframes cue-drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}`}</style>
     </section>
   );
 }
