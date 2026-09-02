@@ -689,6 +689,12 @@ textarea.field {
   backdrop-filter: blur(12px) saturate(170%);
   background: linear-gradient(180deg, rgba(5, 14, 46, 0.12), rgba(5, 14, 46, 0.42));
 }
+/* See-through variant — no blur, no tint; the footage shows straight through */
+.glass-strip-clear {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: transparent;
+}
 
 /* Data chips over the hero footage */
 .data-chip {
