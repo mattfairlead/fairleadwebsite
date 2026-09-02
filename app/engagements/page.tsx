@@ -7,7 +7,7 @@ import EngagementRow from "@/components/EngagementRow";
 import TestimonialFeature from "@/components/TestimonialFeature";
 import Btn from "@/components/Btn";
 import { getEngagements, getSectors } from "@/lib/data";
-import { pageMetadata, videoJsonLd } from "@/lib/seo";
+import { pageMetadata, videoJsonLd, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Engagements",
@@ -17,13 +17,15 @@ export const metadata: Metadata = pageMetadata(
 
 /**
  * Dion Leadership testimonial — Steve Dion on the sale to Gallagher. Served
- * from the "Reviews" GitHub release (H.264 + AAC QuickTime, fast-start, so it
- * streams on click). Set NEXT_PUBLIC_DION_TESTIMONIAL_URL once the file moves
- * to Blob/Supabase Storage (§9 media plan) — no code change needed.
+ * from the "Reviews" GitHub release (H.264 + AAC QuickTime, fast-start) via
+ * /api/media/dion-testimonial, which re-serves it with video headers —
+ * GitHub Releases sends `Content-Disposition: attachment`, which iOS Safari
+ * treats as a forced download and refuses to play inline. Set
+ * NEXT_PUBLIC_DION_TESTIMONIAL_URL once the file moves to Blob/Supabase
+ * Storage (§9 media plan); a proper storage host serves correct headers
+ * directly, so this bypasses the proxy — no code change needed.
  */
-const DION_VIDEO =
-  process.env.NEXT_PUBLIC_DION_TESTIMONIAL_URL ||
-  "https://github.com/mattfairlead/fairleadwebsite/releases/download/Reviews/dionleadership.mov";
+const DION_VIDEO = process.env.NEXT_PUBLIC_DION_TESTIMONIAL_URL || "/api/media/dion-testimonial";
 const DION_POSTER = "/engagements/dion-leadership-steve.jpg";
 const DION_LABEL = "Steve Dion, Dion Leadership, on working with Fairlead through the sale to Gallagher";
 // Portrait phone clip: 1280×720 track with a 90° rotation matrix → displays 720×1280. 2:09 long.
@@ -153,7 +155,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
             videoJsonLd({
               name: "Dion Leadership — client testimonial",
               description: DION_LABEL,
-              contentUrl: DION_VIDEO,
+              contentUrl: DION_VIDEO.startsWith("/") ? `${SITE_URL}${DION_VIDEO}` : DION_VIDEO,
               thumbnailPath: DION_POSTER,
               uploadDate: "2026-09-02",
               duration: "PT2M10S",
