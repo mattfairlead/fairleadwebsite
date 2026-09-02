@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
-import ImageBand from "@/components/ImageBand";
+import ImageBand, { WATERLINE } from "@/components/ImageBand";
+import Sailboat from "@/components/Sailboat";
 import LiveDots, { type DotPin } from "@/components/LiveDots";
 import UsMap, { type MapCity } from "@/components/UsMap";
 import { US_MAP_ASPECT, US_MAP_VIEWBOX } from "@/content/us-map";
@@ -41,15 +42,20 @@ const NAV = [
 const linkCls = "body-sm text-white-40 transition-colors duration-200 hover:text-white-100";
 
 /**
- * Footer — §5.5 last row. A blue-hour image band (21rem) carrying a
- * dot-matrix map of the lower 48 with the four office cities as live dots,
- * then a hairline-segmented footer. No personal
+ * Footer — §5.5 last row. A blue-hour image band (21rem) over flat water,
+ * a sailboat on the left, and a dot-matrix map of the lower 48 with the
+ * four office cities as live dots, then a hairline-segmented footer. No personal
  * emails, no fax. Mailing address small-print only (TODO §9: keep or drop).
  */
 export default function Footer() {
   return (
     <footer>
-      <ImageBand minHeight="21rem" overlayStrength={0.8} className="mt-20">
+      <ImageBand minHeight="21rem" overlayStrength={0.8} horizon="water" className="mt-20">
+        {/* the boat sits on the waterline; its hull dips into the water so the seam never shows */}
+        <Sailboat
+          className="absolute left-[6%] hidden w-32 text-blue-950 md:block lg:w-40"
+          style={{ bottom: `calc(${WATERLINE} - 10px)` }}
+        />
         <div
           className="absolute top-1/2 -translate-y-1/2 max-md:left-1/2 max-md:-translate-x-1/2 md:right-[5%]"
           style={{ width: "min(29rem, 92vw)", aspectRatio: US_MAP_ASPECT }}
