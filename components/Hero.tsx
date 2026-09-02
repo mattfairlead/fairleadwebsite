@@ -14,12 +14,21 @@ import { ARROW } from "@/components/Btn";
 /**
  * Hero — "Visibility". §5.5 row 1 + §5.7.
  *
- * Full-bleed band on a flat --blue-950 ground (footage was too busy behind
- * the headline); H1 chars split on load; one pill CTA; glass stat strip at
- * the bottom edge. As the user scrolls the first 60vh,
+ * Full-bleed two-layer parallax band; H1 chars split on load; one pill CTA;
+ * glass stat strip at the bottom edge. As the user scrolls the first 60vh,
  * three hairline markers pin onto the foreground and a chip resolves beside
  * each — the only scrubbed animation on the site (scrub: 0.6, then hold).
  */
+
+/**
+ * Hero background footage. Currently served from the WordPress uploads dir;
+ * set NEXT_PUBLIC_HERO_VIDEO_URL once the file moves to Blob/Supabase Storage
+ * (§9 media plan) — no code change needed. Empty string disables the video and
+ * falls back to the ImageBand gradient.
+ */
+const HERO_VIDEO =
+  process.env.NEXT_PUBLIC_HERO_VIDEO_URL ??
+  "https://fairleadadvisors.com/wp-content/uploads/2026/06/4130872-uhd_3840_2160_25fps.mp4";
 
 // Markers sit in the outer thirds so the chips never cross the headline
 // column; the right-hand chips open leftward.
@@ -130,7 +139,13 @@ export default function Hero() {
 
   return (
     <section ref={ref} className="relative">
-      <ImageBand aspect="1440/922" minHeight="min(100svh, 58rem)" solid overlayStrength={1}>
+      <ImageBand
+        aspect="1440/922"
+        minHeight="min(100svh, 58rem)"
+        parallax
+        overlayStrength={1}
+        video={HERO_VIDEO || undefined}
+      >
         <div className="absolute inset-0 flex flex-col items-center justify-center px-5 pb-36 text-center">
           <span data-hero-eyebrow className="label mb-8 flex items-center gap-3 text-white-50">
             <span className="inline-block h-px w-6 bg-gold" aria-hidden="true" />
