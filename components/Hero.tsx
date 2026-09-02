@@ -151,9 +151,10 @@ export default function Hero() {
             <br />
             <span className="text-gold-glow">what you can&rsquo;t see.</span>
           </h1>
-          <p data-hero-sub className="body-xl mt-8 max-w-2xl text-white-60">
-            Executive intelligence + artificial intelligence, working inside your portfolio. Embedded finance
-            and operating leadership for PE-backed companies.
+          <p data-hero-sub className="body-xl mt-8 max-w-3xl text-white-60">
+            Executive intelligence + artificial intelligence, working inside your portfolio.
+            <br />
+            Embedded finance and operating leadership for PE-backed companies.
           </p>
           <Link data-hero-cta href="/contact" className="btn btn-primary button mt-10">
             Talk to a partner
