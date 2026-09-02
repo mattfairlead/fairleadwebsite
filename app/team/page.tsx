@@ -15,9 +15,34 @@ export const metadata: Metadata = pageMetadata(
 );
 
 /**
- * /team — §4.5. Partners featured 2×2; full team as expandable cards.
- * Roster, titles, and credentials standardize via the Supabase `team`
- * table (self-service via the marketing hub, Phase 2).
+ * The roster is read live from the engagement hub (see lib/data.ts). The hub
+ * pings /api/revalidate when a card's "Website" checkbox flips; this
+ * interval is the safety net if that ping is ever missed.
+ */
+export const revalidate = 300;
+
+/**
+ * Horizontal hairline under a grid cell. Rows grow when a bio opens, so the
+ * rules track the cells instead of sitting at fixed offsets on the frame:
+ * every row but the last on desktop, every cell but the last when the grid
+ * collapses to one column on mobile.
+ */
+function CellRule({ index, count, columns }: { index: number; count: number; columns: number }) {
+  if (index >= count - 1) return null;
+  const lastRowStart = (Math.ceil(count / columns) - 1) * columns;
+  return (
+    <span
+      className={`dec bottom-0 left-0 h-px w-full${index >= lastRowStart ? " md:hidden" : ""}`}
+      aria-hidden="true"
+    />
+  );
+}
+
+/**
+ * /team — §4.5. Partners featured 2×2 with the portrait beside the text;
+ * the rest of the roster as a hairline grid of circular portraits. Who
+ * appears, in what order, with which title, bio and headshot is decided in
+ * the hub's Team module — one checkbox per card.
  */
 export default async function TeamPage() {
   const team = await getTeam();
@@ -45,31 +70,43 @@ export default async function TeamPage() {
         }
       />
 
-      <SectionReveal className="container-page pb-6">
-        <SectionHead eyebrow="Partners" title={<>The partners.</>} titleClass="h3" />
-        <HairlineFrame columns={2} rows={partners.length > 2 ? ["50%"] : undefined} className="mt-10">
-          <div className="grid md:grid-cols-2">
-            {partners.map((member) => (
-              <div key={member.slug} className="p-4 md:p-8">
-                <TeamCell member={member} featured />
-              </div>
-            ))}
-          </div>
-        </HairlineFrame>
-        <p className="body-sm mt-4 text-white-40">Select a name to read the bio.</p>
-      </SectionReveal>
+      {partners.length > 0 && (
+        <SectionReveal className="container-page pb-6">
+          <SectionHead eyebrow="Partners" title={<>The partners.</>} titleClass="h3" />
+          <HairlineFrame columns={2} className="mt-10">
+            <div className="grid md:grid-cols-2">
+              {partners.map((member, i) => (
+                <div key={member.slug} className="relative">
+                  <CellRule index={i} count={partners.length} columns={2} />
+                  <TeamCell member={member} featured />
+                </div>
+              ))}
+            </div>
+          </HairlineFrame>
+          <p className="body-sm mt-4 text-white-40">Select a name to read the bio.</p>
+        </SectionReveal>
+      )}
 
       {rest.length > 0 && (
         <SectionReveal className="section container-page">
           <SectionHead eyebrow="Team" title={<>The bench.</>} titleClass="h3" />
           <HairlineFrame columns={4} className="mt-10">
             <div className="grid sm:grid-cols-2 md:grid-cols-4">
-              {rest.map((member) => (
-                <div key={member.slug} className="p-4 md:p-6">
+              {rest.map((member, i) => (
+                <div key={member.slug} className="relative">
+                  <CellRule index={i} count={rest.length} columns={4} />
                   <TeamCell member={member} />
                 </div>
               ))}
             </div>
+          </HairlineFrame>
+        </SectionReveal>
+      )}
+
+      {team.length === 0 && (
+        <SectionReveal className="section container-page">
+          <HairlineFrame>
+            <p className="body-lg p-10 text-white-50">The roster is being updated. Check back shortly.</p>
           </HairlineFrame>
         </SectionReveal>
       )}

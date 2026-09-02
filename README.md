@@ -10,8 +10,10 @@ operating platform for PE-backed companies.** Built to the spec in
 - **Tailwind v4** with the §5.1 tokens as CSS variables (`app/globals.css`)
 - **GSAP 3.15** + ScrollTrigger + ScrollSmoother + SplitText + ScrollToPlugin
   via `@gsap/react` — constants and choreography in `lib/motion.ts` (§5.4/§5.8)
-- **Supabase** content backend (`supabase/schema.sql`); without env vars the
-  site serves the local seed content in `content/seed/` — identical shapes
+- **Supabase** — `/team` reads the engagement hub's `team_members` table live
+  (see *Team content* below); other content is seed-backed until the tables in
+  `supabase/schema.sql` are provisioned. Without env vars the site serves
+  `content/seed/` — identical shapes
 - **SendGrid** for the contact form + newsletter (HubSpot is sunset); sends
   are skipped and logged when unconfigured, so previews work
 - **Vercel** hosting; 301 redirects from the legacy WordPress URLs in
@@ -39,9 +41,42 @@ app/api/             contact, subscribe, ask (Phase 2 stub), revalidate
 components/          Hero, GlassStrip, HairlineFrame, SectionReveal, ...
 lib/motion.ts        GSAP constants + sectionReveal()/pulseDots()/headerIntro()
 lib/data.ts          content accessors (Supabase, seed fallback)
-content/seed/        team, engagements, sectors, perspectives seed data
+content/seed/        engagements, sectors, perspectives seed data; team = hub snapshot
+lib/team.ts          hub `team_members` row → TeamMember (slug, title/credentials, group)
+app/api/team/photo/  serves hub headshots (stored inline as base64) with CDN caching
 content/redirects.ts legacy WordPress 301 map
 supabase/schema.sql  content schema + RLS policies
+```
+
+## Team content
+
+The roster on `/team` is owned by the engagement hub
+([mattfairlead/fairlead](https://github.com/mattfairlead/fairlead)) — one
+Supabase project, one `team_members` table, no sync job:
+
+1. In the hub's **Team** module every card has a **Website** checkbox
+   (`team_members.show_on_website`). Checked = on the site.
+2. A row-level policy exposes only checked rows to the anon key, so this site
+   reads `team_members` directly (`lib/data.ts → getTeam`) with no filter of
+   its own to get wrong. Name, title/credentials (`suffix`), the roles line,
+   the extended bio, the headshot and the sort order all come from the hub;
+   `lib/team.ts` maps them onto the site's `TeamMember` shape and decides who
+   is a partner (a bare "Partner" in the suffix).
+3. Headshots are stored in the hub inline as data URLs, so the site lists the
+   roster with a `has_photo` flag and serves each image through
+   `/api/team/photo/[id]` with long cache headers.
+4. Flipping the checkbox (or saving a bio / uploading a photo) makes the hub
+   call this site's `POST /api/revalidate` with `REVALIDATE_SECRET`, so the
+   page updates within seconds; `revalidate = 300` on the page is the safety
+   net.
+
+`content/seed/team.ts` is a snapshot of the hub table for previews without
+env vars. To refresh it, run this in the hub project's SQL editor and paste
+the rows back in the same shape:
+
+```sql
+select id, name, suffix, roles, sort_order, extended_bio
+from team_members order by sort_order, id;
 ```
 
 ## Design system in one paragraph

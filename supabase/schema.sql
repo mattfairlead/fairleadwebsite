@@ -1,8 +1,19 @@
 -- Fairlead Advisors content schema — §7 of the redesign plan.
 -- Public read where visible = true; writes only via service role
 -- (the marketing hub, Phase 2).
+--
+-- TEAM IS NOT HERE. The roster is read live from the engagement hub's
+-- `team_members` table in the same Supabase project
+-- (github.com/mattfairlead/fairlead → supabase/schema.sql and
+-- supabase/migrations/20260902000001_website_visibility.sql). That migration
+-- adds `show_on_website` — the "Website" checkbox on each hub team card — and
+-- an anon SELECT policy scoped to checked rows. lib/team.ts maps the hub row
+-- onto the website's TeamMember shape; nothing below needs to exist for /team.
+--
+-- The tables below (sectors, engagements, perspectives) are NOT yet
+-- provisioned in that project; lib/data.ts serves the seed content until
+-- they are.
 
-create type team_group as enum ('partner', 'team');
 create type perspective_kind as enum ('perspective', 'transaction');
 
 create table sectors (
@@ -10,22 +21,6 @@ create table sectors (
   slug text unique not null,
   name text not null,
   sort int not null default 0
-);
-
-create table team (
-  id uuid primary key default gen_random_uuid(),
-  slug text unique not null,
-  name text not null,
-  title text not null,
-  credentials text,
-  "group" team_group not null default 'team',
-  specialty text not null default '',
-  bio_md text not null default '',
-  photo_url text,
-  linkedin text,
-  visible boolean not null default true,
-  sort int not null default 0,
-  updated_at timestamptz not null default now()
 );
 
 create table engagements (
@@ -51,7 +46,7 @@ create table perspectives (
   id uuid primary key default gen_random_uuid(),
   slug text unique not null,
   title text not null,
-  author_slug text references team (slug),
+  author_slug text, -- lib/team.ts slugify(name) of the hub team member, e.g. "jason-salgo"
   kind perspective_kind not null default 'perspective',
   published_at date not null,
   excerpt text not null default '',
@@ -62,11 +57,9 @@ create table perspectives (
 
 -- Row-level security: public read where visible = true.
 alter table sectors enable row level security;
-alter table team enable row level security;
 alter table engagements enable row level security;
 alter table perspectives enable row level security;
 
 create policy "public read sectors" on sectors for select using (true);
-create policy "public read team" on team for select using (visible = true);
 create policy "public read engagements" on engagements for select using (visible = true);
 create policy "public read perspectives" on perspectives for select using (visible = true);

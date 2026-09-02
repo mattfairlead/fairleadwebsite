@@ -1,110 +1,109 @@
 "use client";
 
 import { useId, useState } from "react";
-import Image from "next/image";
 import clsx from "clsx";
 import type { TeamMember } from "@/lib/types";
 import { Markdown } from "@/lib/md";
-
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((n) => n[0]?.toUpperCase() ?? "")
-    .join("");
-}
+import Portrait from "@/components/Portrait";
 
 /**
- * Team card — photo, name, title, one-line specialty; click expands the
- * full bio in place (no modals — §5.9). Photo eases in scale on hover and
- * its gradient deepens. Until headshots land, a graded monogram stands in.
+ * Team card — circular portrait, name, title + credentials, the hub's roles
+ * line; click expands the full bio in place (no modals — §5.9). Two layouts:
+ * `featured` (partners: portrait beside the text, bio under both) and the
+ * bench cell (portrait above, centered). Everything on the card is the hub
+ * row, mapped by lib/team.ts.
  */
 export default function TeamCell({ member, featured = false }: { member: TeamMember; featured?: boolean }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const title = member.credentials ? `${member.title}, ${member.credentials}` : member.title;
+  const hasBio = member.bio_md.trim().length > 0;
 
   return (
-    <div data-cell id={member.slug} className="flex flex-col scroll-mt-24">
+    <div
+      data-cell
+      id={member.slug}
+      className={clsx("spot flex h-full flex-col scroll-mt-24", featured ? "p-6 md:p-10" : "p-5 md:p-7")}
+    >
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        aria-controls={panelId}
-        className="group flex flex-col text-left"
+        onClick={() => hasBio && setOpen((v) => !v)}
+        aria-expanded={hasBio ? open : undefined}
+        aria-controls={hasBio ? panelId : undefined}
+        disabled={!hasBio}
+        className={clsx(
+          "group flex text-left disabled:cursor-default",
+          featured ? "flex-col gap-6 sm:flex-row sm:items-center sm:gap-8" : "flex-col items-center gap-5 text-center"
+        )}
       >
-        <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/5", borderRadius: "3px" }}>
-          <div
-            className="absolute inset-0 transition-transform duration-[1200ms] group-hover:scale-[1.04]"
-            style={{ transitionTimingFunction: "var(--ease-out-expo)" }}
-          >
-            {member.photo_url ? (
-              <Image src={member.photo_url} alt={member.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 25vw" />
-            ) : (
-              // TODO(media): standardized headshots, one aspect ratio (§4.5)
-              <div className="monogram absolute inset-0 flex items-center justify-center" aria-hidden="true">
-                <span
-                  className="select-none font-semibold text-gold-soft/40"
-                  style={{ fontSize: featured ? "clamp(5rem, 10vw, 8rem)" : "clamp(3.5rem, 6vw, 5rem)", letterSpacing: "-0.06em", lineHeight: 1 }}
-                >
-                  {initials(member.name)}
-                </span>
-                <Image src="/brand/brandmark-white.svg" alt="" width={20} height={20} className="absolute bottom-5 right-5 opacity-30" />
-              </div>
-            )}
-          </div>
-          {/* bottom gradient, deepens on hover — §5.9 */}
-          <div
-            className="absolute inset-x-0 bottom-0 h-2/3 opacity-80 transition-opacity duration-300 group-hover:opacity-100"
-            style={{ background: "linear-gradient(180deg, rgba(5,14,46,0) 0%, #050E2E 100%)" }}
-          />
-          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-0.5 p-5">
-            <span className={clsx(featured ? "body-xl" : "body-lg", "text-white-100")} data-anim="title">
-              {member.name}
-            </span>
+        <div data-anim="visual" className="shrink-0">
+          <Portrait name={member.name} src={member.photo_url} size={featured ? "lg" : "md"} />
+        </div>
+        <div className={clsx("flex min-w-0 flex-col", featured ? "gap-2" : "items-center gap-1.5")}>
+          <span className={clsx(featured ? "body-xxl" : "body-lg", "text-white-100")} data-anim="title">
+            {member.name}
+          </span>
+          {title && (
             <span className="body-sm text-gold/90" data-anim="subtitle">
               {title}
             </span>
-          </div>
-        </div>
-        <div className="flex items-center justify-between gap-4 py-4">
-          <span className="body-sm text-white-60">{member.specialty}</span>
-          <span
-            className={clsx(
-              "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white-60 transition-all duration-500 group-hover:text-gold",
-              open && "rotate-45 text-gold"
-            )}
-            style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.12)", transitionTimingFunction: "var(--ease-spring)" }}
-            aria-hidden="true"
-          >
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          </span>
+          )}
+          {member.specialty && (
+            <span className={clsx("body-sm text-white-50", featured ? "max-w-md" : "max-w-[18rem] line-clamp-2")}>
+              {member.specialty}
+            </span>
+          )}
+          {hasBio && (
+            <span
+              className={clsx(
+                "mt-2 inline-flex items-center gap-2 text-white-40 transition-colors duration-300 group-hover:text-gold",
+                open && "text-gold"
+              )}
+            >
+              <span
+                className={clsx(
+                  "flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-transform duration-500",
+                  open && "rotate-45"
+                )}
+                style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.12)", transitionTimingFunction: "var(--ease-spring)" }}
+                aria-hidden="true"
+              >
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                  <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </span>
+              <span className="button">{open ? "Close" : "Read bio"}</span>
+            </span>
+          )}
         </div>
       </button>
-      <div
-        id={panelId}
-        className="grid transition-[grid-template-rows] duration-500"
-        style={{ gridTemplateRows: open ? "1fr" : "0fr", transitionTimingFunction: "var(--ease-out-expo)" }}
-      >
-        <div className="overflow-hidden">
-          <div className="pb-6">
-            <Markdown className="!gap-3 [&>p]:!text-[0.9375rem]">{member.bio_md}</Markdown>
-            {member.linkedin && (
-              <a
-                href={member.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="body-sm link-underline mt-4 inline-block text-white-60"
+      {hasBio && (
+        <div
+          id={panelId}
+          className="grid transition-[grid-template-rows] duration-500"
+          style={{ gridTemplateRows: open ? "1fr" : "0fr", transitionTimingFunction: "var(--ease-out-expo)" }}
+        >
+          <div className="overflow-hidden">
+            <div className={clsx("pt-6", featured ? "md:pt-8" : "text-left")}>
+              <Markdown
+                className={clsx("!gap-3", featured ? "[&>p]:!text-[0.9375rem]" : "[&>p]:!text-[0.875rem]")}
               >
-                LinkedIn
-              </a>
-            )}
+                {member.bio_md}
+              </Markdown>
+              {member.linkedin && (
+                <a
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="body-sm link-underline mt-4 inline-block text-white-60"
+                >
+                  LinkedIn
+                </a>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

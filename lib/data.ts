@@ -1,28 +1,46 @@
 import { getSupabase } from "@/lib/supabase";
-import type { Engagement, Perspective, Sector, TeamMember } from "@/lib/types";
+import type { Engagement, HubTeamRow, Perspective, Sector, TeamMember } from "@/lib/types";
+import { HUB_TEAM_COLUMNS, mapHubMember, sortHubRows } from "@/lib/team";
 import { team as seedTeam } from "@/content/seed/team";
 import { engagements as seedEngagements } from "@/content/seed/engagements";
 import { sectors as seedSectors } from "@/content/seed/sectors";
 import { perspectives as seedPerspectives } from "@/content/seed/perspectives";
 
 /**
- * Content accessors. Reads Supabase when NEXT_PUBLIC_SUPABASE_* are set,
- * otherwise serves the local seed content — identical shapes, so pages
- * never know the difference. RLS on the Supabase side enforces
- * `visible = true` for the anon key; the seed path filters here.
+ * Content accessors.
+ *
+ * Team is live: it reads the engagement hub's `team_members` table
+ * (github.com/mattfairlead/fairlead) with the anon key. RLS on that table
+ * only exposes rows whose "Website" checkbox is on, so the query needs no
+ * filter of its own — the `.eq` below is belt-and-braces. Without env vars
+ * (local dev, CI) the seed snapshot in content/seed/team.ts is served through
+ * the same mapping, so pages never know the difference.
+ *
+ * Engagements, sectors and perspectives are still seed-backed: the hub's
+ * `engagements` table is the internal tracker (a different shape, not
+ * public), and the website-shaped tables in supabase/schema.sql have not
+ * been provisioned. Each accessor tries Supabase first and falls back to seed
+ * on an error or an empty result, so provisioning them later is zero-code.
  */
 
 export async function getTeam(): Promise<TeamMember[]> {
   const sb = getSupabase();
+  let rows: HubTeamRow[] | null = null;
   if (sb) {
     const { data, error } = await sb
-      .from("team")
-      .select("*")
-      .eq("visible", true)
-      .order("sort", { ascending: true });
-    if (!error && data) return data as TeamMember[];
+      .from("team_members")
+      .select(HUB_TEAM_COLUMNS)
+      .eq("show_on_website", true)
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true });
+    if (error) {
+      console.warn("[data] team_members read failed — serving seed roster:", error.message);
+    } else {
+      rows = (data ?? []) as unknown as HubTeamRow[];
+    }
   }
-  return seedTeam.filter((m) => m.visible).sort((a, b) => a.sort - b.sort);
+  if (!rows) rows = seedTeam.filter((r) => r.show_on_website);
+  return sortHubRows(rows).map(mapHubMember);
 }
 
 export async function getTeamMember(slug: string): Promise<TeamMember | null> {
@@ -30,13 +48,30 @@ export async function getTeamMember(slug: string): Promise<TeamMember | null> {
   return all.find((m) => m.slug === slug) ?? null;
 }
 
-export async function getSectors(): Promise<Sector[]> {
+/** Supabase rows if the table exists and has visible content; otherwise the seed. */
+async function supabaseOrSeed<T>(
+  table: string,
+  seed: () => T[],
+  build: (q: ReturnType<NonNullable<ReturnType<typeof getSupabase>>["from"]>) => PromiseLike<{
+    data: unknown;
+    error: { message: string } | null;
+  }>
+): Promise<T[]> {
   const sb = getSupabase();
   if (sb) {
-    const { data, error } = await sb.from("sectors").select("*").order("sort");
-    if (!error && data) return data as Sector[];
+    const { data, error } = await build(sb.from(table));
+    if (!error && Array.isArray(data) && data.length > 0) return data as T[];
+    if (error) console.warn(`[data] ${table} read failed — serving seed:`, error.message);
   }
-  return [...seedSectors].sort((a, b) => a.sort - b.sort);
+  return seed();
+}
+
+export async function getSectors(): Promise<Sector[]> {
+  return supabaseOrSeed<Sector>(
+    "sectors",
+    () => [...seedSectors].sort((a, b) => a.sort - b.sort),
+    (q) => q.select("*").order("sort")
+  );
 }
 
 export async function getEngagements(filters?: {
@@ -46,18 +81,11 @@ export async function getEngagements(filters?: {
   outcome?: string;
   featuredOnly?: boolean;
 }): Promise<Engagement[]> {
-  const sb = getSupabase();
-  let rows: Engagement[];
-  if (sb) {
-    const { data, error } = await sb
-      .from("engagements")
-      .select("*")
-      .eq("visible", true)
-      .order("year_start", { ascending: false });
-    rows = !error && data ? (data as Engagement[]) : [];
-  } else {
-    rows = seedEngagements.filter((e) => e.visible);
-  }
+  let rows = await supabaseOrSeed<Engagement>(
+    "engagements",
+    () => seedEngagements.filter((e) => e.visible),
+    (q) => q.select("*").eq("visible", true).order("year_start", { ascending: false })
+  );
 
   if (filters?.featuredOnly) rows = rows.filter((e) => e.featured);
   if (filters?.sector) rows = rows.filter((e) => e.sector === filters.sector);
@@ -74,20 +102,14 @@ export async function getEngagement(slug: string): Promise<Engagement | null> {
 }
 
 export async function getPerspectives(kind?: "perspective" | "transaction"): Promise<Perspective[]> {
-  const sb = getSupabase();
-  let rows: Perspective[];
-  if (sb) {
-    const { data, error } = await sb
-      .from("perspectives")
-      .select("*")
-      .eq("visible", true)
-      .order("published_at", { ascending: false });
-    rows = !error && data ? (data as Perspective[]) : [];
-  } else {
-    rows = seedPerspectives
-      .filter((p) => p.visible)
-      .sort((a, b) => b.published_at.localeCompare(a.published_at));
-  }
+  const rows = await supabaseOrSeed<Perspective>(
+    "perspectives",
+    () =>
+      seedPerspectives
+        .filter((p) => p.visible)
+        .sort((a, b) => b.published_at.localeCompare(a.published_at)),
+    (q) => q.select("*").eq("visible", true).order("published_at", { ascending: false })
+  );
   return kind ? rows.filter((p) => p.kind === kind) : rows;
 }
 
