@@ -35,7 +35,7 @@ export default function Footer() {
     <footer>
       <ImageBand minHeight="21rem" overlayStrength={0.8} className="mt-20">
         <LiveDots pins={CITY_PINS} showLabels />
-        <div className="absolute bottom-8 left-6 flex items-center gap-2 md:left-10" aria-hidden="true">
+        <div className="theme-page absolute bottom-8 left-6 flex items-center gap-2 md:left-10" aria-hidden="true">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
           <span className="label text-white-40">Four offices · one platform</span>
         </div>

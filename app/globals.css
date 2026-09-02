@@ -41,6 +41,8 @@
   --gold-rgb: 213, 179, 113;
   --blue-950-rgb: 5, 14, 46;
   --blue-700-rgb: 26, 61, 148;
+  /* what image bands dissolve into — the page ground (see "Light routes") */
+  --ground-rgb: 5, 14, 46;
   --header-h: 4.5rem;
 }
 
@@ -941,6 +943,140 @@ textarea.field {
 }
 .spin {
   animation: spin 0.8s linear infinite;
+}
+
+/* ==========================================================================
+   Light routes — a white ground with navy ink. Routes listed in
+   lib/theme.ts carry <html data-theme="light">, set before first paint. The
+   white-* tokens are the site's ink scale, so remapping them to navy alphas
+   flips text, hairlines, numerals and the header in one move; gold deepens
+   so it still reads on white. Anything that is imagery (.theme-dark, e.g.
+   the footer band) keeps the dark scale for whatever sits on top of it.
+   ========================================================================== */
+
+html[data-theme="light"] {
+  color-scheme: light;
+  background: #ffffff;
+}
+/* .theme-page re-establishes the route's ink inside a .theme-dark scope —
+   for the part of an image band that has dissolved into the page ground. */
+html[data-theme="light"],
+html[data-theme="light"] .theme-page {
+  --ground-rgb: 255, 255, 255;
+  --gold-rgb: 156, 125, 68;
+
+  --color-white-100: #050e2e;
+  --color-white-80: rgba(5, 14, 46, 0.8);
+  --color-white-60: rgba(5, 14, 46, 0.66);
+  --color-white-50: rgba(5, 14, 46, 0.56);
+  --color-white-40: rgba(5, 14, 46, 0.44);
+  --color-white-20: rgba(5, 14, 46, 0.2);
+  --color-white-10: rgba(5, 14, 46, 0.1);
+  --color-white-6: rgba(5, 14, 46, 0.06);
+  --color-muted: #6b7597;
+  --color-gold: #9c7d44;
+  --color-gold-pressed: #866a35;
+  --color-gold-soft: #b59860;
+}
+
+/* Imagery keeps white ink over it, whatever the route */
+.theme-dark {
+  --color-white-100: #ffffff;
+  --color-white-80: rgba(255, 255, 255, 0.8);
+  --color-white-60: rgba(255, 255, 255, 0.6);
+  --color-white-50: rgba(255, 255, 255, 0.5);
+  --color-white-40: rgba(255, 255, 255, 0.4);
+  --color-white-20: rgba(255, 255, 255, 0.2);
+  --color-white-10: rgba(255, 255, 255, 0.1);
+  --color-white-6: rgba(255, 255, 255, 0.06);
+  --color-gold: #d5b371;
+  --gold-rgb: 213, 179, 113;
+}
+
+/* Logo lockup — the white and navy variants both render; the route picks */
+.on-light {
+  display: none;
+}
+html[data-theme="light"] .on-dark {
+  display: none;
+}
+html[data-theme="light"] .on-light {
+  display: block;
+}
+
+/* Ambient ground — the same two light sources, barely there on white */
+html[data-theme="light"] .ambient::before {
+  background:
+    radial-gradient(55% 45% at 12% -5%, rgba(var(--blue-700-rgb), 0.08) 0%, rgba(var(--blue-700-rgb), 0) 60%),
+    radial-gradient(40% 40% at 88% 108%, rgba(213, 179, 113, 0.14) 0%, rgba(213, 179, 113, 0) 60%),
+    radial-gradient(45% 40% at 78% 18%, rgba(15, 42, 110, 0.06) 0%, rgba(15, 42, 110, 0) 60%);
+}
+html[data-theme="light"] .ambient::after {
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+}
+
+/* Spotlight cells — a cooler, lighter wash so the cell lifts, not darkens */
+html[data-theme="light"] .spot::before {
+  background: radial-gradient(
+    28rem circle at var(--mx, 50%) var(--my, 50%),
+    rgba(213, 179, 113, 0.16) 0%,
+    rgba(var(--blue-700-rgb), 0.07) 32%,
+    rgba(var(--blue-700-rgb), 0) 68%
+  );
+}
+html[data-theme="light"] .spot:hover .ghost-num {
+  color: rgba(213, 179, 113, 0.4);
+}
+
+/* Buttons — primary flips to navy on white; the gold hover stays */
+html[data-theme="light"] .btn-primary {
+  color: #ffffff;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 10px 30px -14px rgba(5, 14, 46, 0.35);
+}
+/* Gold hover/active states keep navy text: navy on the deeper gold clears
+   4.5:1, white on it does not. */
+html[data-theme="light"] .btn-primary:hover,
+html[data-theme="light"] .btn-primary:focus-visible {
+  color: var(--color-blue-950);
+}
+html[data-theme="light"] .btn-secondary {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+html[data-theme="light"] .chip {
+  background: rgba(5, 14, 46, 0.05);
+}
+html[data-theme="light"] .chip:hover {
+  background: rgba(5, 14, 46, 0.1);
+  color: var(--color-white-100);
+}
+html[data-theme="light"] .field:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-white-100);
+  box-shadow: 0 0 0 1000px #ffffff inset;
+}
+
+/* Underline links — the resting rule in navy */
+html[data-theme="light"] .link-underline {
+  background-image:
+    linear-gradient(var(--color-gold), var(--color-gold)),
+    linear-gradient(rgba(5, 14, 46, 0.3), rgba(5, 14, 46, 0.3));
+}
+
+/* Header glass, nav pill and the mobile sheet go white */
+html[data-theme="light"] .site-header.is-active {
+  background: rgba(255, 255, 255, calc(var(--header-glass) * 0.72));
+}
+html[data-theme="light"] .nav-pill {
+  background: rgba(5, 14, 46, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(5, 14, 46, 0.05);
+}
+html[data-theme="light"] .mobile-menu {
+  background: rgba(255, 255, 255, 0.9);
+}
+html[data-theme="light"] .text-gold-glow {
+  text-shadow: none;
 }
 
 /* Reduced motion — §5.9. The page must read identically, just still. */
