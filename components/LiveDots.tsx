@@ -8,6 +8,7 @@ export interface DotPin {
   label: string;
   x: string; // percentage, e.g. "72%"
   y: string;
+  labelSide?: "left" | "right" | "top"; // which way the label opens (default right)
 }
 
 /**
@@ -53,7 +54,17 @@ export default function LiveDots({
           )}
           <span data-dot className="absolute -left-[3px] -top-[3px] block h-1.5 w-1.5 rounded-full bg-gold shadow-[0_0_10px_rgba(213,179,113,0.9)]" />
           {showLabels && (
-            <span className="label absolute left-4 top-[-0.4em] whitespace-nowrap text-white-50">{pin.label}</span>
+            <span
+              className={`label absolute whitespace-nowrap text-white-50 ${
+                pin.labelSide === "top"
+                  ? "bottom-3 right-0"
+                  : pin.labelSide === "left"
+                    ? "right-4 top-[-0.4em]"
+                    : "left-4 top-[-0.4em]"
+              }`}
+            >
+              {pin.label}
+            </span>
           )}
         </div>
       ))}
