@@ -116,7 +116,7 @@ export default function TestimonialFeature({
                     priority
                     sizes="(max-width: 768px) 100vw, 58vw"
                     className="object-cover"
-                    style={{ objectPosition: "50% 28%", filter: "saturate(0.88) contrast(1.06)" }}
+                    style={{ objectPosition: "50% 18%", filter: "saturate(0.88) contrast(1.06)" }}
                     onError={() => setPosterMissing(true)}
                   />
                 ) : (
@@ -164,10 +164,11 @@ export default function TestimonialFeature({
                   type="button"
                   onClick={play}
                   aria-label={`${cta} — ${video.label}`}
-                  className="absolute inset-0 flex cursor-pointer items-center justify-center text-left"
+                  className="absolute inset-0 block cursor-pointer text-left"
                 >
-                  {/* play control — glass at rest, gold under the cursor, a slow sonar ring says "live" */}
-                  <span className="relative flex items-center justify-center">
+                  {/* play control — bottom-right, opposite the caption, so it never covers the face.
+                      Glass at rest, gold under the cursor, a slow sonar ring says "live". */}
+                  <span className="absolute bottom-5 right-5 flex items-center justify-center md:bottom-7 md:right-7">
                     <span className="play-ring absolute inset-0 rounded-full" aria-hidden="true" />
                     <span className="play-ring play-ring-2 absolute inset-0 rounded-full" aria-hidden="true" />
                     <span className="play-btn relative flex h-[4.75rem] w-[4.75rem] items-center justify-center rounded-full text-white-100">
@@ -176,7 +177,7 @@ export default function TestimonialFeature({
                   </span>
 
                   {/* caption — mirrors the team-cell typography */}
-                  <span className="absolute inset-x-0 bottom-0 flex flex-col gap-0.5 p-5 md:p-7">
+                  <span className="absolute inset-x-0 bottom-0 flex flex-col gap-0.5 p-5 pr-28 md:p-7 md:pr-32">
                     <span className="label mb-2 flex items-center gap-3 text-white-50">
                       <span className="inline-block h-px w-6 bg-gold" aria-hidden="true" />
                       Client testimonial
