@@ -88,6 +88,7 @@ export function videoJsonLd(v: {
   contentUrl: string;
   thumbnailPath: string;
   uploadDate: string; // ISO date
+  duration?: string; // ISO 8601, e.g. "PT2M10S"
   path: string;
 }) {
   return {
@@ -98,6 +99,7 @@ export function videoJsonLd(v: {
     contentUrl: v.contentUrl,
     thumbnailUrl: `${SITE_URL}${v.thumbnailPath}`,
     uploadDate: v.uploadDate,
+    ...(v.duration ? { duration: v.duration } : {}),
     url: `${SITE_URL}${v.path}`,
     publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
   };

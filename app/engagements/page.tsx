@@ -26,6 +26,9 @@ const DION_VIDEO =
   "https://github.com/mattfairlead/fairleadwebsite/releases/download/Reviews/dionleadership.mov";
 const DION_POSTER = "/engagements/dion-leadership-steve.jpg";
 const DION_LABEL = "Steve Dion, Dion Leadership, on working with Fairlead through the sale to Gallagher";
+// Portrait phone clip: 1280×720 track with a 90° rotation matrix → displays 720×1280. 2:09 long.
+const DION_ASPECT = { w: 720, h: 1280 };
+const DION_DURATION = "2:10";
 
 const ROLES = [
   "Interim CEO",
@@ -140,7 +143,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
         }
         speaker={{ name: "Steve Dion", title: "Founder & CEO, Dion Leadership" }}
         tags={["M&A", "Sale", "Professional services"]}
-        video={{ src: DION_VIDEO, poster: DION_POSTER, label: DION_LABEL }}
+        video={{ src: DION_VIDEO, poster: DION_POSTER, label: DION_LABEL, aspect: DION_ASPECT, duration: DION_DURATION }}
         href="/engagements/dion-leadership"
       />
       <script
@@ -153,6 +156,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
               contentUrl: DION_VIDEO,
               thumbnailPath: DION_POSTER,
               uploadDate: "2026-09-02",
+              duration: "PT2M10S",
               path: "/engagements",
             })
           ),
