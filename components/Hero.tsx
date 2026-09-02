@@ -7,6 +7,7 @@ import { gsap, registerGsap, prefersReducedMotion, isMobile, EASE_OUT, D_REVEAL 
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import GlassStrip from "@/components/GlassStrip";
+import Brandboat from "@/components/Brandboat";
 import ImageBand from "@/components/ImageBand";
 import { ARROW } from "@/components/Btn";
 
@@ -55,9 +56,12 @@ export default function Hero() {
         const sub = root.querySelector<HTMLElement>("[data-hero-sub]");
         const cta = root.querySelector<HTMLElement>("[data-hero-cta]");
         const cue = root.querySelector<HTMLElement>("[data-hero-cue]");
+        // The boat is the only <svg> in the headline; SplitText re-parents it
+        // into a word wrapper but never hides it, so it gets its own tween.
+        const boat = root.querySelector<HTMLElement>(".brandboat");
 
         if (reduced) {
-          gsap.set([eyebrow, sub, cta, cue].filter(Boolean), { opacity: 1, y: 0 });
+          gsap.set([eyebrow, sub, cta, cue, boat].filter(Boolean), { opacity: 1, y: 0 });
         } else {
           const tl = gsap.timeline({ delay: 0.15 });
           if (eyebrow) {
@@ -72,6 +76,10 @@ export default function Hero() {
           } else if (h1) {
             gsap.set(h1, { opacity: 0, y: 30 });
             tl.to(h1, { opacity: 1, y: 0, duration: D_REVEAL, ease: EASE_OUT }, 0.1);
+          }
+          if (boat) {
+            gsap.set(boat, { opacity: 0, scale: 0.7, rotate: -12, transformOrigin: "50% 74%" });
+            tl.to(boat, { opacity: 1, scale: 1, rotate: 0, duration: 0.9, ease: "back.out(1.5)" }, 0.42);
           }
           if (sub) {
             gsap.set(sub, { opacity: 0, y: 24 });
@@ -147,7 +155,10 @@ export default function Hero() {
           {/* .h1 clamps to 12vw for short display words; this two-phrase
               headline needs the narrower clamp to hold two lines (caveman rule) */}
           <h1 data-hero-h1 className="h1" style={{ fontSize: "clamp(3rem, 8.5vw, 8.75rem)", perspective: "800px" }}>
-            You can&rsquo;t run
+            You can&rsquo;t{" "}
+            <span className="whitespace-nowrap">
+              run <Brandboat />
+            </span>
             <br />
             <span className="text-gold-glow">what you can&rsquo;t see.</span>
           </h1>
