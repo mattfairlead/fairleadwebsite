@@ -1103,3 +1103,18 @@ html[data-theme="light"] .text-gold-glow {
     opacity: 0;
   }
 }
+
+/* Footer map — the dashed route between offices drifts, slowly. §5.8.6 */
+.us-map-route {
+  animation: us-map-route 16s linear infinite;
+}
+@keyframes us-map-route {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .us-map-route {
+    animation: none;
+  }
+}

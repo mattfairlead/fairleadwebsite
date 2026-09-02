@@ -1,17 +1,32 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import ImageBand from "@/components/ImageBand";
-import LiveDots from "@/components/LiveDots";
+import LiveDots, { type DotPin } from "@/components/LiveDots";
+import UsMap, { type MapCity } from "@/components/UsMap";
+import { US_MAP_ASPECT, US_MAP_VIEWBOX } from "@/content/us-map";
 
 const CITIES = ["Boston", "Houston", "Minneapolis", "Maryland"];
 
-// Approximate positions of the four cities on the footer band, §5.8.6.
-const CITY_PINS = [
-  { label: "Boston", x: "78%", y: "34%" },
-  { label: "Houston", x: "48%", y: "72%" },
-  { label: "Minneapolis", x: "46%", y: "30%" },
-  { label: "Maryland", x: "72%", y: "46%" },
+// The four offices projected into the map frame (Albers USA — see
+// content/us-map.ts). Order is the route the dashed line threads.
+const OFFICES: MapCity[] = [
+  { label: "Minneapolis", x: 541.9, y: 161 },
+  { label: "Boston", x: 908.7, y: 167.1 },
+  { label: "Maryland", x: 836.4, y: 263.8 },
+  { label: "Houston", x: 510.4, y: 509.2 },
 ];
+
+// The live dots sit in a layer over the SVG, so map-space → percent of the
+// same box. Boston's label stacks above its dot (it sits on the coast, and
+// a right-opening label would collide with Minneapolis); Maryland opens left.
+const LABEL_SIDE: Record<string, DotPin["labelSide"]> = { Boston: "top", Maryland: "left" };
+const [vx, vy, vw, vh] = US_MAP_VIEWBOX.split(" ").map(Number);
+const CITY_PINS: DotPin[] = OFFICES.map((c) => ({
+  label: c.label,
+  x: `${(((c.x - vx) / vw) * 100).toFixed(2)}%`,
+  y: `${(((c.y - vy) / vh) * 100).toFixed(2)}%`,
+  labelSide: LABEL_SIDE[c.label] ?? "right",
+}));
 
 const NAV = [
   { href: "/platform", label: "Platform" },
@@ -26,15 +41,22 @@ const NAV = [
 const linkCls = "body-sm text-white-40 transition-colors duration-200 hover:text-white-100";
 
 /**
- * Footer — §5.5 last row. A blue-hour image band (21rem) with the four
- * office cities as live dots, then a hairline-segmented footer. No personal
+ * Footer — §5.5 last row. A blue-hour image band (21rem) carrying a
+ * dot-matrix map of the lower 48 with the four office cities as live dots,
+ * then a hairline-segmented footer. No personal
  * emails, no fax. Mailing address small-print only (TODO §9: keep or drop).
  */
 export default function Footer() {
   return (
     <footer>
       <ImageBand minHeight="21rem" overlayStrength={0.8} className="mt-20">
-        <LiveDots pins={CITY_PINS} showLabels />
+        <div
+          className="absolute top-1/2 -translate-y-1/2 max-md:left-1/2 max-md:-translate-x-1/2 md:right-[5%]"
+          style={{ width: "min(29rem, 92vw)", aspectRatio: US_MAP_ASPECT }}
+        >
+          <UsMap cities={OFFICES} />
+          <LiveDots pins={CITY_PINS} showLabels />
+        </div>
         <div className="theme-page absolute bottom-8 left-6 flex items-center gap-2 md:left-10" aria-hidden="true">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
           <span className="label text-white-40">Four offices · one platform</span>
