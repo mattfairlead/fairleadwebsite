@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
 import HairlineFrame from "@/components/HairlineFrame";
+import Btn from "@/components/Btn";
 import { Markdown } from "@/lib/md";
 import { getEngagement, getEngagements, getSectors } from "@/lib/data";
 import { pageMetadata } from "@/lib/seo";
@@ -43,19 +44,19 @@ export default async function EngagementPage({ params }: { params: Promise<{ slu
       <SectionReveal className="container-page pb-10">
         <HairlineFrame columns={3}>
           <div className="grid md:grid-cols-3">
-            <div data-cell className="flex flex-col gap-2 p-6 md:p-8">
+            <div data-cell className="spot flex flex-col gap-2 p-6 md:p-8">
               <span className="label text-white-50">Roles</span>
               <span data-anim="title" className="body-md text-white-100">
                 {engagement.roles.join(" · ")}
               </span>
             </div>
-            <div data-cell className="flex flex-col gap-2 p-6 md:p-8">
+            <div data-cell className="spot flex flex-col gap-2 p-6 md:p-8">
               <span className="label text-white-50">Outcome</span>
               <span data-anim="title" className="body-md text-white-100">
                 {engagement.outcome_tags.join(" · ")}
               </span>
             </div>
-            <div data-cell className="flex flex-col gap-2 p-6 md:p-8">
+            <div data-cell className="spot flex flex-col gap-2 p-6 md:p-8">
               <span className="label text-white-50">Period</span>
               <span data-anim="title" className="body-md text-white-100 tabular">
                 {engagement.year_start}
@@ -70,8 +71,10 @@ export default async function EngagementPage({ params }: { params: Promise<{ slu
         </HairlineFrame>
       </SectionReveal>
 
-      <section className="container-page max-w-4xl pb-16">
-        <Markdown>{engagement.body_md}</Markdown>
+      <section className="container-page pb-16">
+        <div className="prose-measure">
+          <Markdown>{engagement.body_md}</Markdown>
+        </div>
       </section>
 
       <SectionReveal className="container-page pb-20">
@@ -79,9 +82,9 @@ export default async function EngagementPage({ params }: { params: Promise<{ slu
           <Link href="/engagements" className="btn btn-secondary button">
             All engagements
           </Link>
-          <Link href="/contact" className="btn btn-primary button">
+          <Btn href="/contact" arrow>
             Talk to a partner
-          </Link>
+          </Btn>
         </div>
       </SectionReveal>
     </>

@@ -2,34 +2,40 @@
 
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { animateCounts, initSmoother, reveal, registerGsap } from "@/lib/motion";
+import { initSmoother, registerGsap, trackSpotlight } from "@/lib/motion";
 
 /**
  * Root motion boundary. Provides the .page-wrapper > .main-wrapper structure
- * ScrollSmoother requires, boots ScrollSmoother, and wires every generic
- * `data-anim` element on the page once fonts are ready — so nothing "jumps
- * to hidden" and SplitText never measures against a fallback font.
+ * ScrollSmoother requires, boots ScrollSmoother once fonts are ready, and
+ * runs the single pointer tracker that feeds the spotlight cells.
+ *
+ * Per-route reveals are wired by app/template.tsx, which remounts on every
+ * navigation — so new pages animate in, not just the first one.
  */
 export default function MotionProvider({ children }: { children: React.ReactNode }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    registerGsap();
-    let cancelled = false;
+  useGSAP(
+    () => {
+      registerGsap();
+      let cancelled = false;
+      let smoother: ReturnType<typeof initSmoother> = null;
+      const stopSpot = trackSpotlight(document.body);
 
-    const ready = document.fonts?.ready ?? Promise.resolve();
-    ready.then(() => {
-      if (cancelled) return;
-      const smoother = initSmoother();
-      reveal(document);
-      animateCounts(document);
-      return () => smoother?.kill();
-    });
+      const ready = document.fonts?.ready ?? Promise.resolve();
+      ready.then(() => {
+        if (cancelled) return;
+        smoother = initSmoother();
+      });
 
-    return () => {
-      cancelled = true;
-    };
-  }, { scope: wrapperRef });
+      return () => {
+        cancelled = true;
+        stopSpot();
+        smoother?.kill();
+      };
+    },
+    { scope: wrapperRef }
+  );
 
   return (
     <div className="page-wrapper" ref={wrapperRef}>

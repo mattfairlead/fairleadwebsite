@@ -12,6 +12,8 @@ export const metadata: Metadata = pageMetadata(
   "/contact"
 );
 
+const CITIES = ["Boston", "Houston", "Minneapolis", "Maryland"];
+
 /**
  * /contact — §4.7. One form, one phone, four cities. No personal emails,
  * no fax.
@@ -25,26 +27,35 @@ export default function ContactPage() {
         lead={<>Tell us what you&rsquo;re working through. A partner reads every submission.</>}
       />
 
-      <SectionReveal className="container-page pb-20">
+      <SectionReveal className="container-page pb-24">
         <HairlineFrame verticalsAt={["60%"]}>
           <div className="grid md:grid-cols-[3fr_2fr]">
-            <div data-cell className="p-6 md:p-10">
+            <div data-cell className="p-6 md:p-12">
               <Suspense fallback={null}>
                 <ContactForm />
               </Suspense>
             </div>
-            <div data-cell className="flex flex-col gap-6 p-6 md:p-10">
+            <div data-cell className="spot flex flex-col gap-10 p-6 md:p-12">
               <div className="flex flex-col gap-2">
                 <span className="label text-white-50">Phone</span>
-                <a href="tel:+16173154822" className="body-xl text-white-100 transition-colors duration-200 hover:text-gold tabular">
+                <a
+                  href="tel:+16173154822"
+                  className="h3 text-white-100 transition-colors duration-200 hover:text-gold tabular"
+                  style={{ fontSize: "clamp(1.75rem, 1.2rem + 1.4vw, 2.5rem)" }}
+                >
                   (617) 315-4822
                 </a>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <span className="label text-white-50">Offices</span>
-                <p data-anim="subtitle" className="body-lg text-white-60">
-                  Boston · Houston · Minneapolis · Maryland
-                </p>
+                <ul data-anim="subtitle" className="flex flex-col gap-2">
+                  {CITIES.map((c) => (
+                    <li key={c} className="body-lg flex items-center gap-3 text-white-60">
+                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold/80" aria-hidden="true" />
+                      {c}
+                    </li>
+                  ))}
+                </ul>
               </div>
               <div className="flex flex-col gap-2">
                 <span className="label text-white-50">Elsewhere</span>
@@ -57,6 +68,7 @@ export default function ContactPage() {
                   LinkedIn
                 </a>
               </div>
+              <p className="body-sm mt-auto text-white-40">No personal inboxes, no business developers. One form, one line, four cities.</p>
             </div>
           </div>
         </HairlineFrame>

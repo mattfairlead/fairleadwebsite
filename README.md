@@ -47,13 +47,20 @@ supabase/schema.sql  content schema + RLS policies
 ## Design system in one paragraph
 
 Fully dark (`--blue-950` ground), Inter only, personality from weight 600 +
-negative tracking. Gold (`#D5B371`) is the only accent, used sparingly.
-Cards never have fills or radii — cells are separated by absolutely-positioned
-1px hairlines (`.dec`) that draw themselves in on scroll (`sectionReveal()`,
-§5.8.2: horizontals at `e`, verticals at `e+.48`, cells at `e+.24+.3i`).
-Buttons are pills; inputs are underlines; every reveal is `once: true`; only
-the live dots and the submit spinner loop. Reduced motion kills ScrollSmoother
-and renders the resolved layout.
+negative tracking (plus Inter's `cv11`/`ss03` alternates). Gold (`#D5B371`)
+is the only accent, used sparingly. Cards never have fills or radii — cells
+are separated by absolutely-positioned 1px hairlines (`.dec`) that draw
+themselves in on scroll (`sectionReveal()`, §5.8.2: horizontals at `e`,
+verticals at `e+.48`, cells at `e+.24+.3i`). Buttons are pills with spring
+physics (hover lifts + gold glow, click compresses); inputs are underlines
+whose gold rule draws in from the left on focus; hairline cells are
+`.spot` surfaces that light under the cursor. The page sits on an ambient
+layer (`.ambient`: two slow light sources + 4% film grain). Every reveal is
+`once: true`; the generic `data-anim` reveals are wired per route by
+`app/template.tsx`, so navigations animate in too. Only the live dots, the
+ambient drift, the hero scroll cue, and the submit spinner loop. Reduced
+motion kills ScrollSmoother, skips every hidden initial state, and renders
+the resolved layout.
 
 ## Phase status (§8)
 

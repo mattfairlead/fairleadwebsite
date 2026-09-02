@@ -4,6 +4,7 @@ import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import NewsletterForm from "@/components/NewsletterForm";
+import { ARROW } from "@/components/Btn";
 import { getPerspectives, getTeam } from "@/lib/data";
 import { pageMetadata } from "@/lib/seo";
 
@@ -50,14 +51,20 @@ export default async function PerspectivesPage() {
                 <span className="dec left-0 top-0 h-px w-full" />
                 <Link
                   href={`/perspectives/${post.slug}`}
-                  className="grid items-baseline gap-3 px-1 py-8 transition-colors duration-200 hover:bg-blue-900/40 md:grid-cols-[12rem_1fr] md:gap-10 md:px-4"
+                  className="spot group grid items-baseline gap-3 px-2 py-10 md:grid-cols-[12rem_1fr_auto] md:gap-10 md:px-5"
                 >
                   <span className="body-sm text-white-40 tabular">{formatDate(post.published_at)}</span>
-                  <span className="flex flex-col gap-2">
-                    <span className="h4">{post.title}</span>
+                  <span className="flex flex-col gap-3">
+                    <span className="h3 transition-colors duration-300 group-hover:text-gold-soft">{post.title}</span>
                     <span className="body-md max-w-2xl text-white-60">{post.excerpt}</span>
-                    {author && <span className="body-sm text-white-40">{author.name}</span>}
+                    {author && (
+                      <span className="body-sm flex items-center gap-2 text-white-40">
+                        <span className="inline-block h-px w-4 bg-white-20" aria-hidden="true" />
+                        {author.name}
+                      </span>
+                    )}
                   </span>
+                  <span className="row-arrow self-center">{ARROW}</span>
                 </Link>
               </div>
             );
@@ -67,19 +74,19 @@ export default async function PerspectivesPage() {
       </SectionReveal>
 
       <SectionReveal className="section container-page">
-        <SectionHead eyebrow="Newsletter" title={<>Get the next one.</>} titleClass="h3" />
-        <div className="mt-8">
+        <div className="grid gap-10 md:grid-cols-2 md:items-center">
+          <SectionHead eyebrow="Newsletter" title={<>Get the next one.</>} titleClass="h3" />
           <NewsletterForm />
         </div>
       </SectionReveal>
 
-      <SectionReveal className="section container-page" id="transactions">
+      <SectionReveal className="section container-page scroll-mt-24" id="transactions">
         <SectionHead eyebrow="Transactions" title={<>The deal record.</>} titleClass="h3" />
         <div className="relative mt-10">
           {transactions.map((t) => (
             <div key={t.slug} data-anim="fade-up" className="relative">
               <span className="dec left-0 top-0 h-px w-full" />
-              <div className="grid items-baseline gap-2 px-1 py-5 md:grid-cols-[12rem_1fr_auto] md:gap-10 md:px-4">
+              <div className="spot grid items-baseline gap-2 px-2 py-5 md:grid-cols-[12rem_1fr_auto] md:gap-10 md:px-5">
                 <span className="body-sm text-white-40 tabular">{formatDate(t.published_at)}</span>
                 <span className="flex flex-col gap-1">
                   <span className="body-lg text-white-100">{t.title}</span>

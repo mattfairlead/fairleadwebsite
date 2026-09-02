@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Field from "@/components/Field";
+import { ARROW } from "@/components/Btn";
 
 /**
  * Newsletter capture (§4.6) — one underline field, posts to /api/subscribe
@@ -28,7 +30,8 @@ export default function NewsletterForm() {
 
   if (state === "done") {
     return (
-      <p className="h4" data-anim="fade-up">
+      <p className="h4 flex items-center gap-3" role="status" aria-live="polite">
+        <span className="inline-block h-2 w-2 rounded-full bg-gold" aria-hidden="true" />
         You&rsquo;re on the list.
       </p>
     );
@@ -36,22 +39,24 @@ export default function NewsletterForm() {
 
   return (
     <form onSubmit={submit} className="flex max-w-md flex-col gap-6">
-      <label className="flex flex-col gap-2">
-        <span className="label text-white-50">Email</span>
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="field"
-          placeholder="you@firm.com"
-          autoComplete="email"
-        />
-      </label>
+      <Field
+        label="Email"
+        type="email"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="you@firm.com"
+        autoComplete="email"
+        inputMode="email"
+      />
       <button type="submit" className="btn btn-secondary button self-start" disabled={state === "busy"}>
-        {state === "busy" ? "Sending…" : "Get the next one"}
+        {state === "busy" ? "Sending…" : <>Get the next one {ARROW}</>}
       </button>
-      {state === "error" && <p className="body-sm text-gold">Something broke — try again, or email us.</p>}
+      {state === "error" && (
+        <p className="body-sm text-gold" role="alert">
+          Something broke — try again, or email us.
+        </p>
+      )}
     </form>
   );
 }
