@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="200 90 820 660" role="img" aria-labelledby="t">
+  <title id="t">Origami house — Fairlead brandmark on a navy roof over gold paper walls</title>
+  <defs>
+    <radialGradient id="shadow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#000" stop-opacity="0.42"/>
+      <stop offset="0.55" stop-color="#000" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="door" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7a5624"/>
+      <stop offset="1" stop-color="#33230e"/>
+    </linearGradient>
+    <linearGradient id="rightWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d09e49"/>
+      <stop offset="1" stop-color="#c08a3b"/>
+    </linearGradient>
+    <linearGradient id="roofMain" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#31476f"/>
+      <stop offset="1" stop-color="#2a3d63"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ground shadow -->
+  <ellipse cx="720" cy="690" rx="470" ry="118" fill="url(#shadow)"/>
+
+  <!-- walls -->
+  <polygon points="640,425 870,405 870,640 640,700" fill="url(#rightWall)"/>
+  <polygon points="295,410 640,425 468,555" fill="#edd08c"/>
+  <polygon points="295,410 468,555 295,685" fill="#e3c273"/>
+  <polygon points="295,685 468,555 640,700" fill="#d8b062"/>
+  <polygon points="640,425 640,700 468,555" fill="#e6c677"/>
+
+  <!-- doorway -->
+  <polygon points="410,512 520,515 520,695 410,688" fill="url(#door)"/>
+
+  <!-- roof thickness / fascia -->
+  <polygon points="245,395 640,415 935,385 935,393 640,424 245,403" fill="#1f3054"/>
+
+  <!-- roof: main face -->
+  <polygon points="437,135 742,130 935,385 640,415" fill="url(#roofMain)"/>
+  <!-- roof: gable faces (lit / mid) -->
+  <polygon points="437,135 245,395 440,398" fill="#6a6f9b"/>
+  <polygon points="437,135 440,398 640,415" fill="#4e5583"/>
+
+  <!-- brandmark laid onto the roof plane -->
+  <g transform="matrix(6.9 -0.11 4.4 6.08 532 177)" fill="#4c5d88">
+    <path d="M9.72,24.64C12.83,6.63,10.31.78,10.28.72,4.32,2.66,0,8.26,0,14.87c0,8.21,6.66,14.87,14.87,14.87,3.42,0,6.57-1.16,9.09-3.1-.55-.23-6.84-2.76-14.23-1.99Z"/>
+    <path d="M29.73,14.87C29.73,6.66,23.08,0,14.87,0c-1.6,0-3.14.26-4.58.72l13.69,25.89c3.5-2.72,5.76-6.97,5.76-11.75Z"/>
+  </g>
+</svg>
