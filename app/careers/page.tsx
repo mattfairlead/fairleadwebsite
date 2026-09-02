@@ -39,11 +39,11 @@ export default function CareersPage() {
         }
         aside={
           <Image
-            src="/brand/origami-house.svg"
+            src="/brand/housefairlead.png"
             alt=""
-            width={820}
-            height={660}
-            className="h-auto w-64 max-md:mx-auto md:w-80 lg:w-96"
+            width={1406}
+            height={855}
+            className="h-auto w-72 max-md:mx-auto md:w-96 lg:w-[28rem]"
           />
         }
       />
