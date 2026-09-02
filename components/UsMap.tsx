@@ -8,8 +8,9 @@ export interface MapCity {
 
 /**
  * The footer's map of the lower 48 — §5.8.6's ground. A dot-matrix fill
- * clipped to the nation, hairline state borders, a gold edge, and a slow
- * dashed route threading the offices together. Pure SVG, no runtime; the
+ * clipped to the nation, hairline state borders, a gold edge, the brandmark
+ * ghosted over the western states, and a slow dashed route threading the
+ * offices together. Pure SVG, no runtime; the
  * live dots layer sits on top and does the breathing.
  */
 export default function UsMap({ cities = [], className = "" }: { cities?: MapCity[]; className?: string }) {
@@ -80,6 +81,16 @@ export default function UsMap({ cities = [], className = "" }: { cities?: MapCit
         strokeLinejoin="round"
         vectorEffect="non-scaling-stroke"
       />
+
+      {/* the brandmark, laid over the open western states like a watermark */}
+      <g
+        transform="translate(118 168) scale(8.8)"
+        fill="rgba(230,209,170,0.13)"
+        style={{ mixBlendMode: "screen" }}
+      >
+        <path d="M9.72,24.64C12.83,6.63,10.31.78,10.28.72,4.32,2.66,0,8.26,0,14.87c0,8.21,6.66,14.87,14.87,14.87,3.42,0,6.57-1.16,9.09-3.1-.55-.23-6.84-2.76-14.23-1.99Z" />
+        <path d="M29.73,14.87C29.73,6.66,23.08,0,14.87,0c-1.6,0-3.14.26-4.58.72l13.69,25.89c3.5-2.72,5.76-6.97,5.76-11.75Z" />
+      </g>
 
       {/* the route between offices */}
       {cities.length > 1 && (
