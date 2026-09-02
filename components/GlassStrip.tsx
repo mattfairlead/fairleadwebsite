@@ -14,19 +14,24 @@ export interface GlassCell {
  * a full-bleed image section. Used for the hero stats (60+ / 16 / 2010), the
  * Cottonwood options on the Intelligence band, and the engagement process on
  * /platform.
+ *
+ * `clear` drops the blur and tint so the strip is see-through: only the
+ * hairlines and the figures sit over the footage (the hero).
  */
 export default function GlassStrip({
   cells,
   className = "",
   anchored = true,
+  clear = false,
 }: {
   cells: GlassCell[];
   className?: string;
   anchored?: boolean;
+  clear?: boolean;
 }) {
   const hasCounts = cells.some((c) => c.countTo !== undefined);
   return (
-    <div className={`${anchored ? "absolute inset-x-0 bottom-0" : "relative"} glass-strip ${className}`}>
+    <div className={`${anchored ? "absolute inset-x-0 bottom-0" : "relative"} glass-strip ${clear ? "glass-strip-clear" : ""} ${className}`}>
       <HairlineFrame columns={cells.length}>
         <div
           className={hasCounts ? "grid grid-cols-3" : "grid grid-cols-2 md:grid-cols-4"}

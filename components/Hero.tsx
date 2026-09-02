@@ -193,6 +193,7 @@ export default function Hero() {
 
         {/* Hero stats strip — the 60+ / 16 / 2010 trio lives here, §5.5 */}
         <GlassStrip
+          clear
           cells={[
             { countTo: 60, countSuffix: "+", head: "embedded engagements" },
             { countTo: 16, head: "sectors" },
