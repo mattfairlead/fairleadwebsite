@@ -6,7 +6,7 @@
  * navigations by <RouteTheme>. The token remap lives in app/globals.css
  * under "Light routes".
  */
-export const LIGHT_ROUTES = ["/careers"] as const;
+export const LIGHT_ROUTES = [] as const;
 
 export function isLightRoute(pathname: string): boolean {
   return LIGHT_ROUTES.some((route) => pathname === route || pathname.startsWith(route + "/"));
