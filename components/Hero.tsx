@@ -19,14 +19,14 @@ import ImageBand from "@/components/ImageBand";
  */
 
 /**
- * Hero background footage. Currently served from a GitHub Releases asset;
+ * Hero background footage. Currently served from the WordPress uploads dir;
  * set NEXT_PUBLIC_HERO_VIDEO_URL once the file moves to Blob/Supabase Storage
  * (§9 media plan) — no code change needed. Empty string disables the video and
  * falls back to the ImageBand gradient.
  */
 const HERO_VIDEO =
   process.env.NEXT_PUBLIC_HERO_VIDEO_URL ??
-  "https://github.com/mattfairlead/fairleadwebsite/releases/download/Videos/Sequence.01.mp4";
+  "https://fairleadadvisors.com/wp-content/uploads/2026/06/4130872-uhd_3840_2160_25fps.mp4";
 
 const MARKERS = [
   { x: "18%", y: "62%", chip: "Inverter string 14 — 48% failure ratio, 8 matched issues", source: "SCADA + CMMS" },
