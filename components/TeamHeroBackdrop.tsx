@@ -22,9 +22,15 @@ const TEAM_POSTER = "/team/hero-poster.jpg";
 // the footage sits low and right of the headline. Its left edge feathers
 // over ~60% of the box so the blue melts in; top and bottom fade into the
 // ground above and the sections below.
+//
+// Every fade reaches full transparency a few percent short of the edge,
+// never at 100%. On scroll the page moves on fractional offsets and the
+// mask can rasterise a pixel short of the box, which would flash a 1px
+// line of footage along the seam; keeping the edge rows transparent means
+// there is nothing to reveal.
 const MASK = [
-  "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 28%, rgba(0,0,0,0.8) 52%, #000 72%)",
-  "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 20%, #000 50%, rgba(0,0,0,0.6) 82%, rgba(0,0,0,0) 100%)",
+  "linear-gradient(90deg, rgba(0,0,0,0) 2%, rgba(0,0,0,0.35) 28%, rgba(0,0,0,0.8) 52%, #000 72%)",
+  "linear-gradient(180deg, rgba(0,0,0,0) 3%, rgba(0,0,0,0.85) 20%, #000 50%, rgba(0,0,0,0.6) 80%, rgba(0,0,0,0) 96%)",
 ].join(", ");
 
 export default function TeamHeroBackdrop() {
@@ -37,6 +43,14 @@ export default function TeamHeroBackdrop() {
           maskImage: MASK,
           WebkitMaskComposite: "source-in",
           maskComposite: "intersect",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskSize: "100% 100%",
+          maskSize: "100% 100%",
+          // own compositor layer: the mask is rasterised once with the box
+          // and travels with it, instead of being re-cut every scroll frame
+          transform: "translateZ(0)",
+          willChange: "transform",
         }}
       >
         <BackgroundVideo src={TEAM_VIDEO} poster={TEAM_POSTER} />
