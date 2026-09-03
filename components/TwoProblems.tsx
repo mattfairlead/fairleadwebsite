@@ -37,7 +37,7 @@ export default function TwoProblems() {
               <span className="ghost-num" aria-hidden="true">
                 0{i + 1}
               </span>
-              <span className={cell.accent ? "label text-gold" : "label text-white-50"}>{cell.label}</span>
+              <span className="label text-gold">{cell.label}</span>
               <h3 data-anim="title" className="h3">
                 {cell.title}
               </h3>
