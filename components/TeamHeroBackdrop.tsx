@@ -19,9 +19,10 @@ const TEAM_VIDEO = process.env.NEXT_PUBLIC_TEAM_HERO_VIDEO_URL || "/api/media/te
 const TEAM_POSTER = "/team/hero-poster.jpg";
 
 // The box runs the full height of the intro and hangs off the right edge,
-// so the footage reads as half the page. Its left edge feathers over ~60%
-// of the box so the blue melts in; top and bottom fade under the header
-// and into the sections below.
+// so the footage reads as half the page. It is sized to the footage's own
+// aspect ratio (1368×964) so nothing is cropped and every face is in
+// frame. Its left edge feathers over ~60% of the box so the blue melts
+// in; top and bottom fade under the header and into the sections below.
 //
 // Every fade reaches full transparency a few percent short of the edge,
 // never at 100%. On scroll the page moves on fractional offsets and the
@@ -37,7 +38,7 @@ export default function TeamHeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-y-0 right-0 w-[64%] max-md:w-[92%] max-md:opacity-60"
+        className="absolute inset-y-0 right-0 aspect-[1368/964] max-md:aspect-auto max-md:w-[92%] max-md:opacity-60"
         style={{
           WebkitMaskImage: MASK,
           maskImage: MASK,
@@ -53,13 +54,13 @@ export default function TeamHeroBackdrop() {
           willChange: "transform",
         }}
       >
-        <BackgroundVideo src={TEAM_VIDEO} poster={TEAM_POSTER} />
-        {/* blue-hour wash — deepest where the copy sits, lifting toward the edge */}
+        <BackgroundVideo src={TEAM_VIDEO} poster={TEAM_POSTER} inset="0" />
+        {/* blue-hour wash — deepest where the copy sits, lifting off the faces toward the edge */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(90deg, rgba(5,14,46,0.6) 0%, rgba(10,26,79,0.3) 45%, rgba(5,14,46,0.3) 100%), linear-gradient(180deg, rgba(5,14,46,0.35) 0%, rgba(5,14,46,0) 40%, rgba(5,14,46,0.45) 100%)",
+              "linear-gradient(90deg, rgba(5,14,46,0.6) 0%, rgba(10,26,79,0.2) 45%, rgba(5,14,46,0.12) 100%), linear-gradient(180deg, rgba(5,14,46,0.3) 0%, rgba(5,14,46,0) 35%, rgba(5,14,46,0.4) 100%)",
           }}
         />
       </div>
