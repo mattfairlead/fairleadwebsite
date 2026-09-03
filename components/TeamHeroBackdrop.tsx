@@ -18,18 +18,20 @@ import BackgroundVideo from "@/components/BackgroundVideo";
 const TEAM_VIDEO = process.env.NEXT_PUBLIC_TEAM_HERO_VIDEO_URL || "/api/media/team-hero";
 const TEAM_POSTER = "/team/hero-poster.jpg";
 
-// Left edge feathers over ~60% of the box so the blue melts in; top and
-// bottom fade under the header and into the sections below.
+// The box hangs off the right edge and starts below the header line, so
+// the footage sits low and right of the headline. Its left edge feathers
+// over ~60% of the box so the blue melts in; top and bottom fade into the
+// ground above and the sections below.
 const MASK = [
   "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 28%, rgba(0,0,0,0.8) 52%, #000 72%)",
-  "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 26%, #000 55%, rgba(0,0,0,0.6) 82%, rgba(0,0,0,0) 100%)",
+  "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 20%, #000 50%, rgba(0,0,0,0.6) 82%, rgba(0,0,0,0) 100%)",
 ].join(", ");
 
 export default function TeamHeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-y-0 right-0 w-[64%] max-md:w-[92%] max-md:opacity-60"
+        className="absolute right-0 top-[18%] bottom-0 w-[54%] max-md:top-[10%] max-md:w-[92%] max-md:opacity-60"
         style={{
           WebkitMaskImage: MASK,
           maskImage: MASK,
