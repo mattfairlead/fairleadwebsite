@@ -14,16 +14,21 @@ import { prefersReducedMotion } from "@/lib/motion";
  *
  * The wrapper div is server-rendered so ScrollSmoother collects its
  * `data-speed` when effects initialise — only the <video> inside mounts later.
+ * It overscans 10% top and bottom by default so parallax never shows an
+ * edge; pass `inset="0"` when the box is sized to the footage and every
+ * pixel of the frame should stay visible.
  */
 export default function BackgroundVideo({
   src,
   poster,
   speed,
+  inset = "-10% 0",
   className = "",
 }: {
   src: string;
   poster?: string;
   speed?: string;
+  inset?: string;
   className?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -50,7 +55,8 @@ export default function BackgroundVideo({
   return (
     <div
       data-speed={speed}
-      className={clsx("pointer-events-none absolute inset-[-10%_0] overflow-hidden", className)}
+      className={clsx("pointer-events-none absolute overflow-hidden", className)}
+      style={{ inset }}
       aria-hidden="true"
     >
       {enabled && (

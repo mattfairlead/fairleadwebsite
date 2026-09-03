@@ -19,7 +19,9 @@ const TEAM_VIDEO = process.env.NEXT_PUBLIC_TEAM_HERO_VIDEO_URL || "/api/media/te
 const TEAM_POSTER = "/team/hero-poster.jpg";
 
 // The box hangs off the right edge and starts below the header line, so
-// the footage sits low and right of the headline. Its left edge feathers
+// the footage sits low and right of the headline. It is sized to the
+// footage's own aspect ratio (1368×964) so nothing is cropped away and the
+// whole roster is in frame. Its left edge feathers
 // over ~60% of the box so the blue melts in; top and bottom fade into the
 // ground above and the sections below.
 //
@@ -37,7 +39,7 @@ export default function TeamHeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute right-0 top-[18%] bottom-0 w-[54%] max-md:top-[10%] max-md:w-[92%] max-md:opacity-60"
+        className="absolute right-0 top-[18%] bottom-0 aspect-[1368/964] max-md:top-[10%] max-md:aspect-auto max-md:w-[92%] max-md:opacity-60"
         style={{
           WebkitMaskImage: MASK,
           maskImage: MASK,
@@ -53,7 +55,7 @@ export default function TeamHeroBackdrop() {
           willChange: "transform",
         }}
       >
-        <BackgroundVideo src={TEAM_VIDEO} poster={TEAM_POSTER} />
+        <BackgroundVideo src={TEAM_VIDEO} poster={TEAM_POSTER} inset="0" />
         {/* blue-hour wash — deepest where the copy sits, lifting toward the edge */}
         <div
           className="absolute inset-0"
