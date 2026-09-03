@@ -55,7 +55,7 @@ export default async function TeamPage() {
       <PageIntro
         eyebrow="Team"
         backdrop={<TeamHeroBackdrop />}
-        className="flex flex-col justify-center md:min-h-[42rem]"
+        className="flex flex-col justify-end md:min-h-[38rem]"
         title={<>Operators, in the seat.</>}
         lead={<>The team behind every engagement — partners who sit in the seat, and the operators who scale with it.</>}
         aside={
