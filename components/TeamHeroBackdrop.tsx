@@ -11,7 +11,7 @@ import BackgroundVideo from "@/components/BackgroundVideo";
  * never goes flat. A blue-hour wash on top grades the footage toward the
  * §5.1 palette, the same way ImageBand treats motion bands.
  *
- * Served from the "Team" GitHub release via /api/media/team-hero (see that
+ * Served from the "Team2" GitHub release via /api/media/team-hero (see that
  * route for why). Set NEXT_PUBLIC_TEAM_HERO_VIDEO_URL once the file moves
  * to Blob/Supabase Storage (§9 media plan) — no code change needed.
  */
