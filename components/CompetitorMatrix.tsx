@@ -58,7 +58,7 @@ function Mark({ on, gold }: { on: boolean; gold?: boolean }) {
 export default function CompetitorMatrix() {
   return (
     <SectionReveal className="section container-page">
-      <SectionHead eyebrow="The field" title={<>No competitor solves both halves.</>} />
+      <SectionHead eyebrow="The field" title={<>No competitor solves both halves.</>} eyebrowClass="text-gold" />
       <HairlineFrame className="mt-14">
         {/* column heads */}
         <div className="grid grid-cols-[1fr_5rem_5rem] items-center gap-4 px-4 py-4 md:grid-cols-[14rem_1fr_9rem_9rem] md:px-6">
