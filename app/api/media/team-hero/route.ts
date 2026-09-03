@@ -15,7 +15,7 @@ export const maxDuration = 60;
  * Drop this once the file moves to Blob/Supabase Storage (§9 media plan) —
  * point NEXT_PUBLIC_TEAM_HERO_VIDEO_URL at the new location directly.
  */
-const ORIGIN_URL = "https://github.com/mattfairlead/fairleadwebsite/releases/download/Team/flvirtualteam.mp4";
+const ORIGIN_URL = "https://github.com/mattfairlead/fairleadwebsite/releases/download/Team2/Sequence.01.mp4";
 
 export async function GET(request: NextRequest) {
   const range = request.headers.get("range");
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 
   const headers = new Headers();
   headers.set("Content-Type", "video/mp4");
-  headers.set("Content-Disposition", "inline; filename=flvirtualteam.mp4");
+  headers.set("Content-Disposition", "inline; filename=team-hero.mp4");
   headers.set("Accept-Ranges", "bytes");
   headers.set("Cache-Control", "public, max-age=31536000, immutable");
 
