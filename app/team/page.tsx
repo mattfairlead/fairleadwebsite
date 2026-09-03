@@ -5,6 +5,7 @@ import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import HairlineFrame from "@/components/HairlineFrame";
 import TeamCell from "@/components/TeamCell";
+import TeamHeroBackdrop from "@/components/TeamHeroBackdrop";
 import { getTeam } from "@/lib/data";
 import { pageMetadata, personJsonLd } from "@/lib/seo";
 
@@ -53,6 +54,8 @@ export default async function TeamPage() {
     <>
       <PageIntro
         eyebrow="Team"
+        backdrop={<TeamHeroBackdrop />}
+        className="flex flex-col justify-end md:min-h-[38rem]"
         title={<>Operators, in the seat.</>}
         lead={<>The team behind every engagement — partners who sit in the seat, and the operators who scale with it.</>}
         aside={
