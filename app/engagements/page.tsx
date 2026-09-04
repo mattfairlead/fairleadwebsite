@@ -317,28 +317,17 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
           </div>
         )}
 
-        <p className="body-sm mt-10 max-w-2xl text-white-40">
-          {unlocked ? (
-            <>
-              Summaries are maintained in Fairlead&rsquo;s engagement hub and reflect the current record. Shared with
-              you in confidence.
-            </>
-          ) : register.live ? (
-            <>
-              The register is served from Fairlead&rsquo;s engagement hub and is current to the day. Every summary is
-              public with the names taken out.{" "}
-              <RevealButton className="link-underline text-white-60">Ask a partner for the names</RevealButton> and one
-              of us will be in touch — nothing is sent automatically.
-            </>
-          ) : (
-            <>
-              This is a snapshot of the register: the engagement hub isn&rsquo;t connected here, so the summaries stay
-              redacted. On the live site they read in full with the names taken out.{" "}
-              <RevealButton className="link-underline text-white-60">Ask a partner for the names</RevealButton> and one
-              of us will be in touch — nothing is sent automatically.
-            </>
-          )}
-        </p>
+        {unlocked ? (
+          <p className="body-sm mt-10 max-w-2xl text-white-40">
+            Summaries are maintained in Fairlead&rsquo;s engagement hub and reflect the current record. Shared with you
+            in confidence.
+          </p>
+        ) : !register.live ? (
+          <p className="body-sm mt-10 max-w-2xl text-white-40">
+            This is a snapshot of the register: the engagement hub isn&rsquo;t connected here, so the summaries stay
+            redacted. On the live site they read in full with the names taken out.
+          </p>
+        ) : null}
       </SectionReveal>
     </RevealProvider>
   );
