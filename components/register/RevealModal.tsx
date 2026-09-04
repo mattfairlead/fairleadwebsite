@@ -111,7 +111,7 @@ export default function RevealModal({ open, onClose, total }: { open: boolean; o
         <div className="flex items-start justify-between gap-6 px-6 pt-6 md:px-10 md:pt-8">
           <span className="label flex items-center gap-3 text-white-50">
             <LockGlyph open={sent} />
-            {sent ? "Request sent" : "Ask for the names"}
+            {sent ? "Request sent" : "The full register"}
           </span>
           <button type="button" onClick={onClose} className="btn btn-ghost button -mr-2 -mt-1">
             Close
@@ -136,9 +136,8 @@ export default function RevealModal({ open, onClose, total }: { open: boolean; o
               A partner has it.
             </h2>
             <p className="body-md max-w-md text-white-60">
-              Your request went straight to the partners. One of them will reply to{" "}
-              <span className="text-white-100">{form.email}</span> with what we can share. The summaries below are
-              yours to read in the meantime.
+              Your request went straight to the partners. One of them will follow up at{" "}
+              <span className="text-white-100">{form.email}</span>.
             </p>
             <p className="body-sm text-white-40">
               In a hurry? Call{" "}
@@ -152,12 +151,12 @@ export default function RevealModal({ open, onClose, total }: { open: boolean; o
           <form onSubmit={submit} className="flex flex-col gap-8 px-6 pb-8 pt-6 md:px-10 md:pb-12">
             <div className="flex flex-col gap-3">
               <h2 id="reveal-title" className="h3">
-                The names are a partner&rsquo;s call.
+                Request the full register.
               </h2>
               <p className="body-md max-w-lg text-white-60">
-                The register holds all <span className="text-white-100 tabular">{total}</span> engagements since 2010.
-                What we did is on the page; who it was for is shared at a partner&rsquo;s discretion. Tell us who you
-                are and what you&rsquo;re working through, and one of us will be in touch.
+                Every company, sponsor and engagement summary since 2010 —{" "}
+                <span className="text-white-100 tabular">{total}</span> in all, by sector, work and status. Tell us who
+                you are and what you&rsquo;re working on, and a partner will follow up directly.
               </p>
             </div>
 
