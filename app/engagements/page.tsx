@@ -6,7 +6,6 @@ import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import TestimonialFeature from "@/components/TestimonialFeature";
 import RevealProvider from "@/components/register/RevealProvider";
-import RevealButton from "@/components/register/RevealButton";
 import RegisterRow from "@/components/register/RegisterRow";
 import { LockGlyph } from "@/components/register/RevealModal";
 import { getEngagements, loadRegister } from "@/lib/data";
