@@ -3,17 +3,27 @@ import Link from "next/link";
 import clsx from "clsx";
 import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
+import SectionHead from "@/components/SectionHead";
 import EngagementRow from "@/components/EngagementRow";
 import TestimonialFeature from "@/components/TestimonialFeature";
-import Btn from "@/components/Btn";
-import { getEngagements, getSectors } from "@/lib/data";
+import RevealProvider from "@/components/register/RevealProvider";
+import RevealButton from "@/components/register/RevealButton";
+import RegisterRow from "@/components/register/RegisterRow";
+import { LockGlyph } from "@/components/register/RevealModal";
+import { ARROW } from "@/components/Btn";
+import { getEngagements, loadRegister } from "@/lib/data";
+import { filterRegister, registerStats, SECTORS, STATUSES, WORK, type RegisterFilters } from "@/lib/register";
+import { getRegisterGrant, revealMode } from "@/lib/register-access";
 import { pageMetadata, videoJsonLd, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Engagements",
-  "Selected from 60+ embedded engagements across 16 sectors since 2010 — by sector, role, sponsor type, and outcome.",
+  "The full Fairlead engagement register — every embedded engagement since 2010, by sector, work and status. What we did, in the open; the names on request.",
   "/engagements"
 );
+
+// Renders per request: the register's locked/unlocked state is a cookie.
+export const dynamic = "force-dynamic";
 
 /**
  * Dion Leadership testimonial — Steve Dion on the sale to Gallagher. Served
@@ -32,27 +42,14 @@ const DION_LABEL = "Steve Dion, Dion Leadership, on working with Fairlead throug
 const DION_ASPECT = { w: 720, h: 1280 };
 const DION_DURATION = "2:10";
 
-const ROLES = [
-  "Interim CEO",
-  "Interim CFO",
-  "Interim COO",
-  "Controller",
-  "Operating Partner",
-  "Board",
-  "M&A",
-  "Restructuring",
-];
-const SPONSOR_TYPES = ["PE", "Infra", "VC", "Family office", "Corporate"];
-const OUTCOMES = ["Sale", "Financing", "Turnaround", "Spin-off", "Tax equity"];
+type Search = RegisterFilters & { unlocked?: string; link?: string };
 
-type Search = { sector?: string; role?: string; sponsor?: string; outcome?: string };
-
-function filterHref(current: Search, key: keyof Search, value: string | null): string {
-  const next = { ...current };
+function filterHref(current: RegisterFilters, key: keyof RegisterFilters, value: string | null): string {
+  const next: RegisterFilters = { work: current.work, sector: current.sector, status: current.status };
   if (value === null || current[key] === value) delete next[key];
   else next[key] = value;
   const qs = new URLSearchParams(Object.entries(next).filter(([, v]) => v) as [string, string][]).toString();
-  return qs ? `/engagements?${qs}` : "/engagements";
+  return `/engagements${qs ? `?${qs}` : ""}#register`;
 }
 
 function FilterGroup({
@@ -63,8 +60,8 @@ function FilterGroup({
 }: {
   label: string;
   options: { value: string; label: string }[];
-  paramKey: keyof Search;
-  current: Search;
+  paramKey: keyof RegisterFilters;
+  current: RegisterFilters;
 }) {
   const activeValue = current[paramKey];
   return (
@@ -100,29 +97,44 @@ function FilterGroup({
 
 export default async function EngagementsPage({ searchParams }: { searchParams: Promise<Search> }) {
   const sp = await searchParams;
-  const sectors = await getSectors();
-  const engagements = await getEngagements({
-    sector: sp.sector,
-    role: sp.role,
-    sponsorType: sp.sponsor,
-    outcome: sp.outcome,
-  });
+  const filters: RegisterFilters = { work: sp.work, sector: sp.sector, status: sp.status };
 
-  const activeCount = [sp.sector, sp.role, sp.sponsor, sp.outcome].filter(Boolean).length;
+  const [caseStudies, register, grant] = await Promise.all([
+    getEngagements({ featuredOnly: true }),
+    loadRegister(),
+    getRegisterGrant(),
+  ]);
+  const studies = caseStudies.filter((e) => e.body_md);
+
+  // The one decision that matters: full rows exist only when the hub is
+  // reachable AND this browser holds a verified grant. Everything below
+  // renders from `visible`, whose type says which it is.
+  const unlocked = Boolean(grant) && register.live;
+  const visible = unlocked && register.rows ? { locked: false as const, rows: filterRegister(register.rows, filters) } : { locked: true as const, rows: filterRegister(register.publicRows, filters) };
+
+  const stats = registerStats(register.publicRows);
+  const activeCount = [filters.work, filters.sector, filters.status].filter(Boolean).length;
   const hasFilter = activeCount > 0;
+  const justUnlocked = unlocked && sp.unlocked === "1";
+  const linkExpired = !unlocked && sp.link === "expired";
 
   return (
-    <>
+    <RevealProvider mode={revealMode()} total={stats.total}>
       <PageIntro
         eyebrow="Engagements"
-        title={<>The proof, filterable.</>}
-        lead={<>Sixty-plus embedded engagements across sixteen sectors since 2010. Filter by what you&rsquo;re working through.</>}
+        title={<>The register.</>}
+        lead={
+          <>
+            Every embedded engagement since 2010 — sponsor-backed and founder-led, from a portfolio assessment to the
+            seat itself. Read what we did; the names are private until you ask.
+          </>
+        }
         aside={
           <dl className="grid grid-cols-3 gap-8 md:gap-10">
             {[
-              ["60+", "engagements"],
-              ["16", "sectors"],
-              ["2010", "since"],
+              [stats.total, "engagements"],
+              [stats.active, "active"],
+              [stats.sponsorBacked, "sponsor-backed"],
             ].map(([n, l]) => (
               <div key={l} className="flex flex-col gap-1">
                 <dt className="h3 text-white-100 tabular">{n}</dt>
@@ -165,12 +177,76 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
         }}
       />
 
+      {studies.length > 0 && (
+        <SectionReveal className="container-page pb-20">
+          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <SectionHead eyebrow="Case studies" title={<>The ones we can talk about.</>} />
+            <p className="body-md max-w-sm text-white-50" data-anim="fade-up">
+              Cleared for the public record — metric first, in the operator&rsquo;s vocabulary.
+            </p>
+          </div>
+          <div className="relative mt-14">
+            {studies.map((engagement) => (
+              <EngagementRow key={engagement.slug} engagement={engagement} />
+            ))}
+            <span className="dec bottom-0 left-0 h-px w-full" />
+          </div>
+        </SectionReveal>
+      )}
+
+      <SectionReveal id="register" className="container-page pb-8 pt-4">
+        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+          <SectionHead eyebrow="The register" title={<>All {stats.total}, on request.</>} />
+          <div className="flex flex-col items-start gap-4 md:items-end" data-anim="fade-up">
+            {grant ? (
+              <>
+                <span className="grant-chip button">
+                  <LockGlyph open />
+                  Unlocked for {grant.name} · {grant.firm}
+                </span>
+                <Link href="/engagements/lock" className="body-sm link-underline text-white-40" prefetch={false}>
+                  Lock this browser
+                </Link>
+              </>
+            ) : (
+              <>
+                <RevealButton className="btn btn-primary button">
+                  <LockGlyph />
+                  Reveal the register
+                  {ARROW}
+                </RevealButton>
+                <span className="body-sm max-w-xs text-white-40 md:text-right">
+                  The company and its sponsor for every row. One emailed link; a partner sees every request.
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+
+        {linkExpired && (
+          <p
+            className="body-md mt-10 flex items-start gap-3 text-gold"
+            role="alert"
+            style={{ boxShadow: "inset 0 0 0 1px rgba(213,179,113,0.3)", padding: "1rem 1.25rem" }}
+          >
+            <span className="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-gold" aria-hidden="true" />
+            That link has expired or was already used. Ask again and we&rsquo;ll send a fresh one.
+          </p>
+        )}
+        {grant && !register.live && (
+          <p className="body-md mt-10 text-white-50" role="status">
+            Unlocked for {grant.name} — but this preview has no connection to the engagement hub, so the rows below
+            stay redacted. The live site serves the full register.
+          </p>
+        )}
+      </SectionReveal>
+
       <section className="container-page relative pb-8" aria-label="Filters">
         <span className="dec left-0 top-0 h-px w-full" />
         <div className="flex items-center justify-between gap-4 py-5">
           <span className="body-sm text-white-50">
-            <span className="text-white-100 tabular">{engagements.length}</span>{" "}
-            {engagements.length === 1 ? "engagement" : "engagements"}
+            <span className="text-white-100 tabular">{visible.rows.length}</span>{" "}
+            {visible.rows.length === 1 ? "engagement" : "engagements"}
             {hasFilter && (
               <>
                 {" "}
@@ -179,7 +255,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
             )}
           </span>
           {hasFilter && (
-            <Link href="/engagements" className="chip button" scroll={false}>
+            <Link href="/engagements#register" className="chip button" scroll={false}>
               Clear all
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                 <path d="M2 2l6 6M8 2L2 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -190,33 +266,32 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
         <div className="relative">
           <span className="dec left-0 top-0 h-px w-full" />
           <FilterGroup
+            label="Work"
+            paramKey="work"
+            current={filters}
+            options={WORK.map((w) => ({ value: w.slug, label: w.label }))}
+          />
+          <FilterGroup
             label="Sector"
             paramKey="sector"
-            current={sp}
-            options={sectors.map((s) => ({ value: s.slug, label: s.name }))}
-          />
-          <FilterGroup label="Role" paramKey="role" current={sp} options={ROLES.map((r) => ({ value: r, label: r }))} />
-          <FilterGroup
-            label="Sponsor type"
-            paramKey="sponsor"
-            current={sp}
-            options={SPONSOR_TYPES.map((s) => ({ value: s, label: s }))}
+            current={filters}
+            options={SECTORS.map((s) => ({ value: s.slug, label: s.label }))}
           />
           <FilterGroup
-            label="Outcome"
-            paramKey="outcome"
-            current={sp}
-            options={OUTCOMES.map((o) => ({ value: o, label: o }))}
+            label="Status"
+            paramKey="status"
+            current={filters}
+            options={STATUSES.map((s) => ({ value: s.slug, label: s.label }))}
           />
         </div>
       </section>
 
       <SectionReveal className="container-page pb-20">
-        {engagements.length > 0 ? (
+        {visible.rows.length > 0 ? (
           <div className="relative">
-            {engagements.map((engagement) => (
-              <EngagementRow key={engagement.slug} engagement={engagement} />
-            ))}
+            {visible.locked
+              ? visible.rows.map((row) => <RegisterRow key={row.id} locked row={row} />)
+              : visible.rows.map((row) => <RegisterRow key={row.id} locked={false} row={row} decode={justUnlocked} />)}
             <span className="dec bottom-0 left-0 h-px w-full" />
           </div>
         ) : (
@@ -227,29 +302,40 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
             <span className="label text-gold">No match — yet</span>
             <h2 className="h2 mt-4">Nothing matches that combination.</h2>
             <p className="body-lg mx-auto mt-4 max-w-md text-white-60">
-              The site shows a selection. The full engagement summary goes deeper — sixty-plus engagements,
-              every role and outcome.
+              Loosen a filter, or talk to a partner about the work you&rsquo;re actually facing.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Btn href="/contact?subject=engagement-summary" arrow>
-                Request the engagement summary
-              </Btn>
-              <Link href="/engagements" className="btn btn-ghost button">
+              <Link href="/engagements#register" className="btn btn-secondary button" scroll={false}>
                 Clear filters
+              </Link>
+              <Link href="/contact" className="btn btn-ghost button">
+                Talk to a partner
               </Link>
             </div>
           </div>
         )}
 
         <p className="body-sm mt-10 max-w-2xl text-white-40">
-          Selected from 60+ embedded engagements across 16 sectors. Full engagement summary available on
-          request —{" "}
-          <Link href="/contact?subject=engagement-summary" className="link-underline text-white-60">
-            request the engagement summary
-          </Link>
-          .
+          {unlocked ? (
+            <>
+              Summaries are maintained in Fairlead&rsquo;s engagement hub and reflect the current record. Shared with
+              you in confidence.
+            </>
+          ) : register.live ? (
+            <>
+              The register is served from Fairlead&rsquo;s engagement hub and is current to the day. The summaries are
+              public with the names taken out; who each one is about waits until you&rsquo;ve verified your email
+              — and every request reaches a partner.
+            </>
+          ) : (
+            <>
+              This is a snapshot of the register: the engagement hub isn&rsquo;t connected here, so the summaries stay
+              redacted. On the live site they read in full with the names taken out; who each one is about waits until
+              you&rsquo;ve verified your email — and every request reaches a partner.
+            </>
+          )}
         </p>
       </SectionReveal>
-    </>
+    </RevealProvider>
   );
 }

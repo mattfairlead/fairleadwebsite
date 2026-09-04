@@ -11,9 +11,11 @@ operating platform for PE-backed companies.** Built to the spec in
 - **GSAP 3.15** + ScrollTrigger + ScrollSmoother + SplitText + ScrollToPlugin
   via `@gsap/react` — constants and choreography in `lib/motion.ts` (§5.4/§5.8)
 - **Supabase** — `/team` reads the engagement hub's `team_members` table live
-  (see *Team content* below); other content is seed-backed until the tables in
-  `supabase/schema.sql` are provisioned. Without env vars the site serves
-  `content/seed/` — identical shapes
+  (see *Team content* below) and `/engagements` reads its `engagements` table
+  server-side as a locked register (see *Engagement register* below); other
+  content is seed-backed until the tables in `supabase/schema.sql` are
+  provisioned. Without env vars the site serves `content/seed/` — identical
+  shapes
 - **SendGrid** for the contact form + newsletter (HubSpot is sunset); sends
   are skipped and logged when unconfigured, so previews work
 - **Vercel** hosting; 301 redirects from the legacy WordPress URLs in
@@ -37,7 +39,12 @@ degrades gracefully when unset.
 ```
 app/                 routes (/, /platform, /intelligence, /engagements[/slug],
                      /team, /perspectives[/slug], /contact, /careers)
-app/api/             contact, subscribe, ask (Phase 2 stub), revalidate
+app/api/             contact, subscribe, ask (Phase 2 stub), revalidate,
+                     register/request (the reveal form)
+app/engagements/     unlock (the emailed link → grant cookie), lock (clears it)
+components/register/ RegisterRow, Redacted, RevealModal/Provider/Button, Decode
+lib/register.ts      hub `engagements` row → RegisterRow / RegisterPublicRow (redaction)
+lib/register-access.ts  signed link + grant tokens, the grant cookie
 components/          Hero, GlassStrip, HairlineFrame, SectionReveal, ...
 lib/motion.ts        GSAP constants + sectionReveal()/pulseDots()/headerIntro()
 lib/data.ts          content accessors (Supabase, seed fallback)
@@ -79,6 +86,50 @@ select id, name, suffix, roles, sort_order, extended_bio
 from team_members order by sort_order, id;
 ```
 
+## Engagement register
+
+`/engagements` renders **every** row of the hub's `engagements` table as a
+locked register — sector, status, work-type tags, a sponsor-backed flag and
+the summary (with the company and sponsor names scrubbed out, see
+`scrubNames` in `lib/register.ts`) are public; the company and its sponsor
+are not. A visitor reveals the names by asking for them:
+
+1. **Reveal** (any locked row, or the header CTA) opens a sheet: name, firm,
+   role, work email, an optional line. `POST /api/register/request`.
+2. The visitor gets an email with a **48-hour link** (an HMAC-signed token,
+   `ENGAGEMENTS_SECRET`). Fairlead gets "Register access requested — …" on
+   the `CONTACT_TO` list, with everything they typed.
+3. Opening the link (`/engagements/unlock`) sets a **30-day grant cookie**
+   (httpOnly, signed) for that browser, emails Fairlead "Register unlocked —
+   …", and bounces back to `/engagements?unlocked=1#register`, where the
+   names decode out of their redaction. "Lock this browser" clears it.
+
+Why it can't be worked around from the browser: the page is rendered per
+request on the server, and the confidential fields **only enter the render
+tree when the cookie's signature verifies**. The locked view is built from
+`RegisterPublicRow`, a type with no field that could hold a name; the
+redaction bars are drawn from a hash of the row id, not the text (so bar
+widths say nothing about name length); nothing is blurred, hidden with CSS,
+or shipped as JSON. The scrub replaces whole-word, case-insensitive mentions
+of the company and the fund (and each without its corporate suffix) with
+"the company" / "the sponsor" — it does not catch a summary that identifies
+its subject some other way, so summaries in the hub should be written to
+read anonymously. The hub table has **no anon RLS policy** — the site reads
+it with `SUPABASE_SERVICE_ROLE_KEY`, server-only, and the anon key in the
+client bundle cannot read it at all. Without the secret, production refuses
+to issue grants; without the service key, the public-safe snapshot in
+`content/seed/register.ts` is served and nothing can unlock.
+
+Abuse controls on the request route: honeypot field, per-IP and per-address
+hourly rate limits, length caps on every field. `ENGAGEMENTS_REVEAL_MODE=instant`
+skips the email step (weaker; for a trial only).
+
+Rows come from the hub with `show_on_website = true`
+(`supabase/hub_engagements_website.sql`, applied to the hub project; default
+true, so the register is the whole tracker until a row is unchecked). The
+read is cached under the `engagements` tag for 5 minutes; the hub's
+`POST /api/revalidate` with `/engagements` in `paths` clears it.
+
 ## Design system in one paragraph
 
 Fully dark (`--blue-950` ground), Inter only, personality from weight 600 +
@@ -106,8 +157,8 @@ the resolved layout.
 - **Phase 2:** Ask Fairlead command bar (trigger + `/api/ask` stubbed behind
   `NEXT_PUBLIC_ASK_ENABLED=false`), Cottonwood `pin-steps` interactive
   reveal, Solaris demo reel embed, marketing-hub write path.
-- **Phase 3:** full 60+ engagement import, newsletter automation,
-  per-audience landing variants.
+- **Phase 3:** newsletter automation, per-audience landing variants. (The
+  full engagement import is superseded by the live register above.)
 
 ## Before launch — content owners (§9)
 

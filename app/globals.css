@@ -519,6 +519,11 @@ body {
   border-radius: 0;
   transition: border-color 0.3s ease;
 }
+/* The gold rule drawing in (and the label turning gold) is the focus
+   indicator for a field — the outline ring would box the underline. */
+.field:focus-visible {
+  outline: none;
+}
 .field::placeholder {
   color: var(--color-muted);
 }
@@ -1126,4 +1131,151 @@ html[data-theme="light"] .text-gold-glow {
   .us-map-route {
     animation: none;
   }
+}
+
+/* ==========================================================================
+   Engagement register — the locked rows and the reveal sheet.
+   The redaction is bars, not blurred text: the row's HTML holds nothing to
+   un-blur. Widths are hashed from the row id (lib/register.ts).
+   ========================================================================== */
+
+.redact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em 0.55em;
+  width: 100%;
+  max-width: 42rem;
+}
+.redact i {
+  display: block;
+  height: 0.62em;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(255, 255, 255, 0.13) 40%,
+    rgba(var(--gold-rgb), 0.16) 50%,
+    rgba(255, 255, 255, 0.13) 60%,
+    rgba(255, 255, 255, 0.09) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  transition: background-position 0.9s var(--ease-out-expo);
+}
+.redact-title {
+  font-size: 1.75rem; /* .h4 — bars sit where the company name would */
+  line-height: 1.16;
+  gap: 0.4em 0.45em;
+  padding-top: 0.25em;
+  padding-bottom: 0.1em;
+}
+.redact-title i {
+  height: 0.7em;
+  border-radius: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--gold-rgb), 0.22) 0%,
+    rgba(var(--gold-rgb), 0.3) 40%,
+    rgba(230, 209, 170, 0.5) 50%,
+    rgba(var(--gold-rgb), 0.3) 60%,
+    rgba(var(--gold-rgb), 0.22) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  transition: background-position 0.9s var(--ease-out-expo);
+}
+.redact-line {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+/* A light passes along the bars under the cursor; a slow tide otherwise */
+.register-row:hover .redact i,
+.register-row:focus-within .redact i {
+  background-position: 0% 0;
+}
+.register-row .redact-title i {
+  animation: redact-tide 6s ease-in-out infinite alternate;
+}
+.register-row:nth-child(odd) .redact-title i {
+  animation-delay: -3s;
+}
+.register-row:hover .redact-title i {
+  animation: none;
+}
+@keyframes redact-tide {
+  from {
+    opacity: 0.85;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* The pill on a locked row — the visible affordance for the stretched button */
+.reveal-pill {
+  pointer-events: none;
+}
+.register-row:hover .reveal-pill,
+.register-row:focus-within .reveal-pill {
+  background: var(--color-gold);
+  color: var(--color-blue-950);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--gold-rgb), 0.6),
+    0 12px 30px -12px rgba(var(--gold-rgb), 0.5);
+}
+.register-row:focus-within .reveal-pill {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+.register-row:active .reveal-pill {
+  transform: scale(0.97);
+}
+
+/* Padlock — the shackle lifts when open (the header after a grant, the sheet after a send) */
+.lock-glyph .lock-shackle {
+  transform-origin: 9.5px 6.5px;
+  transition: transform 0.5s var(--ease-spring);
+}
+.lock-glyph.is-open .lock-shackle {
+  transform: translateY(-1.5px) rotate(24deg);
+}
+.register-row:hover .lock-glyph .lock-shackle {
+  transform: translateY(-1.5px) rotate(24deg);
+}
+
+/* The reveal sheet — rises from the bottom on phones, centers on larger screens */
+.reveal-panel {
+  max-height: 92svh;
+  background: rgba(7, 19, 56, 0.92);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 40px 120px -30px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(var(--gold-rgb), 0.1);
+  animation: lightbox-rise 0.6s var(--ease-out-expo) both;
+}
+@media (min-width: 768px) {
+  .reveal-panel {
+    border-radius: var(--radius-card);
+    margin: 1.5rem;
+  }
+}
+.lightbox.is-closing .reveal-panel {
+  animation: lightbox-rise 0.22s ease-in reverse both;
+}
+
+/* Unlocked header chip */
+.grant-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 1rem;
+  border-radius: var(--radius-pill);
+  background: rgba(var(--gold-rgb), 0.08);
+  box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb), 0.3);
+  color: var(--color-gold-soft);
 }

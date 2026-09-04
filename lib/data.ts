@@ -117,3 +117,62 @@ export async function getPerspective(slug: string): Promise<Perspective | null> 
   const all = await getPerspectives();
   return all.find((p) => p.slug === slug) ?? null;
 }
+
+/* ==========================================================================
+   Engagement register — the hub's `engagements` table, every row, read with
+   the service role and cached under the "engagements" tag (the hub's
+   revalidate call clears it; 5 minutes is the safety net). The page decides
+   per request whether the visitor holds a grant (lib/register-access.ts)
+   and renders either the full rows or their redaction — the redaction is
+   computed here, on the server, from named public fields only, and the
+   public summary has the company and sponsor names scrubbed before it
+   leaves the server.
+   ========================================================================== */
+
+import { unstable_cache } from "next/cache";
+import { getSupabaseAdmin } from "@/lib/supabase";
+import type { HubEngagementRow, RegisterPublicRow, RegisterRow } from "@/lib/types";
+import { HUB_ENGAGEMENT_COLUMNS, mapHubEngagements, redact } from "@/lib/register";
+import { register as seedRegister } from "@/content/seed/register";
+
+const readHubEngagements = unstable_cache(
+  async (): Promise<HubEngagementRow[] | null> => {
+    const sb = getSupabaseAdmin();
+    if (!sb) {
+      console.warn(
+        "[data] engagement hub not configured (NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY) — serving the public-safe snapshot"
+      );
+      return null;
+    }
+    const { data, error } = await sb
+      .from("engagements")
+      .select(HUB_ENGAGEMENT_COLUMNS)
+      .eq("show_on_website", true)
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true });
+    if (error) {
+      // A typical cause: the hub project is missing the `show_on_website`
+      // column (supabase/hub_engagements_website.sql was not applied).
+      console.warn("[data] engagements read failed — serving the public-safe snapshot:", error.message);
+      return null;
+    }
+    return (data ?? []) as unknown as HubEngagementRow[];
+  },
+  ["hub-engagements"],
+  { tags: ["engagements"], revalidate: 300 }
+);
+
+export type RegisterLoad =
+  | { live: true; rows: RegisterRow[]; publicRows: RegisterPublicRow[] }
+  | { live: false; rows: null; publicRows: RegisterPublicRow[] };
+
+/**
+ * `rows` (the confidential shape) is only present when the hub is reachable;
+ * `publicRows` always is. Callers render `rows` ONLY behind a verified grant.
+ */
+export async function loadRegister(): Promise<RegisterLoad> {
+  const hub = await readHubEngagements();
+  if (!hub) return { live: false, rows: null, publicRows: seedRegister };
+  const rows = mapHubEngagements(hub);
+  return { live: true, rows, publicRows: rows.map(redact) };
+}

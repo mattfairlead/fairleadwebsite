@@ -97,3 +97,57 @@ export interface Perspective {
   external_url: string | null; // transactions link out to the original release
   visible: boolean;
 }
+
+/* ==========================================================================
+   Engagement register — the hub's `engagements` table, rendered on
+   /engagements as a locked register (every row) that unlocks per browser once
+   a visitor verifies their email. See lib/register.ts and lib/register-access.ts.
+   ========================================================================== */
+
+/**
+ * One row of the hub's `engagements` table — the internal tracker. Read
+ * SERVER-SIDE ONLY with the service role (lib/supabase.ts → getSupabaseAdmin);
+ * there is deliberately no anon policy on this table. `company`, `pe_fund`
+ * and `summary` are the confidential fields.
+ */
+export interface HubEngagementRow {
+  id: number;
+  company: string;
+  pe_fund: string;
+  key_symbols: string; // "◆⬤▲◼⚑" subset — the hub's work-type legend
+  sector: string; // "Energy" | "VC" | "Family Office" | "Other"
+  summary: string;
+  status: string; // "Active" | "Historical" | ""
+  sort_order: number;
+  show_on_website: boolean;
+  updated_at: string;
+}
+
+/** The hub's work-type legend, as slugs the site filters on. */
+export type RegisterWork = "operating-partner" | "assessment" | "m-and-a" | "leadership" | "advisory";
+export type RegisterSector = "energy" | "venture" | "family-office" | "other";
+export type RegisterStatus = "active" | "historical" | null;
+
+/**
+ * What EVERY visitor may see about a register row. Structurally incapable of
+ * carrying a company or sponsor name — the locked view is built from this
+ * type alone, so no name can reach the HTML by accident. `summary` is the
+ * hub's summary with the company and sponsor names scrubbed out
+ * (lib/register.ts → redact); empty when the hub is unreachable.
+ */
+export interface RegisterPublicRow {
+  id: number;
+  index: number; // 1-based position in the register ("№ 023")
+  sector: RegisterSector;
+  status: RegisterStatus;
+  work: RegisterWork[];
+  sponsor_backed: boolean; // the hub row names a fund — the name itself stays private
+  summary: string; // name-scrubbed; "" when no hub connection
+}
+
+/** The unlocked row — public fields plus the confidential ones. */
+export interface RegisterRow extends RegisterPublicRow {
+  company: string;
+  sponsor: string | null;
+  summary: string; // the hub's summary as written, names and all
+}
