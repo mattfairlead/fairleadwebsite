@@ -6,10 +6,11 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * The emailed link lands here. A valid, unexpired link token becomes a
- * 30-day grant cookie for this browser and Fairlead hears that the visitor
- * followed through. Expired or tampered tokens bounce to the register with a
- * flag so the page can say "that link has expired — ask again".
+ * The share link a partner forwarded lands here. A valid, unexpired link
+ * token becomes a 30-day grant cookie for this browser and Fairlead hears
+ * that the visitor opened it. Expired or tampered tokens bounce to the
+ * register with a flag so the page can say "that link has expired — ask
+ * again".
  */
 export async function GET(req: Request) {
   const url = new URL(req.url);
@@ -36,7 +37,7 @@ export async function GET(req: Request) {
       `What they're working through:`,
       requester.message || "—",
       ``,
-      `They opened their verification link; the register is unlocked in their browser for 30 days.`,
+      `They opened the link a partner forwarded; the register is unlocked in their browser for 30 days.`,
     ].join("\n"),
   });
 

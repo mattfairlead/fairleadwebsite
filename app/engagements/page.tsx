@@ -4,21 +4,31 @@ import clsx from "clsx";
 import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
-import EngagementRow from "@/components/EngagementRow";
 import TestimonialFeature from "@/components/TestimonialFeature";
 import RevealProvider from "@/components/register/RevealProvider";
 import RevealButton from "@/components/register/RevealButton";
 import RegisterRow from "@/components/register/RegisterRow";
 import { LockGlyph } from "@/components/register/RevealModal";
-import { ARROW } from "@/components/Btn";
 import { getEngagements, loadRegister } from "@/lib/data";
-import { filterRegister, registerStats, SECTORS, STATUSES, WORK, type RegisterFilters } from "@/lib/register";
-import { getRegisterGrant, revealMode } from "@/lib/register-access";
+import {
+  featuredItem,
+  filterItems,
+  redact,
+  registerStats,
+  renumber,
+  withoutFeatured,
+  SECTORS,
+  STATUSES,
+  WORK,
+  type RegisterFilters,
+  type RegisterItem,
+} from "@/lib/register";
+import { getRegisterGrant } from "@/lib/register-access";
 import { pageMetadata, videoJsonLd, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Engagements",
-  "The full Fairlead engagement register — every embedded engagement since 2010, by sector, work and status. What we did, in the open; the names on request.",
+  "The full Fairlead engagement register — every embedded engagement since 2010, by sector, work and status. What we did, in the open; the names at a partner's discretion.",
   "/engagements"
 );
 
@@ -104,29 +114,40 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
     loadRegister(),
     getRegisterGrant(),
   ]);
-  const studies = caseStudies.filter((e) => e.body_md);
-
   // The one decision that matters: full rows exist only when the hub is
   // reachable AND this browser holds a verified grant. Everything below
-  // renders from `visible`, whose type says which it is.
+  // renders from `items`, whose kinds say which it is.
   const unlocked = Boolean(grant) && register.live;
-  const visible = unlocked && register.rows ? { locked: false as const, rows: filterRegister(register.rows, filters) } : { locked: true as const, rows: filterRegister(register.publicRows, filters) };
 
-  const stats = registerStats(register.publicRows);
+  // One list: the case studies we're cleared to name, then every other hub
+  // row. Hub rows a case study already names are dropped (server-side, on
+  // the confidential rows) so each company appears once; the whole list is
+  // then numbered in display order.
+  const studies = caseStudies.filter((e) => e.body_md); // cleared for the public record: the ones with a case study
+  const featured = studies.map(featuredItem);
+  const rest: RegisterItem[] = register.live
+    ? withoutFeatured(register.rows, studies).map((row) =>
+        unlocked ? { kind: "unlocked", row } : { kind: "locked", row: redact(row) }
+      )
+    : register.publicRows.map((row) => ({ kind: "locked", row }));
+  const items = renumber([...featured, ...rest]);
+  const visible = filterItems(items, filters);
+
+  const stats = registerStats(items.map((it) => it.row));
   const activeCount = [filters.work, filters.sector, filters.status].filter(Boolean).length;
   const hasFilter = activeCount > 0;
   const justUnlocked = unlocked && sp.unlocked === "1";
   const linkExpired = !unlocked && sp.link === "expired";
 
   return (
-    <RevealProvider mode={revealMode()} total={stats.total}>
+    <RevealProvider total={stats.total}>
       <PageIntro
         eyebrow="Engagements"
         title={<>The register.</>}
         lead={
           <>
             Every embedded engagement since 2010 — sponsor-backed and founder-led, from a portfolio assessment to the
-            seat itself. Read what we did; the names are private until you ask.
+            seat itself. What we did is on the record; who it was for is a partner&rsquo;s call.
           </>
         }
         aside={
@@ -177,50 +198,25 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
         }}
       />
 
-      {studies.length > 0 && (
-        <SectionReveal className="container-page pb-20">
-          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-            <SectionHead eyebrow="Case studies" title={<>The ones we can talk about.</>} />
-            <p className="body-md max-w-sm text-white-50" data-anim="fade-up">
-              Cleared for the public record — metric first, in the operator&rsquo;s vocabulary.
-            </p>
-          </div>
-          <div className="relative mt-14">
-            {studies.map((engagement) => (
-              <EngagementRow key={engagement.slug} engagement={engagement} />
-            ))}
-            <span className="dec bottom-0 left-0 h-px w-full" />
-          </div>
-        </SectionReveal>
-      )}
-
       <SectionReveal id="register" className="container-page pb-8 pt-4">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <SectionHead eyebrow="The register" title={<>All {stats.total}, on request.</>} />
-          <div className="flex flex-col items-start gap-4 md:items-end" data-anim="fade-up">
-            {grant ? (
-              <>
-                <span className="grant-chip button">
-                  <LockGlyph open />
-                  Unlocked for {grant.name} · {grant.firm}
-                </span>
-                <Link href="/engagements/lock" className="body-sm link-underline text-white-40" prefetch={false}>
-                  Lock this browser
-                </Link>
-              </>
-            ) : (
-              <>
-                <RevealButton className="btn btn-primary button">
-                  <LockGlyph />
-                  Reveal the register
-                  {ARROW}
-                </RevealButton>
-                <span className="body-sm max-w-xs text-white-40 md:text-right">
-                  The company and its sponsor for every row. One emailed link; a partner sees every request.
-                </span>
-              </>
-            )}
-          </div>
+          <SectionHead eyebrow="The register" title={<>All {stats.total}, in one place.</>} />
+          {grant ? (
+            <div className="flex flex-col items-start gap-4 md:items-end" data-anim="fade-up">
+              <span className="grant-chip button">
+                <LockGlyph open />
+                Unlocked for {grant.name} · {grant.firm}
+              </span>
+              <Link href="/engagements/lock" className="body-sm link-underline text-white-40" prefetch={false}>
+                Lock this browser
+              </Link>
+            </div>
+          ) : (
+            <p className="body-md max-w-sm text-white-50" data-anim="fade-up">
+              Named where we&rsquo;ve been cleared to name them. For the rest, what we did is on the record and who it
+              was for is a partner&rsquo;s call.
+            </p>
+          )}
         </div>
 
         {linkExpired && (
@@ -245,8 +241,8 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
         <span className="dec left-0 top-0 h-px w-full" />
         <div className="flex items-center justify-between gap-4 py-5">
           <span className="body-sm text-white-50">
-            <span className="text-white-100 tabular">{visible.rows.length}</span>{" "}
-            {visible.rows.length === 1 ? "engagement" : "engagements"}
+            <span className="text-white-100 tabular">{visible.length}</span>{" "}
+            {visible.length === 1 ? "engagement" : "engagements"}
             {hasFilter && (
               <>
                 {" "}
@@ -287,11 +283,17 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
       </section>
 
       <SectionReveal className="container-page pb-20">
-        {visible.rows.length > 0 ? (
+        {visible.length > 0 ? (
           <div className="relative">
-            {visible.locked
-              ? visible.rows.map((row) => <RegisterRow key={row.id} locked row={row} />)
-              : visible.rows.map((row) => <RegisterRow key={row.id} locked={false} row={row} decode={justUnlocked} />)}
+            {visible.map((it) =>
+              it.kind === "featured" ? (
+                <RegisterRow key={`f${it.row.id}`} kind="featured" row={it.row} engagement={it.engagement} />
+              ) : it.kind === "locked" ? (
+                <RegisterRow key={it.row.id} kind="locked" row={it.row} />
+              ) : (
+                <RegisterRow key={it.row.id} kind="unlocked" row={it.row} decode={justUnlocked} />
+              )
+            )}
             <span className="dec bottom-0 left-0 h-px w-full" />
           </div>
         ) : (
@@ -323,15 +325,17 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
             </>
           ) : register.live ? (
             <>
-              The register is served from Fairlead&rsquo;s engagement hub and is current to the day. The summaries are
-              public with the names taken out; who each one is about waits until you&rsquo;ve verified your email
-              — and every request reaches a partner.
+              The register is served from Fairlead&rsquo;s engagement hub and is current to the day. Every summary is
+              public with the names taken out.{" "}
+              <RevealButton className="link-underline text-white-60">Ask a partner for the names</RevealButton> and one
+              of us will be in touch — nothing is sent automatically.
             </>
           ) : (
             <>
               This is a snapshot of the register: the engagement hub isn&rsquo;t connected here, so the summaries stay
-              redacted. On the live site they read in full with the names taken out; who each one is about waits until
-              you&rsquo;ve verified your email — and every request reaches a partner.
+              redacted. On the live site they read in full with the names taken out.{" "}
+              <RevealButton className="link-underline text-white-60">Ask a partner for the names</RevealButton> and one
+              of us will be in touch — nothing is sent automatically.
             </>
           )}
         </p>

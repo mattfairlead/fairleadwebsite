@@ -88,17 +88,21 @@ from team_members order by sort_order, id;
 
 ## Engagement register
 
-`/engagements` renders **every** row of the hub's `engagements` table as a
-locked register — sector, status, work-type tags, a sponsor-backed flag and
-the summary (with the company and sponsor names scrubbed out, see
-`scrubNames` in `lib/register.ts`) are public; the company and its sponsor
-are not. A visitor reveals the names by asking for them:
+`/engagements` renders one list: the case studies Fairlead is cleared to
+name (`content/seed/engagements.ts` / the site's `engagements` table,
+`featured = true`), then **every** other row of the hub's `engagements`
+table. Sector, status, work-type tags, a sponsor-backed flag and the summary
+(with the company and sponsor names scrubbed out, see `scrubNames` in
+`lib/register.ts`) are public on every row; the company and its sponsor are
+not. Hub rows a named case study already covers are dropped server-side so
+each company appears once. A visitor asks for the names:
 
-1. **Reveal** (any locked row, or the header CTA) opens a sheet: name, firm,
+1. **Ask** (any locked row, or the footnote link) opens a sheet: name, firm,
    role, work email, an optional line. `POST /api/register/request`.
-2. The visitor gets an email with a **48-hour link** (an HMAC-signed token,
-   `ENGAGEMENTS_SECRET`). Fairlead gets "Register access requested — …" on
-   the `CONTACT_TO` list, with everything they typed.
+2. Fairlead gets "Register access requested — …" on the `CONTACT_TO` list
+   with everything they typed **and a 7-day share link** (an HMAC-signed
+   token, `ENGAGEMENTS_SECRET`). Nothing is sent to the visitor: a partner
+   decides, and forwards the link (or just replies) if they choose to.
 3. Opening the link (`/engagements/unlock`) sets a **30-day grant cookie**
    (httpOnly, signed) for that browser, emails Fairlead "Register unlocked —
    …", and bounces back to `/engagements?unlocked=1#register`, where the
@@ -116,13 +120,13 @@ of the company and the fund (and each without its corporate suffix) with
 its subject some other way, so summaries in the hub should be written to
 read anonymously. The hub table has **no anon RLS policy** — the site reads
 it with `SUPABASE_SERVICE_ROLE_KEY`, server-only, and the anon key in the
-client bundle cannot read it at all. Without the secret, production refuses
-to issue grants; without the service key, the public-safe snapshot in
-`content/seed/register.ts` is served and nothing can unlock.
+client bundle cannot read it at all. Without the secret, requests still
+reach Fairlead but carry no link and nothing can unlock; without the service
+key, the public-safe snapshot in `content/seed/register.ts` is served (no
+summaries) and the page says so.
 
 Abuse controls on the request route: honeypot field, per-IP and per-address
-hourly rate limits, length caps on every field. `ENGAGEMENTS_REVEAL_MODE=instant`
-skips the email step (weaker; for a trial only).
+hourly rate limits, length caps on every field.
 
 Rows come from the hub with `show_on_website = true`
 (`supabase/hub_engagements_website.sql`, applied to the hub project; default

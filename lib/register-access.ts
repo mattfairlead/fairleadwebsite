@@ -5,35 +5,25 @@ import { cookies } from "next/headers";
 /**
  * Register access — who may see the unlocked engagement register.
  *
- * The gate is a signed grant in an httpOnly cookie. A visitor asks to reveal
- * the register (RevealModal → POST /api/register/request); we email them a
- * one-time link (an HMAC-signed, expiring token); following it
- * (/engagements/unlock) sets the grant cookie; from then on the SERVER renders
- * the unlocked rows for that browser. Nothing confidential is ever in the
- * page until that point, so there is nothing client-side to bypass: no hidden
- * DOM, no JSON, no CSS blur over real text.
+ * The gate is a signed grant in an httpOnly cookie. A visitor asks for the
+ * names (RevealModal → POST /api/register/request); Fairlead is emailed the
+ * request together with a one-time share link (an HMAC-signed, expiring
+ * token). Nothing goes to the visitor automatically: a partner decides, and
+ * forwards the link if they choose to. Following it (/engagements/unlock)
+ * sets the grant cookie; from then on the SERVER renders the unlocked rows
+ * for that browser. Nothing confidential is ever in the page until that
+ * point, so there is nothing client-side to bypass: no hidden DOM, no JSON,
+ * no CSS blur over real text.
  *
  * Tokens are HMAC-SHA256 over a base64url JSON payload, keyed by
- * ENGAGEMENTS_SECRET. Without the secret, production refuses to issue or
- * honour grants (fail closed); development derives a throwaway key so the
- * flow works locally.
- *
- * ENGAGEMENTS_REVEAL_MODE:
- *   "verify"  (default) — email link required; the grant is issued on click.
- *   "instant"           — the grant is issued on form submit (no email step).
- *                         Weaker: anyone can POST a form. Fairlead is still
- *                         notified either way.
+ * ENGAGEMENTS_SECRET. Without the secret, production cannot mint share links
+ * or honour grants (requests still reach Fairlead — they just carry no
+ * link); development derives a throwaway key so the flow works locally.
  */
 
 export const GRANT_COOKIE = "fl_register";
-const LINK_TTL_S = 60 * 60 * 48; // the emailed link — 48 hours
+const LINK_TTL_S = 60 * 60 * 24 * 7; // the share link a partner forwards — 7 days
 const GRANT_TTL_S = 60 * 60 * 24 * 30; // the browser grant — 30 days
-
-export type RevealMode = "verify" | "instant";
-
-export function revealMode(): RevealMode {
-  return (process.env.ENGAGEMENTS_REVEAL_MODE || "").trim().toLowerCase() === "instant" ? "instant" : "verify";
-}
 
 /** Public-safe details carried in a grant — enough to greet and to notify. */
 export interface Requester {
@@ -97,7 +87,7 @@ function open<T extends { t: string; exp: number }>(token: string | undefined | 
 
 const now = () => Math.floor(Date.now() / 1000);
 
-/** The emailed one-time link token. */
+/** The one-time share link token, emailed to Fairlead for a partner to forward. */
 export function mintLinkToken(r: Requester & { message: string }): string | null {
   const payload: LinkPayload = { ...r, t: "link", iat: now(), exp: now() + LINK_TTL_S };
   return mint(payload);

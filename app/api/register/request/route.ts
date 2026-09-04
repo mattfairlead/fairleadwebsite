@@ -1,28 +1,21 @@
 import { NextResponse } from "next/server";
 import { sendMail } from "@/lib/sendgrid";
-import {
-  GRANT_COOKIE,
-  grantCookieOptions,
-  isAccessConfigured,
-  mintGrantToken,
-  mintLinkToken,
-  revealMode,
-  type Requester,
-} from "@/lib/register-access";
+import { mintLinkToken, type Requester } from "@/lib/register-access";
 
 export const runtime = "nodejs";
 
 /**
- * "Reveal the register" — the modal on /engagements posts here.
+ * "Ask for the names" — the sheet on /engagements posts here.
  *
- * verify mode (default): mint a 48-hour link token, email it to the visitor,
- * tell Fairlead who asked. Nothing is unlocked until the link is followed
- * (/engagements/unlock). instant mode: set the grant cookie right away.
+ * Fairlead is emailed who asked, what they're working through, and a 7-day
+ * share link a partner can forward if they decide to share the register.
+ * Nothing is sent to the visitor and nothing unlocks: the partner decides.
+ * Following the forwarded link (/engagements/unlock) is what sets the grant.
  *
  * Abuse controls: honeypot field, per-IP and per-address rate limits (in
  * memory — best effort on serverless, which is fine: the cost of a miss is
- * one extra email to an address its owner typed). Every payload field is
- * length-capped before it reaches a token or a mail.
+ * one extra email to Fairlead). Every payload field is length-capped before
+ * it reaches a token or a mail.
  */
 
 const ROLES = new Set(["Sponsor", "Portfolio company", "Intermediary", "Other", ""]);
@@ -53,7 +46,7 @@ export async function POST(req: Request) {
   }
 
   // Honeypot — a real form never fills this.
-  if (String(body.website ?? "").trim()) return NextResponse.json({ ok: true, mode: "verify" });
+  if (String(body.website ?? "").trim()) return NextResponse.json({ ok: true });
 
   const requester: Requester = {
     name: String(body.name ?? "").slice(0, 120).trim(),
@@ -67,11 +60,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
   if (!ROLES.has(requester.role)) return NextResponse.json({ error: "Invalid role" }, { status: 400 });
-
-  if (!isAccessConfigured()) {
-    console.error("[register] ENGAGEMENTS_SECRET unset — cannot issue access");
-    return NextResponse.json({ error: "Register access is not configured" }, { status: 503 });
-  }
 
   if (limited(`ip:${clientIp(req)}`, 12) || limited(`email:${requester.email}`, 4)) {
     return NextResponse.json({ error: "Too many requests — try again later" }, { status: 429 });
@@ -88,68 +76,32 @@ export async function POST(req: Request) {
     message || "—",
   ].join("\n");
 
-  if (revealMode() === "instant") {
-    const grant = mintGrantToken(requester);
-    if (!grant) return NextResponse.json({ error: "Register access is not configured" }, { status: 503 });
-    await sendMail({
-      subject: `Register unlocked — ${who}`,
-      replyTo: requester.email,
-      text: `${details}\n\nInstant mode: the register was unlocked for this browser on submit.`,
-    });
-    const res = NextResponse.json({ ok: true, mode: "instant" });
-    res.cookies.set(GRANT_COOKIE, grant, grantCookieOptions());
-    return res;
-  }
-
+  // The share link lands on the origin the visitor is on (preview or
+  // production), so the cookie it sets is for the host they'll return to.
   const token = mintLinkToken({ ...requester, message });
-  if (!token) return NextResponse.json({ error: "Register access is not configured" }, { status: 503 });
-  // The origin the visitor is on (preview or production), so the link and
-  // the cookie it sets land on the same host.
-  const link = `${new URL(req.url).origin}/engagements/unlock?t=${encodeURIComponent(token)}`;
+  const link = token ? `${new URL(req.url).origin}/engagements/unlock?t=${encodeURIComponent(token)}` : null;
+  if (!token) console.error("[register] ENGAGEMENTS_SECRET unset — request forwarded without a share link");
 
-  const visitor = await sendMail({
-    to: requester.email,
-    subject: "Your link to the Fairlead engagement register",
-    text: [
-      `${requester.name},`,
-      ``,
-      `Here is your link to the full engagement register — every company, sponsor and summary:`,
-      ``,
-      link,
-      ``,
-      `It works for 48 hours and unlocks the register in the browser you open it in for 30 days.`,
-      `If you didn't ask for this, ignore it — nothing is unlocked until the link is opened.`,
-      ``,
-      `Fairlead Advisors · (617) 315-4822 · fairleadadvisors.com`,
-    ].join("\n"),
-    html: linkEmailHtml(requester.name, link),
-  });
-  if (visitor.skipped) console.info(`[register] mail skipped — unlock link for ${requester.email}:\n${link}`);
-  if (!visitor.ok) return NextResponse.json({ error: "Mail delivery failed" }, { status: 502 });
+  const share = link
+    ? [
+        `To share the register with them, forward this link. It opens every name, sponsor and summary in the`,
+        `browser it's opened in for 30 days, and expires in 7 days. Nothing has been sent to them yet:`,
+        ``,
+        link,
+        ``,
+        `Or just reply to this email — it goes straight to them.`,
+      ]
+    : [
+        `No share link could be made: ENGAGEMENTS_SECRET is unset on the website. Reply to this email to reach them.`,
+      ];
 
-  await sendMail({
+  const sent = await sendMail({
     subject: `Register access requested — ${who}`,
     replyTo: requester.email,
-    text: `${details}\n\nA verification link was sent to ${requester.email}. You'll get a second note when it's opened.`,
+    text: [details, ``, ...share].join("\n"),
   });
+  if (sent.skipped && link) console.info(`[register] mail skipped — share link for ${requester.email}:\n${link}`);
+  if (!sent.ok) return NextResponse.json({ error: "Mail delivery failed" }, { status: 502 });
 
-  return NextResponse.json({ ok: true, mode: "verify" });
-}
-
-function esc(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
-}
-
-function linkEmailHtml(name: string, link: string): string {
-  return `<!doctype html><html><body style="margin:0;padding:0;background:#050e2e;color:#ffffff;font-family:Inter,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#050e2e;"><tr><td align="center" style="padding:48px 20px;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
-<tr><td style="padding:0 0 28px 0;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);font-weight:600;">
-<span style="display:inline-block;width:32px;height:1px;background:#d5b371;vertical-align:middle;margin-right:12px;"></span>Fairlead Advisors</td></tr>
-<tr><td style="padding:0 0 16px 0;font-size:28px;line-height:1.1;letter-spacing:-0.04em;font-weight:600;color:#ffffff;">Your link to the engagement register.</td></tr>
-<tr><td style="padding:0 0 28px 0;font-size:16px;line-height:1.5;color:rgba(255,255,255,0.7);">${esc(name)}, here is the full register — every company, sponsor and summary. The link works for 48 hours and unlocks the register in the browser you open it in for 30 days.</td></tr>
-<tr><td style="padding:0 0 32px 0;"><a href="${esc(link)}" style="display:inline-block;background:#ffffff;color:#050e2e;text-decoration:none;font-weight:600;font-size:14px;letter-spacing:-0.02em;padding:18px 32px;border-radius:80px;">Open the register &rarr;</a></td></tr>
-<tr><td style="padding:0 0 12px 0;border-top:1px solid rgba(255,255,255,0.1);"></td></tr>
-<tr><td style="padding:12px 0 0 0;font-size:13px;line-height:1.5;color:rgba(255,255,255,0.4);">If you didn&rsquo;t ask for this, ignore it &mdash; nothing is unlocked until the link is opened.<br>Fairlead Advisors &middot; (617) 315-4822 &middot; fairleadadvisors.com</td></tr>
-</table></td></tr></table></body></html>`;
+  return NextResponse.json({ ok: true });
 }

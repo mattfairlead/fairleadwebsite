@@ -1,4 +1,6 @@
 import type {
+  Engagement,
+  EngagementRole,
   HubEngagementRow,
   RegisterPublicRow,
   RegisterRow,
@@ -178,12 +180,92 @@ export function scrubNames(text: string, names: [name: string, replacement: stri
 
 export type RegisterFilters = { work?: string; sector?: string; status?: string };
 
+export function matchesFilters(r: RegisterPublicRow, f: RegisterFilters): boolean {
+  if (f.work && !r.work.includes(f.work as RegisterWork)) return false;
+  if (f.sector && r.sector !== f.sector) return false;
+  if (f.status && r.status !== f.status) return false;
+  return true;
+}
+
 export function filterRegister<T extends RegisterPublicRow>(rows: T[], f: RegisterFilters): T[] {
-  let out = rows;
-  if (f.work) out = out.filter((r) => r.work.includes(f.work as RegisterWork));
-  if (f.sector) out = out.filter((r) => r.sector === f.sector);
-  if (f.status) out = out.filter((r) => r.status === f.status);
-  return out;
+  return rows.filter((r) => matchesFilters(r, f));
+}
+
+/* --------------------------------------------------------------------------
+   One register. The page renders a single list: the case studies Fairlead is
+   cleared to name, then every other hub row — locked unless the browser holds
+   a verified grant. Case studies are mapped onto the register's taxonomy so
+   the filters and the numbering run across the whole list.
+   -------------------------------------------------------------------------- */
+
+export type RegisterItem =
+  | { kind: "featured"; row: RegisterPublicRow; engagement: Engagement }
+  | { kind: "locked"; row: RegisterPublicRow }
+  | { kind: "unlocked"; row: RegisterRow };
+
+const ENERGY_SECTORS = new Set(["energy", "renewables", "district-energy", "energy-storage", "oilfield-services", "infrastructure"]);
+
+const ROLE_WORK: Record<EngagementRole, RegisterWork> = {
+  "Interim CEO": "leadership",
+  "Interim CFO": "leadership",
+  "Interim COO": "leadership",
+  Controller: "leadership",
+  Board: "leadership",
+  "Operating Partner": "operating-partner",
+  "M&A": "m-and-a",
+  Restructuring: "advisory",
+};
+
+export function featuredSector(e: Engagement): RegisterSector {
+  if (e.sponsor_type === "VC") return "venture";
+  if (e.sponsor_type === "Family office") return "family-office";
+  return ENERGY_SECTORS.has(e.sector) ? "energy" : "other";
+}
+
+export function featuredWork(e: Engagement): RegisterWork[] {
+  return WORK.map((w) => w.slug).filter((slug) => e.roles.some((r) => ROLE_WORK[r] === slug));
+}
+
+/** A case study as a register item. Negative ids keep clear of the hub's. */
+export function featuredItem(e: Engagement, i: number): RegisterItem {
+  return {
+    kind: "featured",
+    engagement: e,
+    row: {
+      id: -(i + 1),
+      index: i + 1,
+      sector: featuredSector(e),
+      status: e.year_end === null ? "active" : "historical",
+      work: featuredWork(e),
+      sponsor_backed: e.sponsor_type !== "Corporate",
+      summary: e.summary_md,
+    },
+  };
+}
+
+function sameCompany(a: string, b: string): boolean {
+  const va = new Set(nameVariants(a).map((s) => s.toLowerCase()));
+  return nameVariants(b).some((v) => va.has(v.toLowerCase()));
+}
+
+/**
+ * Drop the hub rows a named case study already covers, so the list has one
+ * row per company. Compares the CONFIDENTIAL company name server-side; the
+ * result is redacted or rendered exactly as before, so nothing new leaves.
+ * Anonymised case studies can't be matched and are left alone.
+ */
+export function withoutFeatured<T extends { company: string }>(rows: T[], featured: Engagement[]): T[] {
+  const named = featured.filter((e) => !e.anonymized);
+  return rows.filter((r) => !named.some((e) => sameCompany(e.company_display, r.company)));
+}
+
+/** Number the combined list 1…n in display order. */
+export function renumber(items: RegisterItem[]): RegisterItem[] {
+  return items.map((it, i) => ({ ...it, row: { ...it.row, index: i + 1 } }) as RegisterItem);
+}
+
+export function filterItems(items: RegisterItem[], f: RegisterFilters): RegisterItem[] {
+  return items.filter((it) => matchesFilters(it.row, f));
 }
 
 export function registerStats<T extends RegisterPublicRow>(rows: T[]) {
