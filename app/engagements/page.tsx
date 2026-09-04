@@ -199,7 +199,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
 
       <SectionReveal id="register" className="container-page pb-8 pt-4">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <SectionHead eyebrow="The register" title={<>All {stats.total}, in one place.</>} />
+          <SectionHead eyebrow="The register" title={<>{stats.total} engagements, 2010 to today.</>} />
           {grant ? (
             <div className="flex flex-col items-start gap-4 md:items-end" data-anim="fade-up">
               <span className="grant-chip button">
@@ -212,8 +212,10 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
             </div>
           ) : (
             <p className="body-md max-w-sm text-white-50" data-anim="fade-up">
-              Named where we&rsquo;ve been cleared to name them. For the rest, what we did is on the record and who it
-              was for is a partner&rsquo;s call.
+              Interim CFO and controller seats, operating-partner roles, M&amp;A and portfolio assessments — across
+              energy and infrastructure, venture-backed companies and family offices.{" "}
+              <span className="text-white-100 tabular">{stats.active}</span> active today;{" "}
+              <span className="text-white-100 tabular">{stats.sponsorBacked}</span> with a sponsor at the table.
             </p>
           )}
         </div>
