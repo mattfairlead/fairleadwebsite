@@ -2,38 +2,26 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import Field from "@/components/Field";
 import { ARROW } from "@/components/Btn";
-import type { RevealMode } from "@/lib/register-access";
 
 const ROLES = ["Sponsor", "Portfolio company", "Intermediary", "Other"] as const;
 
 /**
- * The reveal sheet — a glass overlay (the VideoLightbox recipe) with one
+ * The request sheet — a glass overlay (the VideoLightbox recipe) with one
  * short form: name, firm, role, email, an optional line. Posts to
- * /api/register/request. In verify mode success is "check your inbox"; the
- * register stays locked until the emailed link is opened, and there is no
- * client-side state that could unlock it — the server decides per request.
- * In instant mode the response sets the grant cookie and the page re-renders.
+ * /api/register/request, which only notifies Fairlead: nothing is sent to
+ * the visitor and nothing unlocks here. A partner reads the request and
+ * decides what to share, so there is no client-side state that could open
+ * the register — the server decides per request, from a cookie only a
+ * partner-forwarded link can set.
  */
-export default function RevealModal({
-  open,
-  onClose,
-  mode,
-  total,
-}: {
-  open: boolean;
-  onClose: () => void;
-  mode: RevealMode;
-  total: number;
-}) {
-  const router = useRouter();
+export default function RevealModal({ open, onClose, total }: { open: boolean; onClose: () => void; total: number }) {
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(open);
   const [closing, setClosing] = useState(false);
-  const [state, setState] = useState<"idle" | "busy" | "sent" | "error" | "limited" | "unavailable">("idle");
+  const [state, setState] = useState<"idle" | "busy" | "sent" | "error" | "limited">("idle");
   const [form, setForm] = useState({ name: "", firm: "", role: "", email: "", message: "", website: "" });
   const panelRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<Element | null>(null);
@@ -95,18 +83,8 @@ export default function RevealModal({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (res.ok) {
-        const json = (await res.json().catch(() => ({}))) as { mode?: string };
-        if (json.mode === "instant") {
-          onClose();
-          router.replace("/engagements?unlocked=1#register");
-          router.refresh();
-          setState("idle");
-        } else {
-          setState("sent");
-        }
-      } else if (res.status === 429) setState("limited");
-      else if (res.status === 503) setState("unavailable");
+      if (res.ok) setState("sent");
+      else if (res.status === 429) setState("limited");
       else setState("error");
     } catch {
       setState("error");
@@ -133,7 +111,7 @@ export default function RevealModal({
         <div className="flex items-start justify-between gap-6 px-6 pt-6 md:px-10 md:pt-8">
           <span className="label flex items-center gap-3 text-white-50">
             <LockGlyph open={sent} />
-            {sent ? "Link sent" : "Reveal the register"}
+            {sent ? "Request sent" : "Ask for the names"}
           </span>
           <button type="button" onClick={onClose} className="btn btn-ghost button -mr-2 -mt-1">
             Close
@@ -155,14 +133,15 @@ export default function RevealModal({
               </svg>
             </span>
             <h2 id="reveal-title" className="h3">
-              Check your inbox.
+              A partner has it.
             </h2>
             <p className="body-md max-w-md text-white-60">
-              We sent a link to <span className="text-white-100">{form.email}</span>. It&rsquo;s good for 48 hours and
-              unlocks the register in this browser for 30 days.
+              Your request went straight to the partners. One of them will reply to{" "}
+              <span className="text-white-100">{form.email}</span> with what we can share. The summaries below are
+              yours to read in the meantime.
             </p>
             <p className="body-sm text-white-40">
-              Nothing to show? Check spam, or call{" "}
+              In a hurry? Call{" "}
               <a href="tel:+16173154822" className="link-underline text-white-60 tabular">
                 (617) 315-4822
               </a>
@@ -173,12 +152,12 @@ export default function RevealModal({
           <form onSubmit={submit} className="flex flex-col gap-8 px-6 pb-8 pt-6 md:px-10 md:pb-12">
             <div className="flex flex-col gap-3">
               <h2 id="reveal-title" className="h3">
-                Every name, every sponsor, on every row.
+                The names are a partner&rsquo;s call.
               </h2>
               <p className="body-md max-w-lg text-white-60">
                 The register holds all <span className="text-white-100 tabular">{total}</span> engagements since 2010.
-                Tell us who you are and we&rsquo;ll{" "}
-                {mode === "instant" ? "open it in this browser." : "email you a link that opens it. A partner sees every request."}
+                What we did is on the page; who it was for is shared at a partner&rsquo;s discretion. Tell us who you
+                are and what you&rsquo;re working through, and one of us will be in touch.
               </p>
             </div>
 
@@ -248,13 +227,13 @@ export default function RevealModal({
                   </>
                 ) : (
                   <>
-                    {mode === "instant" ? "Reveal the register" : "Send my link"}
+                    Send the request
                     {ARROW}
                   </>
                 )}
               </button>
               <span className="body-sm max-w-xs text-white-40">
-                {mode === "instant" ? "A partner is notified of every reveal." : "No account, no password — one link."}
+                Read by a partner, not a queue. No account, no automated reply.
               </span>
             </div>
 
@@ -274,15 +253,6 @@ export default function RevealModal({
                   (617) 315-4822
                 </a>
                 .
-              </p>
-            )}
-            {state === "unavailable" && (
-              <p className="body-sm text-gold" role="alert">
-                The register isn&rsquo;t taking requests right now. Call{" "}
-                <a href="tel:+16173154822" className="link-underline tabular">
-                  (617) 315-4822
-                </a>{" "}
-                and a partner will send it.
               </p>
             )}
           </form>
