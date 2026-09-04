@@ -88,7 +88,7 @@ export default function CompetitorMatrix() {
             >
               <span className="flex flex-col gap-1">
                 {row.fairlead ? (
-                  <Image src="/brand/logo-white.svg" alt="Fairlead" width={167} height={43} className="h-6 w-auto" />
+                  <Image src="/brand/logo-white.svg" alt="Fairlead" width={167} height={43} className="h-6 w-auto self-start" />
                 ) : (
                   <span className="body-lg text-white-100">{row.who}</span>
                 )}
