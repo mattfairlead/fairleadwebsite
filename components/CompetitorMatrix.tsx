@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import Image from "next/image";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import HairlineFrame from "@/components/HairlineFrame";
@@ -86,7 +87,11 @@ export default function CompetitorMatrix() {
               }
             >
               <span className="flex flex-col gap-1">
-                <span className={clsx("body-lg", row.fairlead ? "text-gold" : "text-white-100")}>{row.who}</span>
+                {row.fairlead ? (
+                  <Image src="/brand/logo-white.svg" alt="Fairlead" width={167} height={43} className="h-6 w-auto" />
+                ) : (
+                  <span className="body-lg text-white-100">{row.who}</span>
+                )}
                 <span className="body-sm text-white-40 md:hidden">{row.note}</span>
               </span>
               <span className={clsx("body-md hidden md:block", row.fairlead ? "text-white-80" : "text-white-50")}>{row.note}</span>
