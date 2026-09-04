@@ -130,8 +130,10 @@ export type RegisterStatus = "active" | "historical" | null;
 
 /**
  * What EVERY visitor may see about a register row. Structurally incapable of
- * carrying a company, sponsor or summary — the locked view is built from this
- * type alone, so nothing confidential can reach the HTML by accident.
+ * carrying a company or sponsor name — the locked view is built from this
+ * type alone, so no name can reach the HTML by accident. `summary` is the
+ * hub's summary with the company and sponsor names scrubbed out
+ * (lib/register.ts → redact); empty when the hub is unreachable.
  */
 export interface RegisterPublicRow {
   id: number;
@@ -140,11 +142,12 @@ export interface RegisterPublicRow {
   status: RegisterStatus;
   work: RegisterWork[];
   sponsor_backed: boolean; // the hub row names a fund — the name itself stays private
+  summary: string; // name-scrubbed; "" when no hub connection
 }
 
 /** The unlocked row — public fields plus the confidential ones. */
 export interface RegisterRow extends RegisterPublicRow {
   company: string;
   sponsor: string | null;
-  summary: string;
+  summary: string; // the hub's summary as written, names and all
 }

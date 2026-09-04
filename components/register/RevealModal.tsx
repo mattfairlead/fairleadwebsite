@@ -173,7 +173,7 @@ export default function RevealModal({
           <form onSubmit={submit} className="flex flex-col gap-8 px-6 pb-8 pt-6 md:px-10 md:pb-12">
             <div className="flex flex-col gap-3">
               <h2 id="reveal-title" className="h3">
-                Every name, every sponsor, every summary.
+                Every name, every sponsor, on every row.
               </h2>
               <p className="body-md max-w-lg text-white-60">
                 The register holds all <span className="text-white-100 tabular">{total}</span> engagements since 2010.

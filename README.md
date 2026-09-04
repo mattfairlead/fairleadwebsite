@@ -89,9 +89,10 @@ from team_members order by sort_order, id;
 ## Engagement register
 
 `/engagements` renders **every** row of the hub's `engagements` table as a
-locked register — sector, status, work-type tags and a sponsor-backed flag
-are public; the company, its sponsor and the summary are not. A visitor
-reveals the register by asking for it:
+locked register — sector, status, work-type tags, a sponsor-backed flag and
+the summary (with the company and sponsor names scrubbed out, see
+`scrubNames` in `lib/register.ts`) are public; the company and its sponsor
+are not. A visitor reveals the names by asking for them:
 
 1. **Reveal** (any locked row, or the header CTA) opens a sheet: name, firm,
    role, work email, an optional line. `POST /api/register/request`.
@@ -109,7 +110,11 @@ tree when the cookie's signature verifies**. The locked view is built from
 `RegisterPublicRow`, a type with no field that could hold a name; the
 redaction bars are drawn from a hash of the row id, not the text (so bar
 widths say nothing about name length); nothing is blurred, hidden with CSS,
-or shipped as JSON. The hub table has **no anon RLS policy** — the site reads
+or shipped as JSON. The scrub replaces whole-word, case-insensitive mentions
+of the company and the fund (and each without its corporate suffix) with
+"the company" / "the sponsor" — it does not catch a summary that identifies
+its subject some other way, so summaries in the hub should be written to
+read anonymously. The hub table has **no anon RLS policy** — the site reads
 it with `SUPABASE_SERVICE_ROLE_KEY`, server-only, and the anon key in the
 client bundle cannot read it at all. Without the secret, production refuses
 to issue grants; without the service key, the public-safe snapshot in

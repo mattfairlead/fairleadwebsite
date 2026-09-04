@@ -13,8 +13,9 @@ import type {
  * above all, what the LOCKED view is allowed to contain.
  *
  * Two shapes leave this file: RegisterPublicRow (sector, status, work-type
- * tags, an index, a sponsor-backed flag) and RegisterRow (that plus company,
- * sponsor and summary). Pages render the public shape unless
+ * tags, an index, a sponsor-backed flag, and the summary with the company
+ * and sponsor names scrubbed out) and RegisterRow (that plus company,
+ * sponsor and the summary as written). Pages render the public shape unless
  * lib/register-access.ts has verified the visitor's grant cookie — and the
  * public shape has no field that could hold a name, so a locked page cannot
  * leak one even through a template mistake.
@@ -91,9 +92,11 @@ export function mapHubEngagements(rows: HubEngagementRow[]): RegisterRow[] {
 /**
  * Strip a row down to what everyone may see. Builds a NEW object from named
  * public fields — never a spread — so a column added to the hub tomorrow
- * cannot ride along into the locked HTML.
+ * cannot ride along into the locked HTML. The summary comes through with the
+ * company and sponsor names replaced (see scrubNames); the names themselves
+ * do not.
  */
-export function redact(row: RegisterPublicRow): RegisterPublicRow {
+export function redact(row: RegisterRow): RegisterPublicRow {
   return {
     id: row.id,
     index: row.index,
@@ -101,7 +104,76 @@ export function redact(row: RegisterPublicRow): RegisterPublicRow {
     status: row.status,
     work: [...row.work],
     sponsor_backed: row.sponsor_backed,
+    summary: scrubNames(row.summary, [
+      [row.company, "the company"],
+      [row.sponsor ?? "", "the sponsor"],
+    ]),
   };
+}
+
+/* --------------------------------------------------------------------------
+   Name scrubbing. The locked row shows the summary but not who it is about,
+   so every mention of the company or its sponsor inside the summary text is
+   replaced with a neutral phrase. Matches are case-insensitive and whole-word
+   (so "Cordia's plants" → "the company's plants"), and each name is also
+   matched without its corporate suffix ("Cordia Energy" → "Cordia") because
+   that is how a summary usually refers to it. This catches direct mentions
+   only: a summary that identifies its subject some other way is Fairlead's
+   to reword in the hub.
+   -------------------------------------------------------------------------- */
+
+const CORPORATE_SUFFIX =
+  /^(inc|incorporated|llc|l\.l\.c|lp|l\.p|llp|plc|ltd|limited|co|corp|corporation|company|holdings|holdco|group|partners|capital|management|energy|resources|services|solutions|systems|technologies|industries|international|ventures|fund|equity)\.?$/i;
+
+/**
+ * A name and every suffix-stripped stem of it, longest first: "Cordia Energy
+ * Holdings, LLC" → ["Cordia Energy Holdings, LLC", "Cordia Energy Holdings",
+ * "Cordia Energy", "Cordia"]. Exported for tests.
+ */
+export function nameVariants(name: string): string[] {
+  const full = name.trim().replace(/\s+/g, " ");
+  if (!full) return [];
+  const out = new Set<string>([full]);
+  const words = full.replace(/^the\s+/i, "").split(" ");
+  const add = () => {
+    const stem = words.join(" ").replace(/[,&]+$/, "");
+    // Never a stem that is itself a generic word ("Energy Partners" → "Energy" would scrub every "energy").
+    if (stem.length >= 3 && stem.toLowerCase() !== full.toLowerCase() && !CORPORATE_SUFFIX.test(stem)) out.add(stem);
+  };
+  add();
+  // Peel trailing suffixes one at a time, keeping each intermediate form —
+  // a summary may say "Cordia Energy" or just "Cordia".
+  while (words.length > 1) {
+    const last = words[words.length - 1].replace(/[,&]+$/, "");
+    if (!last || CORPORATE_SUFFIX.test(last)) {
+      words.pop();
+      add();
+    } else break;
+  }
+  return [...out].sort((a, b) => b.length - a.length);
+}
+
+/** Matches a run of corporate-suffix words after a name, so "Riverstone Holdings" folds into "Riverstone". */
+const TRAILING_SUFFIX = String.raw`(?:[,\s]+(?:${CORPORATE_SUFFIX.source.slice(2, -5)})\.?(?![A-Za-z0-9]))*`;
+
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Replace every whole-word mention of each name (and its stem) in `text`. */
+export function scrubNames(text: string, names: [name: string, replacement: string][]): string {
+  let out = text ?? "";
+  for (const [name, replacement] of names) {
+    for (const variant of nameVariants(name)) {
+      const re = new RegExp(`(?<![A-Za-z0-9])${escapeRegExp(variant)}(?![A-Za-z0-9])${TRAILING_SUFFIX}`, "gi");
+      out = out.replace(re, (_m, offset: number, whole: string) => {
+        const before = whole.slice(0, offset).replace(/[\s"'“‘(]+$/, "");
+        const sentenceStart = before === "" || /[.!?]$/.test(before);
+        return sentenceStart ? replacement[0].toUpperCase() + replacement.slice(1) : replacement;
+      });
+    }
+  }
+  return out;
 }
 
 export type RegisterFilters = { work?: string; sector?: string; status?: string };

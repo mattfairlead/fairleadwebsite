@@ -124,7 +124,9 @@ export async function getPerspective(slug: string): Promise<Perspective | null> 
    revalidate call clears it; 5 minutes is the safety net). The page decides
    per request whether the visitor holds a grant (lib/register-access.ts)
    and renders either the full rows or their redaction — the redaction is
-   computed here, on the server, from named public fields only.
+   computed here, on the server, from named public fields only, and the
+   public summary has the company and sponsor names scrubbed before it
+   leaves the server.
    ========================================================================== */
 
 import { unstable_cache } from "next/cache";
@@ -163,7 +165,7 @@ export type RegisterLoad =
  */
 export async function loadRegister(): Promise<RegisterLoad> {
   const hub = await readHubEngagements();
-  if (!hub) return { live: false, rows: null, publicRows: seedRegister.map(redact) };
+  if (!hub) return { live: false, rows: null, publicRows: seedRegister };
   const rows = mapHubEngagements(hub);
   return { live: true, rows, publicRows: rows.map(redact) };
 }
