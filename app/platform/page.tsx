@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageIntro from "@/components/PageIntro";
+import TeamHeroBackdrop from "@/components/TeamHeroBackdrop";
 import SectionReveal from "@/components/SectionReveal";
 import HairlineFrame from "@/components/HairlineFrame";
 import GlassStrip from "@/components/GlassStrip";
@@ -89,6 +90,8 @@ export default function PlatformPage() {
     <>
       <PageIntro
         eyebrow="Platform"
+        backdrop={<TeamHeroBackdrop />}
+        className="flex flex-col justify-center md:min-h-[42rem]"
         title={<>Sitting in the seat, not visiting it.</>}
         lead={
           <>
