@@ -138,7 +138,12 @@ import { register as seedRegister } from "@/content/seed/register";
 const readHubEngagements = unstable_cache(
   async (): Promise<HubEngagementRow[] | null> => {
     const sb = getSupabaseAdmin();
-    if (!sb) return null;
+    if (!sb) {
+      console.warn(
+        "[data] engagement hub not configured (NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY) — serving the public-safe snapshot"
+      );
+      return null;
+    }
     const { data, error } = await sb
       .from("engagements")
       .select(HUB_ENGAGEMENT_COLUMNS)
@@ -146,6 +151,8 @@ const readHubEngagements = unstable_cache(
       .order("sort_order", { ascending: true })
       .order("id", { ascending: true });
     if (error) {
+      // A typical cause: the hub project is missing the `show_on_website`
+      // column (supabase/hub_engagements_website.sql was not applied).
       console.warn("[data] engagements read failed — serving the public-safe snapshot:", error.message);
       return null;
     }

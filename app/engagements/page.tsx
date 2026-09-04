@@ -321,11 +321,17 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
               Summaries are maintained in Fairlead&rsquo;s engagement hub and reflect the current record. Shared with
               you in confidence.
             </>
-          ) : (
+          ) : register.live ? (
             <>
               The register is served from Fairlead&rsquo;s engagement hub and is current to the day. The summaries are
               public with the names taken out; who each one is about waits until you&rsquo;ve verified your email
               — and every request reaches a partner.
+            </>
+          ) : (
+            <>
+              This is a snapshot of the register: the engagement hub isn&rsquo;t connected here, so the summaries stay
+              redacted. On the live site they read in full with the names taken out; who each one is about waits until
+              you&rsquo;ve verified your email — and every request reaches a partner.
             </>
           )}
         </p>
