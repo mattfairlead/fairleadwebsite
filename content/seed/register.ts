@@ -4,8 +4,10 @@ import type { RegisterPublicRow } from "@/lib/types";
  * Public-safe snapshot of the engagement hub's `engagements` table — the
  * fields every visitor may see (sector, status, work-type, sponsor-backed
  * flag) and NOTHING else. No company, sponsor or summary lives in this repo;
- * those come from the hub at request time (lib/data.ts → loadRegister) and
- * only reach a browser that holds a verified grant.
+ * those come from the hub at request time (lib/data.ts → loadRegister). The
+ * name-scrubbed summary is public on the live site; the names only reach a
+ * browser that holds a verified grant. Here `summary` is empty, so the
+ * locked row falls back to its redaction bars.
  *
  * Served when SUPABASE_SERVICE_ROLE_KEY is unset (local dev, CI), so the
  * locked register still lays out at full length. Refresh with:
@@ -109,4 +111,5 @@ export const register: RegisterPublicRow[] = SNAPSHOT.map(([id, sector, symbols,
   status: parseStatus(status),
   work: parseWork(symbols),
   sponsor_backed: sponsor === 1,
+  summary: "",
 }));

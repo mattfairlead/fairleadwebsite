@@ -18,7 +18,7 @@ import { pageMetadata, videoJsonLd, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Engagements",
-  "The full Fairlead engagement register — every embedded engagement since 2010, by sector, work and status. Names, sponsors and summaries on request.",
+  "The full Fairlead engagement register — every embedded engagement since 2010, by sector, work and status. What we did, in the open; the names on request.",
   "/engagements"
 );
 
@@ -126,7 +126,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
         lead={
           <>
             Every embedded engagement since 2010 — sponsor-backed and founder-led, from a portfolio assessment to the
-            seat itself. The names are private until you ask.
+            seat itself. Read what we did; the names are private until you ask.
           </>
         }
         aside={
@@ -216,7 +216,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
                   {ARROW}
                 </RevealButton>
                 <span className="body-sm max-w-xs text-white-40 md:text-right">
-                  Company, sponsor and summary for every row. One emailed link; a partner sees every request.
+                  The company and its sponsor for every row. One emailed link; a partner sees every request.
                 </span>
               </>
             )}
@@ -323,8 +323,9 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
             </>
           ) : (
             <>
-              The register is served from Fairlead&rsquo;s engagement hub and is current to the day. Nothing in it is
-              public until you&rsquo;ve verified your email — and every request reaches a partner.
+              The register is served from Fairlead&rsquo;s engagement hub and is current to the day. The summaries are
+              public with the names taken out; who each one is about waits until you&rsquo;ve verified your email
+              — and every request reaches a partner.
             </>
           )}
         </p>

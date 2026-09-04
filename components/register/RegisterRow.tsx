@@ -11,9 +11,12 @@ import { LockGlyph } from "@/components/register/RevealModal";
  * gold line, summary, tags, pill) in two states that share nothing but the
  * public fields:
  *
- *  locked   — built from RegisterPublicRow ONLY. The title and summary are
- *             redaction bars; the whole row is a button that opens the reveal
- *             sheet. No confidential value is in scope here, by type.
+ *  locked   — built from RegisterPublicRow ONLY. The title is redaction
+ *             bars; the summary is readable, with the company and sponsor
+ *             names already scrubbed out server-side (falls back to bars when
+ *             the hub is unreachable and there is no summary to show). The
+ *             whole row is a button that opens the reveal sheet. No name is
+ *             in scope here, by type.
  *  unlocked — RegisterRow: the company, its sponsor and the hub's summary.
  *
  * Server component. The only client pieces are the reveal button and the
@@ -73,10 +76,10 @@ export default function RegisterRow(props: Props) {
           {meta}
           <div className="flex flex-col gap-3">
             <span className="sr-only">
-              Engagement {row.index}: company, sponsor and summary withheld. Reveal the register to read them.
+              Engagement {row.index}: company and sponsor withheld. Reveal the register to read them.
             </span>
             <RedactedTitle shape={shape} />
-            <RedactedLines shape={shape} />
+            {row.summary ? <p className="body-md max-w-2xl text-white-60">{row.summary}</p> : <RedactedLines shape={shape} />}
             {tags}
           </div>
           <span className="reveal-pill btn btn-secondary button justify-self-start md:justify-self-end" aria-hidden="true">
