@@ -1,8 +1,10 @@
 import SectionReveal from "@/components/SectionReveal";
 import ImageBand from "@/components/ImageBand";
+import DataBox from "@/components/DataBox";
 
 /**
- * Home §4.1 row 4 — the compounding asset. 2-col, 55/45: headline + gold-soft
+ * Home §4.1 row 4 — the compounding asset. 2-col, 55/45: the open box with
+ * data streaming out of it (DataBox) over the eyebrow, headline + gold-soft
  * italic subhead + paragraph / graded photo (scale-in) carrying the one
  * number that matters — fifteen years — as a display numeral.
  */
@@ -11,6 +13,9 @@ export default function Advantage() {
     <SectionReveal className="section container-page">
       <div className="grid items-center gap-12 md:grid-cols-[1.15fr_1fr] md:gap-20">
         <div className="flex flex-col gap-6">
+          <div data-anim="zoom-in" className="-mb-2 w-[18rem] max-w-full" style={{ transformOrigin: "50% 85%" }}>
+            <DataBox />
+          </div>
           <span data-anim="eyebrow" className="label text-white-50">
             The compounding asset
           </span>
