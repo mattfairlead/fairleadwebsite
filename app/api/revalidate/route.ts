@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const runtime = "nodejs";
 
 /**
- * Content revalidation — called by the marketing hub (Phase 2) after a
- * Supabase write so bios and engagement summaries update without a deploy.
- * Requires REVALIDATE_SECRET.
+ * Content revalidation — called by the engagement hub after a Supabase write
+ * (a team card's Website checkbox, an engagement summary edit) so the site
+ * updates without a deploy. Requires REVALIDATE_SECRET.
  */
 export async function POST(req: Request) {
   const secret = process.env.REVALIDATE_SECRET;
@@ -26,5 +26,8 @@ export async function POST(req: Request) {
   }
 
   for (const path of paths) revalidatePath(path);
+  // The register (lib/data.ts → loadRegister) is cached under a tag rather
+  // than a path, since /engagements renders per request.
+  if (paths.some((p) => p === "/engagements" || p.startsWith("/engagements/"))) revalidateTag("engagements");
   return NextResponse.json({ ok: true, revalidated: paths });
 }

@@ -12,11 +12,15 @@ const SENDGRID_URL = "https://api.sendgrid.com/v3/mail/send";
 export async function sendMail(opts: {
   subject: string;
   text: string;
+  /** Optional HTML alternative (the register link email); text is always sent. */
+  html?: string;
   replyTo?: string;
+  /** Defaults to CONTACT_TO (the info@ list). Set for mail to a visitor. */
+  to?: string;
 }): Promise<{ ok: boolean; skipped?: boolean }> {
   // `||` not `??` — env vars imported with blank values must fall through
   const key = process.env.SENDGRID_API_KEY || "";
-  const to = process.env.CONTACT_TO || "";
+  const to = opts.to || process.env.CONTACT_TO || "";
   const from = process.env.CONTACT_FROM || "no-reply@fairleadadvisors.com";
 
   if (!key || !to) {
@@ -32,7 +36,10 @@ export async function sendMail(opts: {
       from: { email: from, name: "fairleadadvisors.com" },
       ...(opts.replyTo ? { reply_to: { email: opts.replyTo } } : {}),
       subject: opts.subject,
-      content: [{ type: "text/plain", value: opts.text }],
+      content: [
+        { type: "text/plain", value: opts.text },
+        ...(opts.html ? [{ type: "text/html", value: opts.html }] : []),
+      ],
     }),
   });
 
