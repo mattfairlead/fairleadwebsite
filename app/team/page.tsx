@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import HairlineFrame from "@/components/HairlineFrame";
 import TeamCell from "@/components/TeamCell";
-import TeamHeroBackdrop from "@/components/TeamHeroBackdrop";
 import { getTeam } from "@/lib/data";
 import { pageMetadata, personJsonLd } from "@/lib/seo";
 
@@ -40,8 +38,10 @@ function CellRule({ index, count, columns }: { index: number; count: number; col
 }
 
 /**
- * /team — §4.5. Partners featured 2×2 with the portrait beside the text;
- * the rest of the roster as a hairline grid of circular portraits. Who
+ * /team — §4.5. No intro: the page opens straight on the roster, so the
+ * first section clears the fixed header itself (same offset PageIntro
+ * uses). Partners featured 2×2 with the portrait beside the text; the rest
+ * of the roster as a hairline grid of circular portraits. Who
  * appears, in what order, with which title, bio and headshot is decided in
  * the hub's Team module — one checkbox per card.
  */
@@ -52,29 +52,8 @@ export default async function TeamPage() {
 
   return (
     <>
-      <PageIntro
-        eyebrow="Team"
-        backdrop={<TeamHeroBackdrop />}
-        className="flex flex-col justify-center md:min-h-[42rem]"
-        title={<>Operators, in the seat.</>}
-        lead={<>The team behind every engagement — partners who sit in the seat, and the operators who scale with it.</>}
-        aside={
-          <dl className="grid grid-cols-2 gap-10">
-            {[
-              [String(partners.length), "partners"],
-              [String(team.length), "operators"],
-            ].map(([n, l]) => (
-              <div key={l} className="flex flex-col gap-1">
-                <dt className="h3 text-white-100 tabular">{n}</dt>
-                <dd className="label text-white-40">{l}</dd>
-              </div>
-            ))}
-          </dl>
-        }
-      />
-
       {partners.length > 0 && (
-        <SectionReveal className="container-page pb-6">
+        <SectionReveal className="container-page pb-6 pt-44 max-md:pt-32">
           <SectionHead eyebrow="Partners" title={<>The partners.</>} titleClass="h3" />
           <HairlineFrame columns={2} className="mt-10">
             <div className="grid md:grid-cols-2">
@@ -91,7 +70,7 @@ export default async function TeamPage() {
       )}
 
       {rest.length > 0 && (
-        <SectionReveal className="section container-page">
+        <SectionReveal className={partners.length > 0 ? "section container-page" : "container-page pb-28 pt-44 max-md:pt-32"}>
           <SectionHead eyebrow="Team" title={<>The operators.</>} titleClass="h3" />
           <HairlineFrame columns={4} className="mt-10">
             <div className="grid sm:grid-cols-2 md:grid-cols-4">
@@ -107,7 +86,7 @@ export default async function TeamPage() {
       )}
 
       {team.length === 0 && (
-        <SectionReveal className="section container-page">
+        <SectionReveal className="container-page pb-28 pt-44 max-md:pt-32">
           <HairlineFrame>
             <p className="body-lg p-10 text-white-50">The roster is being updated. Check back shortly.</p>
           </HairlineFrame>
