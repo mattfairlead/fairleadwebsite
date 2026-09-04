@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import clsx from "clsx";
-import PageIntro from "@/components/PageIntro";
+import IntelligenceHero from "@/components/IntelligenceHero";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import HairlineFrame from "@/components/HairlineFrame";
@@ -68,7 +68,7 @@ const OPTIONS = [
 export default function IntelligencePage() {
   return (
     <>
-      <PageIntro
+      <IntelligenceHero
         eyebrow="Intelligence"
         title={<>Custom AI solutions that solve operational challenges.</>}
         lead={
