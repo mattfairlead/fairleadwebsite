@@ -33,7 +33,7 @@ export default function FeeBlock() {
               alt=""
               width={1151}
               height={1080}
-              className="h-11 w-auto md:h-[3.75rem]"
+              className="h-[3.75rem] w-auto md:h-[5.25rem]"
               style={{ filter: "drop-shadow(0 0 24px rgba(213, 179, 113, 0.25))" }}
             />
             <h2 data-anim="h2" className="h2">
