@@ -11,18 +11,21 @@ import BackgroundVideo from "@/components/BackgroundVideo";
  * never goes flat. A blue-hour wash on top grades the footage toward the
  * §5.1 palette, the same way ImageBand treats motion bands.
  *
- * Served from the "Team2" GitHub release via /api/media/team-hero (see that
+ * Served from the "Team4" GitHub release via /api/media/team-hero (see that
  * route for why). Set NEXT_PUBLIC_TEAM_HERO_VIDEO_URL once the file moves
  * to Blob/Supabase Storage (§9 media plan) — no code change needed.
  */
 const TEAM_VIDEO = process.env.NEXT_PUBLIC_TEAM_HERO_VIDEO_URL || "/api/media/team-hero";
 const TEAM_POSTER = "/team/hero-poster.jpg";
 
-// The box runs the full height of the intro and hangs off the right edge,
-// so the footage reads as half the page. It is sized to the footage's own
-// aspect ratio (1368×964) so nothing is cropped and every face is in
-// frame. Its left edge feathers over ~60% of the box so the blue melts
-// in; top and bottom fade under the header and into the sections below.
+// The box runs the full height of the intro and hangs off the right edge.
+// It is sized to the footage's own aspect ratio (1250×600 — a 5×4 grid of
+// faces) so nothing is cropped and every face is in frame; at that ratio
+// the box spans the whole intro on a desktop, so its left ~64% feathers
+// out and the copy sits over footage that has all but melted into the
+// blue. Below ~1400px the leftmost column slides off the page — behind the
+// feather, where it was already invisible. Top and bottom fade under the
+// header and into the sections below.
 //
 // Every fade reaches full transparency a few percent short of the edge,
 // never at 100%. On scroll the page moves on fractional offsets and the
@@ -30,7 +33,7 @@ const TEAM_POSTER = "/team/hero-poster.jpg";
 // line of footage along the seam; keeping the edge rows transparent means
 // there is nothing to reveal.
 const MASK = [
-  "linear-gradient(90deg, rgba(0,0,0,0) 2%, rgba(0,0,0,0.35) 28%, rgba(0,0,0,0.8) 52%, #000 72%)",
+  "linear-gradient(90deg, rgba(0,0,0,0) 10%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 64%, #000 78%)",
   "linear-gradient(180deg, rgba(0,0,0,0) 3%, rgba(0,0,0,0.85) 26%, #000 55%, rgba(0,0,0,0.6) 82%, rgba(0,0,0,0) 96%)",
 ].join(", ");
 
@@ -38,7 +41,7 @@ export default function TeamHeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-y-0 right-0 aspect-[1368/964] max-md:aspect-auto max-md:w-[92%] max-md:opacity-60"
+        className="absolute inset-y-0 right-0 aspect-[1250/600] max-md:aspect-auto max-md:w-[92%] max-md:opacity-60"
         style={{
           WebkitMaskImage: MASK,
           maskImage: MASK,
