@@ -6,7 +6,6 @@ import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import TestimonialFeature from "@/components/TestimonialFeature";
 import RevealProvider from "@/components/register/RevealProvider";
-import RevealButton from "@/components/register/RevealButton";
 import RegisterRow from "@/components/register/RegisterRow";
 import { LockGlyph } from "@/components/register/RevealModal";
 import { getEngagements, loadRegister } from "@/lib/data";
@@ -200,7 +199,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
 
       <SectionReveal id="register" className="container-page pb-8 pt-4">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <SectionHead eyebrow="The register" title={<>All {stats.total}, in one place.</>} />
+          <SectionHead eyebrow="The register" title={<>{stats.total} engagements, 2010 to today.</>} />
           {grant ? (
             <div className="flex flex-col items-start gap-4 md:items-end" data-anim="fade-up">
               <span className="grant-chip button">
@@ -213,8 +212,10 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
             </div>
           ) : (
             <p className="body-md max-w-sm text-white-50" data-anim="fade-up">
-              Named where we&rsquo;ve been cleared to name them. For the rest, what we did is on the record and who it
-              was for is a partner&rsquo;s call.
+              Interim CFO and controller seats, operating-partner roles, M&amp;A and portfolio assessments — across
+              energy and infrastructure, venture-backed companies and family offices.{" "}
+              <span className="text-white-100 tabular">{stats.active}</span> active today;{" "}
+              <span className="text-white-100 tabular">{stats.sponsorBacked}</span> with a sponsor at the table.
             </p>
           )}
         </div>
@@ -317,28 +318,17 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
           </div>
         )}
 
-        <p className="body-sm mt-10 max-w-2xl text-white-40">
-          {unlocked ? (
-            <>
-              Summaries are maintained in Fairlead&rsquo;s engagement hub and reflect the current record. Shared with
-              you in confidence.
-            </>
-          ) : register.live ? (
-            <>
-              The register is served from Fairlead&rsquo;s engagement hub and is current to the day. Every summary is
-              public with the names taken out.{" "}
-              <RevealButton className="link-underline text-white-60">Ask a partner for the names</RevealButton> and one
-              of us will be in touch — nothing is sent automatically.
-            </>
-          ) : (
-            <>
-              This is a snapshot of the register: the engagement hub isn&rsquo;t connected here, so the summaries stay
-              redacted. On the live site they read in full with the names taken out.{" "}
-              <RevealButton className="link-underline text-white-60">Ask a partner for the names</RevealButton> and one
-              of us will be in touch — nothing is sent automatically.
-            </>
-          )}
-        </p>
+        {unlocked ? (
+          <p className="body-sm mt-10 max-w-2xl text-white-40">
+            Summaries are maintained in Fairlead&rsquo;s engagement hub and reflect the current record. Shared with you
+            in confidence.
+          </p>
+        ) : !register.live ? (
+          <p className="body-sm mt-10 max-w-2xl text-white-40">
+            This is a snapshot of the register: the engagement hub isn&rsquo;t connected here, so the summaries stay
+            redacted. On the live site they read in full with the names taken out.
+          </p>
+        ) : null}
       </SectionReveal>
     </RevealProvider>
   );
