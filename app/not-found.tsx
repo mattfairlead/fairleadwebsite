@@ -18,11 +18,11 @@ export default function NotFound() {
           <h1 className="h2 relative max-w-2xl">This page isn&rsquo;t on the map.</h1>
           <p className="body-lg relative max-w-md text-white-60">
             The address may have moved when the site was rebuilt. Nothing you did — head back to the
-            platform, or tell a partner what you were looking for.
+            homepage, or tell a partner what you were looking for.
           </p>
           <div className="relative flex flex-wrap justify-center gap-4">
             <Btn href="/" arrow>
-              Back to the platform
+              Back to the homepage
             </Btn>
             <Link href="/contact" className="btn btn-ghost button">
               Talk to a partner

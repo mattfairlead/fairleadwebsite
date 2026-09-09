@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Hero from "@/components/Hero";
 import TwoProblems from "@/components/TwoProblems";
+import Scopes from "@/components/Scopes";
 import CompetitorMatrix from "@/components/CompetitorMatrix";
 import Advantage from "@/components/Advantage";
 import Pillars from "@/components/Pillars";
@@ -12,23 +13,25 @@ import { pageMetadata, SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   `${SITE_NAME} — ${SITE_TAGLINE}`,
-  "Executive intelligence + artificial intelligence, working inside your portfolio. Embedded finance and operating leadership for PE-backed companies since 2010.",
+  "Hands-on operating engagements inside PE-backed companies since 2010 — asset management, sell-side preparation and execution, restructuring, fundraising, and finance and back-office management.",
   "/"
 );
 
 /**
- * Home — the argument, end to end (≈ the deck as a scroll). §4.1.
+ * Home — the argument, end to end. The hands-on work states itself first;
+ * the intelligence band follows as how that work gets done.
  */
 export default function HomePage() {
   return (
     <>
       <Hero />
       <TwoProblems />
-      <CompetitorMatrix />
-      <Advantage />
+      <Scopes />
       <Pillars />
-      <IntelligenceBand />
+      <CompetitorMatrix />
       <EngagementCards />
+      <Advantage />
+      <IntelligenceBand />
       <FeeBlock />
       <ContactStrip />
     </>

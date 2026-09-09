@@ -7,7 +7,7 @@ import { ARROW } from "@/components/Btn";
 /**
  * Home §4.1 row 5 — the four pillars in a 4-col hairline grid: .label
  * counter, line icon, .h4, .body-md. Counters are legitimate here — it's
- * the delivery sequence. Each cell links to its /platform anchor; the cell
+ * the delivery sequence. Each cell links to its /hands-on-engagements anchor; the cell
  * is a spotlight surface and the arrow at its foot signals the link.
  */
 
@@ -71,7 +71,7 @@ export default function Pillars() {
           {PILLARS.map((pillar, i) => (
             <Link
               key={pillar.id}
-              href={`/platform#${pillar.id}`}
+              href={`/hands-on-engagements#${pillar.id}`}
               data-cell
               className="spot group flex min-h-[20rem] flex-col gap-5 p-6 md:p-10"
             >

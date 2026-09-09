@@ -5,7 +5,8 @@ import LiveDots from "@/components/LiveDots";
 import Btn from "@/components/Btn";
 
 /**
- * Home §4.1 row 6 — the Intelligence band. Full-bleed Solaris Portfolio Map
+ * Home — the Intelligence band, placed after the hands-on work and the proof:
+ * it shows *how* the work gets done, not what we do. Full-bleed Solaris Portfolio Map
  * still (TODO: sanitized screenshot — until then a stylized map ground)
  * with pulsing site dots (§5.8.6), a faint network between them, and the
  * Cottonwood four-option glass strip. The demo reel lives on /intelligence.
@@ -33,12 +34,13 @@ export default function IntelligenceBand() {
     <SectionReveal className="section">
       <div className="container-page grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-end">
         <SectionHead
-          eyebrow="Operating intelligence"
-          title={<>Custom AI solutions that solve operational challenges.</>}
+          eyebrow="How the work gets done"
+          title={<>The visibility behind every engagement.</>}
         />
         <p className="body-lg max-w-xl text-white-60 md:pb-2" data-anim="fade-up">
-          A $720K utility claim landed on a portfolio company&rsquo;s desk. Solaris returned a four-option
-          decision memo — every number traced to its source — with ~$360K of expected savings on the table.
+          The tools come out of the engagements, not the other way round. A $720K utility claim landed on a
+          portfolio company&rsquo;s desk; Solaris returned a four-option decision memo — every number traced
+          to its source — with ~$360K of expected savings on the table.
         </p>
       </div>
 

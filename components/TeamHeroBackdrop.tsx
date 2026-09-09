@@ -2,7 +2,7 @@ import BackgroundVideo from "@/components/BackgroundVideo";
 
 /**
  * Team footage backdrop — the roster footage sits behind the right side of
- * the /platform intro and dissolves into the page ground on its left, top and
+ * the /hands-on-engagements intro and dissolves into the page ground on its left, top and
  * bottom edges, so the blue reads as one continuous surface the footage
  * surfaces out of rather than a rectangle dropped on it.
  *
