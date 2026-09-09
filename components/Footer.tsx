@@ -6,21 +6,21 @@ import LiveDots, { type DotPin } from "@/components/LiveDots";
 import UsMap, { type MapCity } from "@/components/UsMap";
 import { US_MAP_ASPECT, US_MAP_VIEWBOX } from "@/content/us-map";
 
-const CITIES = ["Boston", "Houston", "Minneapolis", "Maryland"];
+const CITIES = ["Boston", "Houston", "Minneapolis", "Annapolis"];
 
 // The four offices projected into the map frame (Albers USA — see
 // content/us-map.ts). Order is the route the dashed line threads.
 const OFFICES: MapCity[] = [
   { label: "Minneapolis", x: 541.9, y: 161 },
   { label: "Boston", x: 908.7, y: 167.1 },
-  { label: "Maryland", x: 836.4, y: 263.8 },
+  { label: "Annapolis", x: 836.4, y: 263.8 },
   { label: "Houston", x: 510.4, y: 509.2 },
 ];
 
 // The live dots sit in a layer over the SVG, so map-space → percent of the
 // same box. Boston's label stacks above its dot (it sits on the coast, and
-// a right-opening label would collide with Minneapolis); Maryland opens left.
-const LABEL_SIDE: Record<string, DotPin["labelSide"]> = { Boston: "top", Maryland: "left" };
+// a right-opening label would collide with Minneapolis); Annapolis opens left.
+const LABEL_SIDE: Record<string, DotPin["labelSide"]> = { Boston: "top", Annapolis: "left" };
 const [vx, vy, vw, vh] = US_MAP_VIEWBOX.split(" ").map(Number);
 const CITY_PINS: DotPin[] = OFFICES.map((c) => ({
   label: c.label,

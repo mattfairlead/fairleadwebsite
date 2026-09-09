@@ -6,7 +6,7 @@ import Btn from "@/components/Btn";
  * Home §4.1 row 9 — contact strip: the ask · phone · four cities.
  * Two rules only (§5.8.8): vertical at .4, horizontal at .1.
  */
-const CITIES = ["Boston", "Houston", "Minneapolis", "Maryland"];
+const CITIES = ["Boston", "Houston", "Minneapolis", "Annapolis"];
 
 export default function ContactStrip() {
   return (

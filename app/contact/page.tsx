@@ -9,11 +9,11 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Contact",
-  "Talk to a partner. One form, one phone, four cities — Boston, Houston, Minneapolis, Maryland.",
+  "Talk to a partner. One form, one phone, four cities — Boston, Houston, Minneapolis, Annapolis.",
   "/contact"
 );
 
-const CITIES = ["Boston", "Houston", "Minneapolis", "Maryland"];
+const CITIES = ["Boston", "Houston", "Minneapolis", "Annapolis"];
 
 /**
  * /contact — §4.7. One form, one phone, four cities. No personal emails,
