@@ -197,7 +197,7 @@ export default function Header() {
           </a>
         </div>
         <p className="menu-item label mt-auto pb-10 text-white-40" style={{ "--i": NAV.length + 1 } as React.CSSProperties}>
-          Boston · Houston · Minneapolis · Maryland
+          Boston · Houston · Minneapolis · Annapolis
         </p>
       </div>
     </header>

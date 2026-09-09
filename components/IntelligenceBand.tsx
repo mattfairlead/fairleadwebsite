@@ -38,9 +38,10 @@ export default function IntelligenceBand() {
           title={<>The visibility behind every engagement.</>}
         />
         <p className="body-lg max-w-xl text-white-60 md:pb-2" data-anim="fade-up">
-          The tools come out of the engagements, not the other way round. A $720K utility claim landed on a
-          portfolio company&rsquo;s desk; Solaris returned a four-option decision memo — every number traced
-          to its source — with ~$360K of expected savings on the table.
+          The tools come out of the engagements, not the other way around. A $720K utility claim landed on
+          a portfolio company&rsquo;s desk; Solaris, the operating intelligence platform we built inside the
+          portfolio, returned a four-option decision memo — every number traced to its source — with ~$360K
+          of expected savings on the table.
         </p>
       </div>
 

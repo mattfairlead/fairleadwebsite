@@ -80,7 +80,7 @@ export default async function EngagementPage({ params }: { params: Promise<{ slu
       <SectionReveal className="container-page pb-20">
         <div className="flex flex-wrap gap-4">
           <Link href="/engagements" className="btn btn-secondary button">
-            All engagements
+            The full register
           </Link>
           <Btn href="/contact" arrow>
             Talk to a partner

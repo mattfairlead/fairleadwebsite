@@ -19,7 +19,7 @@ export default async function EngagementCards() {
   return (
     <SectionReveal className="section container-page">
       <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-        <SectionHead eyebrow="Proof" title={<>Selected engagements.</>} />
+        <SectionHead eyebrow="Results" title={<>Selected engagements.</>} />
         <p className="body-md max-w-sm text-white-50" data-anim="fade-up">
           Three of sixty-plus. Metric first, in the operator&rsquo;s vocabulary.
         </p>
@@ -32,7 +32,7 @@ export default async function EngagementCards() {
       </div>
       <div className="mt-10">
         <Btn href="/engagements" variant="secondary" arrow dataAnim="pop">
-          All engagements
+          The full register
         </Btn>
       </div>
     </SectionReveal>
