@@ -13,7 +13,7 @@ export interface GlassCell {
  * faint gradient, no border — only hairlines; anchored to the bottom edge of
  * a full-bleed image section. Used for the hero stats (60+ / 16 / 2010), the
  * Cottonwood options on the Intelligence band, and the engagement process on
- * /platform.
+ * /hands-on-engagements.
  *
  * `clear` drops the blur and tint so the strip is see-through: only the
  * hairlines and the figures sit over the footage (the hero).

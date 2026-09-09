@@ -26,7 +26,7 @@ import { getRegisterGrant } from "@/lib/register-access";
 import { pageMetadata, videoJsonLd, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
-  "Engagements",
+  "Results",
   "The full Fairlead engagement register — every embedded engagement since 2010, by sector, work and status. What we did, in the open; the names at a partner's discretion.",
   "/engagements"
 );
@@ -141,7 +141,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
   return (
     <RevealProvider total={stats.total}>
       <PageIntro
-        eyebrow="Engagements"
+        eyebrow="Results"
         title={<>The register.</>}
         lead={
           <>

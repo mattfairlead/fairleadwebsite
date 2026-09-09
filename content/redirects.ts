@@ -8,8 +8,12 @@
 export const redirects = [
   { source: "/who-we-are", destination: "/team", permanent: true },
   { source: "/who-we-are/", destination: "/team", permanent: true },
-  { source: "/services", destination: "/platform", permanent: true },
-  { source: "/services/", destination: "/platform", permanent: true },
+  { source: "/services", destination: "/hands-on-engagements", permanent: true },
+  { source: "/services/", destination: "/hands-on-engagements", permanent: true },
+  // /platform was the draft site's services route before the partners asked for
+  // the hands-on engagements framing (Sept 2026).
+  { source: "/platform", destination: "/hands-on-engagements", permanent: true },
+  { source: "/platform/", destination: "/hands-on-engagements", permanent: true },
   // The #energy anchor variant can't be matched server-side (fragments never
   // reach the server); the sector filter link below covers the query form,
   // and the plain path falls through to /engagements.

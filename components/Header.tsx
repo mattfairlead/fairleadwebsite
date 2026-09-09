@@ -9,9 +9,9 @@ import { headerIntro, headerScrollBlur, registerGsap } from "@/lib/motion";
 import { useGSAP } from "@gsap/react";
 
 const NAV = [
-  { href: "/platform", label: "Platform" },
+  { href: "/hands-on-engagements", label: "Hands-On Engagements" },
   { href: "/intelligence", label: "Intelligence" },
-  { href: "/engagements", label: "Engagements" },
+  { href: "/engagements", label: "Results" },
   { href: "/team", label: "Team" },
   { href: "/perspectives", label: "Perspectives" },
 ];

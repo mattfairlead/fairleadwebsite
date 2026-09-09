@@ -88,19 +88,25 @@ export default function Hero() {
         <div className="absolute inset-0 flex flex-col items-center justify-center px-5 pb-36 text-center">
           <span data-hero-eyebrow className="label mb-8 flex items-center gap-3 text-white-50">
             <span className="inline-block h-px w-6 bg-gold" aria-hidden="true" />
-            The embedded operating platform
+            Hands-on engagements + intelligence
             <span className="inline-block h-px w-6 bg-gold" aria-hidden="true" />
           </span>
           {/* .h1 clamps to 12vw for short display words; this two-phrase
               headline needs the narrower clamp to hold two lines (caveman rule) */}
           <h1 data-hero-h1 className="h1" style={{ fontSize: "clamp(3rem, 8.5vw, 8.75rem)", perspective: "800px" }}>
-            You can&rsquo;t run
+            You can&rsquo;t steer
             <br />
             <span className="text-gold-glow">what you can&rsquo;t see.</span>
           </h1>
-          <p data-hero-sub className="body-xl mt-8 max-w-3xl text-white-60">
-            Executive intelligence + artificial intelligence, working inside your portfolio.
-          </p>
+          <div data-hero-sub className="mt-8 flex flex-col items-center gap-4">
+            <p className="body-xl max-w-3xl text-white-60">
+              Management runs the company. You steer it. We make sure you can see it.
+            </p>
+            <p className="body-md max-w-2xl text-white-50">
+              Embedded operating leadership for PE-backed companies — asset management, sell-side,
+              restructuring, fundraising, and finance — with the tools we build inside the work.
+            </p>
+          </div>
           <Link data-hero-cta href="/contact" className="btn btn-primary button mt-10">
             Talk to a partner
             {ARROW}

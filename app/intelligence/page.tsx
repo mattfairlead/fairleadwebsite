@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import clsx from "clsx";
 import IntelligenceHero from "@/components/IntelligenceHero";
 import SectionReveal from "@/components/SectionReveal";
@@ -9,12 +10,13 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Intelligence",
-  "Custom AI solutions that solve operational challenges. Solaris and the tools Fairlead builds inside engagements — in production, not in pilot.",
+  "How Fairlead runs its hands-on engagements: Solaris and the custom tools built inside the work — in production, not in pilot.",
   "/intelligence"
 );
 
 /**
- * /intelligence — §4.3. The page that proves the AI half without shouting.
+ * /intelligence — how the hands-on work gets done. The page proves the AI half
+ * without shouting, and without standing in front of the operating work.
  */
 
 const STRAPLINES = [
@@ -70,12 +72,16 @@ export default function IntelligencePage() {
     <>
       <IntelligenceHero
         eyebrow="Intelligence"
-        title={<>Custom AI solutions that solve operational challenges.</>}
+        title={<>How the work gets done.</>}
         lead={
           <>
-            AI is a core capability at Fairlead — used daily, in production, across engagements for more
-            than six months. Past the pilot phase most firms are stuck in. Every tool was built to solve a
-            specific client&rsquo;s pain, which is why they generalize.
+            This is the method behind the{" "}
+            <Link href="/hands-on-engagements" className="link-underline text-white-100">
+              hands-on engagements
+            </Link>
+            , not a separate business. Every tool here was built inside an engagement to solve one
+            company&rsquo;s problem — used daily, in production, for more than six months, past the pilot
+            phase most firms are stuck in — and then reused across the portfolio.
           </>
         }
       />
@@ -136,7 +142,7 @@ export default function IntelligencePage() {
       <SectionReveal className="section container-page">
         <SectionHead
           eyebrow="The tools"
-          title={<>Built for a portfolio company. Reused across the portfolio.</>}
+          title={<>Custom AI solutions that solve operational challenges.</>}
         />
         <HairlineFrame columns={3} rows={["50%"]} className="mt-14">
           <div className="grid md:grid-cols-3">

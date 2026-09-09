@@ -30,9 +30,9 @@ const CITY_PINS: DotPin[] = OFFICES.map((c) => ({
 }));
 
 const NAV = [
-  { href: "/platform", label: "Platform" },
+  { href: "/hands-on-engagements", label: "Hands-On Engagements" },
   { href: "/intelligence", label: "Intelligence" },
-  { href: "/engagements", label: "Engagements" },
+  { href: "/engagements", label: "Results" },
   { href: "/team", label: "Team" },
   { href: "/perspectives", label: "Perspectives" },
   { href: "/contact", label: "Contact" },
@@ -65,7 +65,7 @@ export default function Footer() {
         </div>
         <div className="theme-page absolute bottom-8 left-6 flex items-center gap-2 md:left-10" aria-hidden="true">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
-          <span className="label text-white-40">Four offices · one platform</span>
+          <span className="label text-white-40">Four offices · one team</span>
         </div>
       </ImageBand>
 
@@ -76,8 +76,8 @@ export default function Footer() {
           <div className="flex flex-col gap-6">
             <Logo />
             <p className="body-md max-w-xs text-white-50">
-              The embedded operating platform for PE-backed companies. Executive intelligence + artificial
-              intelligence, working inside your portfolio.
+              Embedded operating leadership for PE-backed companies. Hands-on engagements since 2010,
+              with the operating intelligence to steer by.
             </p>
             <a
               href="tel:+16173154822"
