@@ -1,20 +1,20 @@
 import Link from "next/link";
 import HairlineFrame from "@/components/HairlineFrame";
+import Compassmark from "@/components/Compassmark";
 import Btn from "@/components/Btn";
 
 /**
- * 404 — designed, not defaulted (§5.9): same hairline frame, one headline,
- * a plain explanation, and two ways out.
+ * 404 — designed, not defaulted (§5.9): same hairline frame, the compass
+ * rose for a page that is off the map, one headline, a plain explanation,
+ * and two ways out.
  */
 export default function NotFound() {
   return (
     <div className="container-page pb-24 pt-48">
       <HairlineFrame>
-        <div className="relative flex flex-col items-center gap-8 overflow-hidden px-6 py-24 text-center md:py-32">
-          <span className="ghost-num !right-auto !top-1/2 !-translate-y-1/2 !text-[14rem] md:!text-[22rem]" aria-hidden="true" style={{ left: "50%", transform: "translate(-50%, -50%)" }}>
-            404
-          </span>
-          <span className="label relative text-gold">Not on the map</span>
+        <div className="relative flex flex-col items-center gap-8 overflow-hidden px-6 py-20 text-center md:py-28">
+          <Compassmark className="relative -mb-2 w-36 md:w-44" uid="lost-compass" />
+          <span className="label relative text-gold">404 · Not on the map</span>
           <h1 className="h2 relative max-w-2xl">This page isn&rsquo;t on the map.</h1>
           <p className="body-lg relative max-w-md text-white-60">
             The address may have moved when the site was rebuilt. Nothing you did — head back to the
