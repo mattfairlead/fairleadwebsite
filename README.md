@@ -11,11 +11,12 @@ operating platform for PE-backed companies.** Built to the spec in
 - **GSAP 3.15** + ScrollTrigger + ScrollSmoother + SplitText + ScrollToPlugin
   via `@gsap/react` — constants and choreography in `lib/motion.ts` (§5.4/§5.8)
 - **Supabase** — `/team` reads the engagement hub's `team_members` table live
-  (see *Team content* below) and `/engagements` reads its `engagements` table
-  server-side as a locked register (see *Engagement register* below); other
-  content is seed-backed until the tables in `supabase/schema.sql` are
-  provisioned. Without env vars the site serves `content/seed/` — identical
-  shapes
+  (see *Team content* below), `/perspectives` reads its `perspectives` table
+  the same way (edited in the hub's Perspectives module), and `/engagements`
+  reads its `engagements` table server-side as a locked register (see
+  *Engagement register* below); other content is seed-backed until the
+  tables in `supabase/schema.sql` are provisioned. Without env vars the site
+  serves `content/seed/` — identical shapes
 - **Resend** for the contact form and **SendGrid** for the newsletter + the
   register's emailed links (HubSpot is sunset); sends are skipped and logged
   when unconfigured, so previews work
