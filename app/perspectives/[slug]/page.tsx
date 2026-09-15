@@ -41,7 +41,7 @@ export default async function PerspectivePage({ params }: { params: Promise<{ sl
       <PageIntro
         eyebrow={`Perspective · ${date}`}
         title={post.title}
-        lead={author ? `${author.name} — ${author.title}` : undefined}
+        lead={author ? `${author.name} · ${author.title}` : undefined}
       />
 
       <article className="container-page pb-16">

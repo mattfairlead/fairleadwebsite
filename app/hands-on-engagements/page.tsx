@@ -40,7 +40,7 @@ const SCOPES = [
           contract decisions, and the reporting cadence the fund and its LPs expect.
         </p>
         <p>
-          Most of this work starts where a sponsor has more assets than bandwidth — a development platform
+          Most of this work starts where a sponsor has more assets than bandwidth: a development platform
           advancing G&amp;A, a carve-out still running on the seller&rsquo;s systems, a company whose
           management is strong on operations and thin on finance. We fill the gap without displacing the
           team that&rsquo;s already there.
@@ -64,7 +64,7 @@ const SCOPES = [
           that doesn&rsquo;t take six weeks to assemble.
         </p>
         <p>
-          When the window opens we run the process alongside the banker — diligence responses, management
+          When the window opens we run the process alongside the banker: diligence responses, management
           presentations, buyer questions answered from the source rather than from memory. The same team
           that runs the company runs the process to sell it.
         </p>
@@ -92,7 +92,7 @@ const SCOPES = [
         </p>
         <p>
           Some of this work ends in a turnaround and some ends in an orderly sale or wind-down. Both need the
-          same thing — an operator with the numbers, who can talk to lenders.
+          same thing: an operator with the numbers, who can talk to lenders.
         </p>
       </>
     ),
@@ -105,11 +105,11 @@ const SCOPES = [
       <>
         <p>
           Capital raise preparation and execution: the model, the materials, the diligence file, and the
-          outreach list — then the process itself, run with the sponsor through close.
+          outreach list, then the process itself, run with the sponsor through close.
         </p>
         <p>
-          Development-stage platforms carry their own vocabulary — project finance, construction debt, tax
-          equity — and their own diligence burden. We have sat on the company side of those raises, which is
+          Development-stage platforms carry their own vocabulary: project finance, construction debt, tax
+          equity, and their own diligence burden. We have sat on the company side of those raises, which is
           why the questions get answered the first time they are asked.
         </p>
       </>
@@ -124,10 +124,10 @@ const SCOPES = [
         <p>
           Fractional and interim CFO, COO, and Controller seats, and the team underneath them: monthly close,
           AP and AR, payroll, audit support, and the systems that carry all of it. You don&rsquo;t get one
-          person — you get the team behind the person.
+          person: you get the team behind the person.
         </p>
         <p>
-          Overhead discipline sits here too — G&amp;A reduction, vendor management, covenant compliance.{" "}
+          Overhead discipline sits here too: G&amp;A reduction, vendor management, covenant compliance.{" "}
           <em>
             &ldquo;Particularly for development-stage platforms where the fund is advancing G&amp;A and
             development capital, every month of overhead discipline is real return.&rdquo;
@@ -135,7 +135,7 @@ const SCOPES = [
         </p>
         <p>
           It is also where visibility gets built. Once the close is clean and the data is structured, the
-          sponsor can see the company without waiting for month-end — see{" "}
+          sponsor can see the company without waiting for month-end. See{" "}
           <Link href="/intelligence" className="link-underline text-white-100">
             Intelligence
           </Link>
@@ -159,13 +159,13 @@ const PILLARS: { id: string; mark: FoldmarkKind; title: string; body: string }[]
     id: "overhead-discipline",
     mark: "ledger",
     title: "Overhead discipline",
-    body: "G&A reduction, vendor management, 13-week cash forecasting, covenant compliance — every month of it real return.",
+    body: "G&A reduction, vendor management, 13-week cash forecasting, covenant compliance: every month of it real return.",
   },
   {
     id: "real-time-visibility",
     mark: "lens",
     title: "Real-time visibility",
-    body: "Sponsors see what's happening without depending on management — or Fairlead — to tell them.",
+    body: "Sponsors see what's happening without depending on management, or Fairlead, to tell them.",
   },
   {
     id: "exit-ready",
@@ -179,7 +179,7 @@ const PROCESS = [
   { head: "Assess", body: "2–4 weeks inside the company. Contracts, financials, forecasts, interviews." },
   { head: "Embed", body: "The seats filled. The team behind them engaged." },
   { head: "Run", body: "Weekly cash, monthly close, live visibility for the sponsor." },
-  { head: "Exit", body: "Ready when the window opens — the process run by the team that ran the company." },
+  { head: "Exit", body: "Ready when the window opens: the process run by the team that ran the company." },
 ];
 
 export default function HandsOnEngagementsPage() {
@@ -192,7 +192,7 @@ export default function HandsOnEngagementsPage() {
         title={<>We sit in the seat and do the work.</>}
         lead={
           <>
-            Fairlead takes active, hands-on roles inside PE-backed companies — running the asset, preparing
+            Fairlead takes active, hands-on roles inside PE-backed companies: running the asset, preparing
             and executing the sale, restructuring the balance sheet, raising the capital, and holding the
             finance function together. You don&rsquo;t get one person; you get the team, and it scales up or
             down as the situation moves.
@@ -290,7 +290,7 @@ export default function HandsOnEngagementsPage() {
           </div>
           <p className="body-lg max-w-xl text-white-60 md:pb-2" data-anim="fade-up">
             Two to four weeks, accelerated by synthesizing contracts, financials, forecasts, and interviews
-            into a persistent repository — one the sponsor keeps using long after the assessment ends.
+            into a persistent repository the sponsor keeps using long after the assessment ends.
           </p>
         </div>
         <div className="relative mt-14">
@@ -307,7 +307,7 @@ export default function HandsOnEngagementsPage() {
 
       <SectionReveal className="container-page flex flex-col items-start gap-6 pb-16">
         <p className="body-lg max-w-2xl text-white-60" data-anim="fade-up">
-          How we keep all of this visible —{" "}
+          How we keep all of this visible:{" "}
           <Link href="/intelligence" className="link-underline text-white-100">
             Intelligence
           </Link>

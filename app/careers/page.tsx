@@ -9,13 +9,13 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Careers",
-  "We're hiring operators who work AI-first — senior finance and operating people who want the tools to match the work.",
+  "We're hiring operators who work AI-first: senior finance and operating people who want the tools to match the work.",
   "/careers"
 );
 
 const TRAITS = [
   ["In the seat", "You've run a finance or operating function, not advised one."],
-  ["AI-first", "You reach for the tool before the spreadsheet — and build the tool when it doesn't exist."],
+  ["AI-first", "You reach for the tool before the spreadsheet, and build the tool when it doesn't exist."],
   ["Sponsor-literate", "You know what a board wants to see before it asks."],
 ];
 
@@ -30,7 +30,7 @@ export default function CareersPage() {
         title={<>We&rsquo;re hiring operators who work AI-first.</>}
         lead={
           <>
-            Senior finance and operating people who want to sit in the seat — with fifteen years of
+            Senior finance and operating people who want to sit in the seat, with fifteen years of
             operating intelligence and the tools to match. If that&rsquo;s the work you want, tell us.
           </>
         }

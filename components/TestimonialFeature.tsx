@@ -139,7 +139,7 @@ export default function TestimonialFeature({
                 onClick={play}
                 aria-haspopup="dialog"
                 aria-expanded={open}
-                aria-label={`${cta} — ${video.label}`}
+                aria-label={`${cta}: ${video.label}`}
                 className="absolute inset-0 block cursor-pointer text-left"
               >
                 {/* play control — bottom-right, opposite the caption, so it never covers the face.

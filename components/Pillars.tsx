@@ -18,7 +18,7 @@ const PILLARS: { id: string; mark: FoldmarkKind; title: string; body: string }[]
     id: "embedded-leadership",
     mark: "seat",
     title: "Embedded leadership",
-    body: "Fractional and interim CEO, CFO, COO, Controller. You don't get one person — you get the team.",
+    body: "Fractional and interim CEO, CFO, COO, Controller. You don't get one person: you get the team.",
   },
   {
     id: "overhead-discipline",
@@ -30,7 +30,7 @@ const PILLARS: { id: string; mark: FoldmarkKind; title: string; body: string }[]
     id: "real-time-visibility",
     mark: "lens",
     title: "Real-time visibility",
-    body: "Sponsors see what's happening without depending on management — or Fairlead — to tell them.",
+    body: "Sponsors see what's happening without depending on management, or Fairlead, to tell them.",
   },
   {
     id: "exit-ready",

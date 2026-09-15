@@ -13,14 +13,14 @@ const CELLS = [
   {
     label: "Problem one",
     title: "Performance",
-    body: "The visible problem. Revenue, margin, cash — the numbers every sponsor manages and a crowded market of firms offers to fix.",
+    body: "The visible problem. Revenue, margin, cash: the numbers every sponsor manages and a crowded market of firms offers to fix.",
     foot: "Most of the market competes here.",
     accent: false,
   },
   {
     label: "Problem two",
     title: "Information",
-    body: "The harder problem. Knowing what is actually happening inside the company — the visibility LPs hold sponsors accountable for.",
+    body: "The harder problem. Knowing what is actually happening inside the company: the visibility LPs hold sponsors accountable for.",
     foot: "Most sponsors only solve one of the two.",
     accent: true,
   },

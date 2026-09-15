@@ -49,7 +49,7 @@ export default function EngagementRow({ engagement }: { engagement: Engagement }
     <div data-anim="slide-in" className="relative">
       <span className="dec left-0 top-0 h-px w-full" />
       {detail ? (
-        <Link href={`/engagements/${engagement.slug}`} className={cls} aria-label={`${engagement.company_display} — see the engagement`}>
+        <Link href={`/engagements/${engagement.slug}`} className={cls} aria-label={`${engagement.company_display}: see the engagement`}>
           {inner}
         </Link>
       ) : (

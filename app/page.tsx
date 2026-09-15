@@ -12,8 +12,8 @@ import ContactStrip from "@/components/ContactStrip";
 import { pageMetadata, SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
-  `${SITE_NAME} — ${SITE_TAGLINE}`,
-  "Hands-on operating engagements inside PE-backed companies since 2010 — asset management, sell-side preparation and execution, restructuring, fundraising, and finance and back-office management.",
+  `${SITE_NAME} · ${SITE_TAGLINE}`,
+  "Hands-on operating engagements inside PE-backed companies since 2010: asset management, sell-side preparation and execution, restructuring, fundraising, and finance and back-office management.",
   "/"
 );
 

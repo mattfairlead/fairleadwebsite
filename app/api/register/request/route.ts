@@ -62,7 +62,7 @@ export async function POST(req: Request) {
   if (!ROLES.has(requester.role)) return NextResponse.json({ error: "Invalid role" }, { status: 400 });
 
   if (limited(`ip:${clientIp(req)}`, 12) || limited(`email:${requester.email}`, 4)) {
-    return NextResponse.json({ error: "Too many requests — try again later" }, { status: 429 });
+    return NextResponse.json({ error: "Too many requests. Try again later." }, { status: 429 });
   }
 
   const who = `${requester.name}${requester.role ? ` (${requester.role})` : ""} at ${requester.firm}`;
@@ -89,14 +89,14 @@ export async function POST(req: Request) {
         ``,
         link,
         ``,
-        `Or just reply to this email — it goes straight to them.`,
+        `Or just reply to this email. It goes straight to them.`,
       ]
     : [
         `No share link could be made: ENGAGEMENTS_SECRET is unset on the website. Reply to this email to reach them.`,
       ];
 
   const sent = await sendMail({
-    subject: `Register access requested — ${who}`,
+    subject: `Register access requested from ${who}`,
     replyTo: requester.email,
     text: [details, ``, ...share].join("\n"),
   });

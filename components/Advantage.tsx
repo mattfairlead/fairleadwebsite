@@ -26,7 +26,7 @@ export default function Advantage() {
             Fairlead has fifteen years of them, inside the companies.
           </p>
           <p className="body-lg max-w-xl text-white-60" data-anim="fade-up" data-anim-delay="0.15">
-            More data doesn&rsquo;t make AI smarter. An operator who&rsquo;s done the job does — and every
+            More data doesn&rsquo;t make AI smarter. An operator who&rsquo;s done the job does, and every
             engagement adds another one.
           </p>
           <ul className="mt-2 grid max-w-xl gap-3 sm:grid-cols-3 sm:gap-6" data-anim="fade-up" data-anim-delay="0.25">

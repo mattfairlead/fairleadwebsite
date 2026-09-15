@@ -30,7 +30,7 @@ const SCOPES = [
   {
     id: "fundraising",
     title: "Fundraising",
-    body: "Capital raise preparation and execution — model, materials, diligence file — including project finance and tax equity for development-stage platforms.",
+    body: "Capital raise preparation and execution: model, materials, diligence file, including project finance and tax equity for development-stage platforms.",
   },
   {
     id: "finance-back-office",

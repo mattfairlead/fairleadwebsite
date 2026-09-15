@@ -10,7 +10,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Intelligence",
-  "How Fairlead runs its hands-on engagements: Solaris and the custom tools built inside the work — in production, not in pilot.",
+  "How Fairlead runs its hands-on engagements: Solaris and the custom tools built inside the work, in production, not in pilot.",
   "/intelligence"
 );
 
@@ -20,24 +20,24 @@ export const metadata: Metadata = pageMetadata(
  */
 
 const STRAPLINES = [
-  "Your entire portfolio, live — every issue one click from its source.",
-  "Every number traces back to its source — full audit trail, automatically.",
+  "Your entire portfolio, live: every issue one click from its source.",
+  "Every number traces back to its source, with a full audit trail, automatically.",
   "Predicts major equipment failures weeks before they happen.",
-  "Ask for any table, chart, or visual — push it straight into your board deck.",
-  "1,000+ documents indexed, searchable, readable — right in the app.",
-  "Drop in a 47-tab workbook — get back a clean, AI-ready model.",
-  "Sweeps your inbox — every attachment extracted, routed, stored.",
+  "Ask for any table, chart, or visual, and push it straight into your board deck.",
+  "1,000+ documents indexed, searchable, and readable, right in the app.",
+  "Drop in a 47-tab workbook and get back a clean, AI-ready model.",
+  "Sweeps your inbox: every attachment extracted, routed, stored.",
 ];
 
 const TOOLS = [
   {
     name: "Solaris",
-    line: "Operating intelligence platform — portfolio map, provenance financials, predictive risk, sketchpad, knowledge base.",
+    line: "Operating intelligence platform: portfolio map, provenance financials, predictive risk, sketchpad, knowledge base.",
     flagship: true,
   },
   {
     name: "Working capital & cash flow dashboard",
-    line: "QuickBooks + the order system in, a 13-week forecast out — the sponsor checks it before every meeting.",
+    line: "QuickBooks + the order system in, a 13-week forecast out. The sponsor checks it before every meeting.",
   },
   {
     name: "Board report generator",
@@ -80,8 +80,8 @@ export default function IntelligencePage() {
               hands-on engagements
             </Link>
             , not a separate business. Every tool here was built inside an engagement to solve one
-            company&rsquo;s problem — used daily, in production, for more than six months, past the pilot
-            phase most firms are stuck in — and then reused across the portfolio.
+            company&rsquo;s problem, used daily, in production, for more than six months, past the pilot
+            phase most firms are stuck in, and then reused across the portfolio.
           </>
         }
       />
@@ -117,7 +117,7 @@ export default function IntelligencePage() {
                 <path d="M7 4.5v13l10-6.5z" />
               </svg>
             </span>
-            <span className="label text-white-50">Demo reel — coming with the next cut</span>
+            <span className="label text-white-50">Demo reel: coming with the next cut</span>
           </div>
           <span className="pointer-events-none absolute left-0 top-0 h-px w-16 bg-gold/70" aria-hidden="true" />
           <span className="pointer-events-none absolute left-0 top-0 h-16 w-px bg-gold/70" aria-hidden="true" />
@@ -170,10 +170,10 @@ export default function IntelligencePage() {
       {/* Cottonwood case study — static in Phase 1; pin-steps reveal in Phase 2 */}
       <SectionReveal className="section container-page scroll-mt-24" id="cottonwood">
         <div className="grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-end">
-          <SectionHead eyebrow="Case study — Cottonwood Solar" title={<>A $720K claim, answered in four options.</>} />
+          <SectionHead eyebrow="Case study · Cottonwood Solar" title={<>A $720K claim, answered in four options.</>} />
           <p className="body-lg max-w-xl text-white-60 md:pb-2" data-anim="fade-up">
             Dominion presented a $720K interconnection claim. Solaris synthesized the contract record, the
-            correspondence, and the precedent — and returned a decision memo the same week: four options,
+            correspondence, and the precedent, then returned a decision memo the same week: four options,
             each priced.
           </p>
         </div>
@@ -231,7 +231,7 @@ export default function IntelligencePage() {
             {[
               ["Team upskilling", "Your people learn the tools by using them on live work."],
               ["Tools built for the engagement", "Against your actual pain, not a demo dataset."],
-              ["Integrations you already run", "Accounting, orders, email — the systems that are there."],
+              ["Integrations you already run", "Accounting, orders, email: the systems that are there."],
             ].map(([head, body], i) => (
               <div key={head} data-cell className="spot flex flex-col gap-3 p-6 md:p-7 lg:p-10">
                 <span className="label text-white-40 tabular">0{i + 1}</span>
@@ -252,7 +252,7 @@ export default function IntelligencePage() {
         <HairlineFrame>
           <div data-cell className="spot flex flex-col items-start justify-center gap-5 p-6 md:p-10">
             <p data-anim="title" className="body-lg text-white-60">
-              Want a deeper demo of Solaris — or a custom solution built for you?
+              Want a deeper demo of Solaris, or a custom solution built for you?
             </p>
             <Btn href="/contact" arrow>
               Talk to a partner

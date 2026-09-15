@@ -18,7 +18,7 @@ export const SITE_URL = resolveSiteUrl();
 export const SITE_NAME = "Fairlead Advisors";
 export const SITE_TAGLINE = "Embedded operating leadership for PE-backed companies";
 export const SITE_DESCRIPTION =
-  "Hands-on operating engagements inside PE-backed companies since 2010 — asset management, sell-side preparation and execution, restructuring, fundraising, and finance and back-office management, with the real-time visibility to steer by.";
+  "Hands-on operating engagements inside PE-backed companies since 2010: asset management, sell-side preparation and execution, restructuring, fundraising, and finance and back-office management, with the real-time visibility to steer by.";
 
 export function pageMetadata(title: string, description: string, path: string): Metadata {
   const url = `${SITE_URL}${path}`;

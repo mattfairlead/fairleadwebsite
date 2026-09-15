@@ -23,12 +23,12 @@ export const perspectives: Perspective[] = [
     kind: "perspective",
     published_at: "2026-02-15",
     excerpt:
-      "Over the past year, AI moved from experiment to daily production across our engagements. What that actually took — and why most pilots never get there.",
-    body_md: `Over the past year, AI at Fairlead moved from experiment to daily production. Not a pilot, not a proof of concept — tools our teams use every day, inside live engagements, for more than six months now.
+      "Over the past year, AI moved from experiment to daily production across our engagements. What that actually took, and why most pilots never get there.",
+    body_md: `Over the past year, AI at Fairlead moved from experiment to daily production. Not a pilot, not a proof of concept: tools our teams use every day, inside live engagements, for more than six months now.
 
-That distinction matters because most firms are stuck at the pilot phase. The industry data is blunt: the overwhelming majority of corporate AI pilots never reach production. The gap isn't the models. It's the implementation threshold — the unglamorous work of wiring a tool into how a company actually closes its books, pays its vendors, and reports to its board.
+That distinction matters because most firms are stuck at the pilot phase. The industry data is blunt: the overwhelming majority of corporate AI pilots never reach production. The gap isn't the models. It's the implementation threshold: the unglamorous work of wiring a tool into how a company actually closes its books, pays its vendors, and reports to its board.
 
-We crossed that threshold the only way we know: from inside the companies. Every tool we run started as a specific answer to a specific client's pain — a 13-week cash forecast a sponsor could trust before every meeting, a board pack that assembles itself from live data with a full audit trail, an assistant that noticed our client's largest customer was being undercharged.
+We crossed that threshold the only way we know: from inside the companies. Every tool we run started as a specific answer to a specific client's pain: a 13-week cash forecast a sponsor could trust before every meeting, a board pack that assembles itself from live data with a full audit trail, an assistant that noticed our client's largest customer was being undercharged.
 
 Because the tools were built against real operating problems, they generalize. And because we've been embedded in PE-backed companies since 2010, the data they learn from is the kind you can't buy: fifteen years of operating history, captured from the seat.
 

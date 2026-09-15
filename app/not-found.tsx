@@ -17,7 +17,7 @@ export default function NotFound() {
           <span className="label relative text-gold">404 · Not on the map</span>
           <h1 className="h2 relative max-w-2xl">This page isn&rsquo;t on the map.</h1>
           <p className="body-lg relative max-w-md text-white-60">
-            The address may have moved when the site was rebuilt. Nothing you did — head back to the
+            The address may have moved when the site was rebuilt. Nothing you did. Head back to the
             homepage, or tell a partner what you were looking for.
           </p>
           <div className="relative flex flex-wrap justify-center gap-4">
