@@ -814,6 +814,17 @@ textarea.field {
   border-radius: 3px;
 }
 
+/* Folded-paper glyphs (Foldmark) — a navy drop at rest; the cell's hover
+   adds the gold glow the pill buttons use, so the mark lifts with the cell */
+.foldmark {
+  filter: drop-shadow(0 3px 6px rgba(5, 14, 46, 0.55));
+  transition: filter 0.45s ease;
+}
+.group:hover .foldmark,
+.spot:hover .foldmark {
+  filter: drop-shadow(0 4px 8px rgba(5, 14, 46, 0.55)) drop-shadow(0 0 14px rgba(var(--gold-rgb), 0.35));
+}
+
 /* Gold display text with a soft halo — the one headline phrase in gold */
 .text-gold-glow {
   color: var(--color-gold);

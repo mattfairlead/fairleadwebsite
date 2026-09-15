@@ -1,6 +1,15 @@
 import { getSupabase } from "@/lib/supabase";
-import type { Engagement, HubTeamRow, Perspective, Sector, TeamMember } from "@/lib/types";
+import type {
+  Engagement,
+  HubPerspectiveRow,
+  HubTeamRow,
+  Perspective,
+  PerspectiveKind,
+  Sector,
+  TeamMember,
+} from "@/lib/types";
 import { HUB_TEAM_COLUMNS, mapHubMember, sortHubRows } from "@/lib/team";
+import { HUB_PERSPECTIVE_COLUMNS, mapHubPerspective } from "@/lib/perspectives";
 import { team as seedTeam } from "@/content/seed/team";
 import { engagements as seedEngagements } from "@/content/seed/engagements";
 import { sectors as seedSectors } from "@/content/seed/sectors";
@@ -16,11 +25,17 @@ import { perspectives as seedPerspectives } from "@/content/seed/perspectives";
  * (local dev, CI) the seed snapshot in content/seed/team.ts is served through
  * the same mapping, so pages never know the difference.
  *
- * Engagements, sectors and perspectives are still seed-backed: the hub's
- * `engagements` table is the internal tracker (a different shape, not
- * public), and the website-shaped tables in supabase/schema.sql have not
- * been provisioned. Each accessor tries Supabase first and falls back to seed
- * on an error or an empty result, so provisioning them later is zero-code.
+ * Perspectives are live the same way: the hub's `perspectives` table (its
+ * Perspectives module) read with the anon key, RLS scoped to rows whose
+ * "Website" checkbox is on. Only an error (table not yet provisioned, hub
+ * unreachable) serves the seed in content/seed/perspectives.ts — an empty
+ * table means the hub has nothing published, and the site shows that.
+ *
+ * Engagements and sectors are still seed-backed: the hub's `engagements`
+ * table is the internal tracker (a different shape, not public), and the
+ * website-shaped tables in supabase/schema.sql have not been provisioned.
+ * Each accessor tries Supabase first and falls back to seed on an error or
+ * an empty result, so provisioning them later is zero-code.
  */
 
 export async function getTeam(): Promise<TeamMember[]> {
@@ -101,15 +116,27 @@ export async function getEngagement(slug: string): Promise<Engagement | null> {
   return all.find((e) => e.slug === slug) ?? null;
 }
 
-export async function getPerspectives(kind?: "perspective" | "transaction"): Promise<Perspective[]> {
-  const rows = await supabaseOrSeed<Perspective>(
-    "perspectives",
-    () =>
-      seedPerspectives
-        .filter((p) => p.visible)
-        .sort((a, b) => b.published_at.localeCompare(a.published_at)),
-    (q) => q.select("*").eq("visible", true).order("published_at", { ascending: false })
-  );
+export async function getPerspectives(kind?: PerspectiveKind): Promise<Perspective[]> {
+  const sb = getSupabase();
+  let rows: Perspective[] | null = null;
+  if (sb) {
+    const { data, error } = await sb
+      .from("perspectives")
+      .select(HUB_PERSPECTIVE_COLUMNS)
+      .eq("show_on_website", true)
+      .order("published_at", { ascending: false })
+      .order("id", { ascending: false });
+    if (error) {
+      console.warn("[data] perspectives read failed — serving seed:", error.message);
+    } else {
+      rows = ((data ?? []) as unknown as HubPerspectiveRow[]).map(mapHubPerspective);
+    }
+  }
+  if (!rows) {
+    rows = seedPerspectives
+      .filter((p) => p.visible)
+      .sort((a, b) => b.published_at.localeCompare(a.published_at));
+  }
   return kind ? rows.filter((p) => p.kind === kind) : rows;
 }
 

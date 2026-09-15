@@ -9,7 +9,7 @@ const ROLES = ["Sponsor", "Portfolio company", "Intermediary", "Other"] as const
 
 /**
  * The contact form — §4.7. Four underline fields on a dark page, nothing
- * else. Posts to /api/contact (SendGrid → info@ distribution list). Submit
+ * else. Posts to /api/contact (Resend → info@ distribution list). Submit
  * shows the spin state inside the pill; success replaces the form with a
  * drawn check and a single .h3 line. No toasts, no modals (§5.9).
  *

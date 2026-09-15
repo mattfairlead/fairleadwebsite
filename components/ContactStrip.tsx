@@ -1,10 +1,13 @@
 import SectionReveal from "@/components/SectionReveal";
 import HairlineFrame from "@/components/HairlineFrame";
+import Mailmark from "@/components/Mailmark";
 import Btn from "@/components/Btn";
 
 /**
  * Home §4.1 row 9 — contact strip: the ask · phone · four cities.
- * Two rules only (§5.8.8): vertical at .4, horizontal at .1.
+ * Two rules only (§5.8.8): vertical at .4, horizontal at .1. The envelope
+ * docks on the frame's corner the same way it does on /contact, so the
+ * strip reads as that page's calling card.
  */
 const CITIES = ["Boston", "Houston", "Minneapolis", "Annapolis"];
 
@@ -12,6 +15,14 @@ export default function ContactStrip() {
   return (
     <SectionReveal className="section container-page">
       <HairlineFrame verticalsAt={["58%"]}>
+        <span
+          data-anim="fade-up"
+          aria-hidden="true"
+          className="absolute bottom-full right-0 mb-3 block"
+          style={{ width: "clamp(5rem, 7vw, 7.5rem)", aspectRatio: "300 / 186" }}
+        >
+          <Mailmark className="block h-full w-full" uid="strip-mailmark" />
+        </span>
         <div className="grid md:grid-cols-[58fr_42fr]">
           <div data-cell className="spot flex flex-col gap-5 p-6 md:p-8 lg:p-12">
             <span className="label text-gold">Talk to a partner</span>

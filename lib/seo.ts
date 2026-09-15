@@ -46,7 +46,7 @@ export function organizationJsonLd() {
     url: SITE_URL,
     description: SITE_DESCRIPTION,
     telephone: "+1-617-315-4822",
-    sameAs: ["https://www.linkedin.com/company/fairlead-advisors"],
+    sameAs: ["https://www.linkedin.com/company/fairlead-advisors-llc"],
     areaServed: "US",
     knowsAbout: [
       "private equity operating partner services",

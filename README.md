@@ -11,13 +11,15 @@ operating platform for PE-backed companies.** Built to the spec in
 - **GSAP 3.15** + ScrollTrigger + ScrollSmoother + SplitText + ScrollToPlugin
   via `@gsap/react` — constants and choreography in `lib/motion.ts` (§5.4/§5.8)
 - **Supabase** — `/team` reads the engagement hub's `team_members` table live
-  (see *Team content* below) and `/engagements` reads its `engagements` table
-  server-side as a locked register (see *Engagement register* below); other
-  content is seed-backed until the tables in `supabase/schema.sql` are
-  provisioned. Without env vars the site serves `content/seed/` — identical
-  shapes
-- **SendGrid** for the contact form + newsletter (HubSpot is sunset); sends
-  are skipped and logged when unconfigured, so previews work
+  (see *Team content* below), `/perspectives` reads its `perspectives` table
+  the same way (edited in the hub's Perspectives module), and `/engagements`
+  reads its `engagements` table server-side as a locked register (see
+  *Engagement register* below); other content is seed-backed until the
+  tables in `supabase/schema.sql` are provisioned. Without env vars the site
+  serves `content/seed/` — identical shapes
+- **Resend** for the contact form and **SendGrid** for the newsletter + the
+  register's emailed links (HubSpot is sunset); sends are skipped and logged
+  when unconfigured, so previews work
 - **Vercel** hosting; 301 redirects from the legacy WordPress URLs in
   `content/redirects.ts` (§3)
 
@@ -48,8 +50,9 @@ lib/register-access.ts  signed link + grant tokens, the grant cookie
 components/          Hero, GlassStrip, HairlineFrame, SectionReveal, ...
 lib/motion.ts        GSAP constants + sectionReveal()/pulseDots()/headerIntro()
 lib/data.ts          content accessors (Supabase, seed fallback)
-content/seed/        engagements, sectors, perspectives seed data; team = hub snapshot
+content/seed/        engagements, sectors seed data; team + perspectives = hub snapshots (fallback)
 lib/team.ts          hub `team_members` row → TeamMember (slug, title/credentials, group)
+lib/perspectives.ts  hub `perspectives` row → Perspective (the hub's Perspectives module is the editor)
 app/api/team/photo/  serves hub headshots (stored inline as base64) with CDN caching
 content/redirects.ts legacy WordPress 301 map
 supabase/schema.sql  content schema + RLS policies

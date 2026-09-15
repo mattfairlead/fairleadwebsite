@@ -2,19 +2,20 @@
 -- Public read where visible = true; writes only via service role
 -- (the marketing hub, Phase 2).
 --
--- TEAM IS NOT HERE. The roster is read live from the engagement hub's
--- `team_members` table in the same Supabase project
--- (github.com/mattfairlead/fairlead → supabase/schema.sql and
--- supabase/migrations/20260902000001_website_visibility.sql). That migration
--- adds `show_on_website` — the "Website" checkbox on each hub team card — and
--- an anon SELECT policy scoped to checked rows. lib/team.ts maps the hub row
--- onto the website's TeamMember shape; nothing below needs to exist for /team.
+-- TEAM AND PERSPECTIVES ARE NOT HERE. Both are read live from the engagement
+-- hub's tables in the same Supabase project (github.com/mattfairlead/fairlead):
+--   • `team_members` — supabase/migrations/20260902000001_website_visibility.sql
+--     adds `show_on_website` (the "Website" checkbox on each hub team card) and
+--     an anon SELECT policy scoped to checked rows; lib/team.ts maps the row
+--     onto the website's TeamMember shape.
+--   • `perspectives` — supabase/migrations/20260915000001_website_perspectives.sql
+--     creates the table the hub's Perspectives module edits, with the same
+--     `show_on_website` + anon SELECT pattern; lib/perspectives.ts maps the row
+--     onto the website's Perspective shape.
+-- Nothing below needs to exist for /team or /perspectives.
 --
--- The tables below (sectors, engagements, perspectives) are NOT yet
--- provisioned in that project; lib/data.ts serves the seed content until
--- they are.
-
-create type perspective_kind as enum ('perspective', 'transaction');
+-- The tables below (sectors, engagements) are NOT yet provisioned in that
+-- project; lib/data.ts serves the seed content until they are.
 
 create table sectors (
   id uuid primary key default gen_random_uuid(),
@@ -42,24 +43,9 @@ create table engagements (
   visible boolean not null default true
 );
 
-create table perspectives (
-  id uuid primary key default gen_random_uuid(),
-  slug text unique not null,
-  title text not null,
-  author_slug text, -- lib/team.ts slugify(name) of the hub team member, e.g. "jason-salgo"
-  kind perspective_kind not null default 'perspective',
-  published_at date not null,
-  excerpt text not null default '',
-  body_md text,
-  external_url text,
-  visible boolean not null default true
-);
-
 -- Row-level security: public read where visible = true.
 alter table sectors enable row level security;
 alter table engagements enable row level security;
-alter table perspectives enable row level security;
 
 create policy "public read sectors" on sectors for select using (true);
 create policy "public read engagements" on engagements for select using (visible = true);
-create policy "public read perspectives" on perspectives for select using (visible = true);

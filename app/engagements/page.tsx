@@ -5,6 +5,7 @@ import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import TestimonialFeature from "@/components/TestimonialFeature";
+import Compassmark from "@/components/Compassmark";
 import RevealProvider from "@/components/register/RevealProvider";
 import RegisterRow from "@/components/register/RegisterRow";
 import { LockGlyph } from "@/components/register/RevealModal";
@@ -299,9 +300,10 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
           </div>
         ) : (
           // Empty state — designed, not defaulted (§5.9)
-          <div className="relative px-6 py-24 text-center md:px-10">
+          <div className="relative px-6 py-20 text-center md:px-10">
             <span className="dec left-0 top-0 h-px w-full" />
             <span className="dec bottom-0 left-0 h-px w-full" />
+            <Compassmark className="mx-auto mb-6 w-24 md:w-28" uid="empty-compass" />
             <span className="label text-gold">No match yet</span>
             <h2 className="h2 mt-4">Nothing matches that combination.</h2>
             <p className="body-lg mx-auto mt-4 max-w-md text-white-60">
