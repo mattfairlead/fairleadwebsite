@@ -29,7 +29,9 @@ const ASK_ENABLED = process.env.NEXT_PUBLIC_ASK_ENABLED === "true";
  * Craft layer: a glass pill slides between nav links under the cursor; the
  * current page carries a gold dot; a 1px gold scroll-progress rule rides the
  * bottom edge; the mobile menu is a glass sheet whose links stagger in and
- * reverse out, with the page scroll locked while it's open.
+ * reverse out, with the page scroll locked while it's open. The scroll glass
+ * is painted by `.site-header::before`, not the header — see globals.css for
+ * why the sheet depends on that.
  */
 export default function Header() {
   const pathname = usePathname();
@@ -76,15 +78,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header
-      ref={ref}
-      className="site-header fixed inset-x-0 top-0 z-50 h-[4.5rem]"
-      style={{
-        // Short: the glass is scroll-driven now, so a long transition would
-        // just trail the scroll position instead of smoothing it.
-        transition: "background-color 0.15s linear, backdrop-filter 0.15s linear, -webkit-backdrop-filter 0.15s linear",
-      }}
-    >
+    <header ref={ref} className="site-header fixed inset-x-0 top-0 z-50 h-[4.5rem]">
       <div className="container-page relative flex h-full items-stretch">
         {/* segment 1: logo */}
         <div className="flex shrink-0 items-center pr-8" data-header-item>
