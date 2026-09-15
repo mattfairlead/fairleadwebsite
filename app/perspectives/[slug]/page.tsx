@@ -8,6 +8,10 @@ import { Markdown } from "@/lib/md";
 import { getPerspective, getPerspectives, getTeam } from "@/lib/data";
 import { articleJsonLd, pageMetadata } from "@/lib/seo";
 
+// Same safety net as the listing: a post edited outside the hub's own
+// revalidate ping is fresh within five minutes.
+export const revalidate = 300;
+
 export async function generateStaticParams() {
   const posts = await getPerspectives();
   return posts.filter((p) => p.body_md).map((p) => ({ slug: p.slug }));

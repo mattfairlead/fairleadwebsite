@@ -25,6 +25,13 @@ function formatDate(iso: string): string {
 }
 
 /**
+ * The posts are read live from the engagement hub (see lib/data.ts). The hub
+ * pings /api/revalidate when a post is published or edited; this interval is
+ * the safety net for anything that changes the table without that ping.
+ */
+export const revalidate = 300;
+
+/**
  * /perspectives — §4.6. One dated list of every post, newest first; each row
  * opens the post's own page. The content is the hub's `perspectives` table
  * (lib/data.ts), so the partners publish, edit and unpublish from there.
