@@ -107,6 +107,20 @@ body {
     transform: translate3d(2%, 2%, 0) scale(1.06);
   }
 }
+/* Touch screens: the drift and the overlay blend each force a full-screen
+   recomposite every frame, which a phone GPU pays for in scroll jank and
+   battery. The light sources stay; they just hold still, and the grain sits
+   on top as plain alpha. */
+@media (hover: none), (max-width: 767px) {
+  .ambient::before {
+    animation: none;
+    will-change: auto;
+  }
+  .ambient::after {
+    mix-blend-mode: normal;
+    opacity: 0.035;
+  }
+}
 
 /* Tabular figures everywhere a number appears — §5.9 */
 .tabular,
@@ -672,13 +686,16 @@ textarea.field {
     opacity 0.15s linear,
     background-color 0.15s linear;
 }
+/* The blur radius is fixed and the layer's opacity follows the scroll: a
+   radius that follows it re-blurs the backdrop on every scroll frame, while
+   an opacity fade is compositor-only and looks the same. */
 .site-header.is-active::before {
-  opacity: 1;
+  opacity: var(--header-glass);
+  background: rgba(5, 14, 46, 0.55);
   /* Prefixed first, standard last: the CSS minifier collapses the pair and
      keeps whichever comes last, and Chrome only supports the standard one. */
-  -webkit-backdrop-filter: blur(calc(var(--header-glass) * 14px)) saturate(160%);
-  backdrop-filter: blur(calc(var(--header-glass) * 14px)) saturate(160%);
-  background: rgba(5, 14, 46, calc(var(--header-glass) * 0.55));
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
 }
 
 /* Nav hover pill — slides between links (position written by Header.tsx) */
@@ -1190,7 +1207,7 @@ html[data-theme="light"] .link-underline {
 
 /* Header glass, nav pill and the mobile sheet go white */
 html[data-theme="light"] .site-header.is-active::before {
-  background: rgba(255, 255, 255, calc(var(--header-glass) * 0.72));
+  background: rgba(255, 255, 255, 0.72);
 }
 html[data-theme="light"] .nav-pill {
   background: rgba(5, 14, 46, 0.05);
