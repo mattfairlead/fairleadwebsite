@@ -1,10 +1,11 @@
 import { permanentRedirect } from "next/navigation";
 
 /**
- * Landing target for the legacy /YYYY/MM/* catch-all redirect (§3). The
- * transaction record renders as a compact timeline on /perspectives — a
- * slug-level page adds nothing over the row, so land on the timeline.
+ * Former landing target of the legacy /YYYY/MM/* redirect, from when the
+ * press reposts were a separate timeline. Every post has its own page now,
+ * so anything still pointing here goes to it.
  */
-export default function TransactionSlugPage() {
-  permanentRedirect("/perspectives#transactions");
+export default async function TransactionSlugPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  permanentRedirect(`/perspectives/${slug}`);
 }

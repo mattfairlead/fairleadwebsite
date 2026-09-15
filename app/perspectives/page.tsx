@@ -12,7 +12,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Perspectives",
-  "The firm's point of view, written from inside engagements one per quarter. Plus the transaction record.",
+  "The firm's point of view, written from inside engagements, and the record of the work back to 2010.",
   "/perspectives"
 );
 
@@ -25,16 +25,12 @@ function formatDate(iso: string): string {
 }
 
 /**
- * /perspectives — §4.6. Firm view first; the historical press reposts live
- * below as a compact dated "Transactions" timeline (deal history without
- * pretending it's editorial).
+ * /perspectives — §4.6. One dated list of every post, newest first; each row
+ * opens the post's own page. The content is the hub's `perspectives` table
+ * (lib/data.ts), so the partners publish, edit and unpublish from there.
  */
 export default async function PerspectivesPage() {
-  const [posts, transactions, team] = await Promise.all([
-    getPerspectives("perspective"),
-    getPerspectives("transaction"),
-    getTeam(),
-  ]);
+  const [posts, team] = await Promise.all([getPerspectives(), getTeam()]);
 
   return (
     <>
@@ -85,35 +81,6 @@ export default async function PerspectivesPage() {
             <SectionHead eyebrow="Newsletter" title={<>Get the next one.</>} titleClass="h3" />
           </div>
           <NewsletterForm />
-        </div>
-      </SectionReveal>
-
-      <SectionReveal className="section container-page scroll-mt-24" id="transactions">
-        <SectionHead eyebrow="Transactions" title={<>The deal record.</>} titleClass="h3" />
-        <div className="relative mt-10">
-          {transactions.map((t) => (
-            <div key={t.slug} data-anim="fade-up" className="relative">
-              <span className="dec left-0 top-0 h-px w-full" />
-              <div className="spot grid items-baseline gap-2 px-2 py-5 md:grid-cols-[12rem_1fr_auto] md:gap-10 md:px-5">
-                <span className="body-sm text-white-40 tabular">{formatDate(t.published_at)}</span>
-                <span className="flex flex-col gap-1">
-                  <span className="body-lg text-white-100">{t.title}</span>
-                  <span className="body-sm text-white-50">{t.excerpt}</span>
-                </span>
-                {t.external_url && (
-                  <a
-                    href={t.external_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="body-sm link-underline self-center text-white-60"
-                  >
-                    Original release
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
-          <span className="dec bottom-0 left-0 h-px w-full" />
         </div>
       </SectionReveal>
     </>

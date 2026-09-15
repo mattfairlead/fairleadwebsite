@@ -54,10 +54,11 @@ export const redirects = [
     permanent: true,
   },
 
-  // Catch-all: every other historical dated post archives under Perspectives → Transactions
+  // Catch-all: every other historical dated post lives on under Perspectives
+  // at its original WordPress slug.
   {
     source: "/:year(\\d{4})/:month(\\d{2})/:slug*",
-    destination: "/perspectives/transactions/:slug*",
+    destination: "/perspectives/:slug*",
     permanent: true,
   },
 ];
