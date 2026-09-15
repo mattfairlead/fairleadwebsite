@@ -9,21 +9,29 @@
 
 const SENDGRID_URL = "https://api.sendgrid.com/v3/mail/send";
 
+/** CONTACT_TO may hold a comma-separated list of addresses. */
+function recipients(raw: string): string[] {
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 export async function sendMail(opts: {
   subject: string;
   text: string;
   /** Optional HTML alternative (the register link email); text is always sent. */
   html?: string;
   replyTo?: string;
-  /** Defaults to CONTACT_TO (the info@ list). Set for mail to a visitor. */
+  /** Defaults to CONTACT_TO (the info@ list, comma-separated). Set for mail to a visitor. */
   to?: string;
 }): Promise<{ ok: boolean; skipped?: boolean }> {
   // `||` not `??` — env vars imported with blank values must fall through
   const key = process.env.SENDGRID_API_KEY || "";
-  const to = opts.to || process.env.CONTACT_TO || "";
+  const to = recipients(opts.to || process.env.CONTACT_TO || "");
   const from = process.env.CONTACT_FROM || "no-reply@fairleadadvisors.com";
 
-  if (!key || !to) {
+  if (!key || to.length === 0) {
     console.warn("[sendgrid] SENDGRID_API_KEY/CONTACT_TO unset — mail skipped:", opts.subject);
     return { ok: true, skipped: true };
   }
@@ -32,7 +40,7 @@ export async function sendMail(opts: {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      personalizations: [{ to: [{ email: to }] }],
+      personalizations: [{ to: to.map((email) => ({ email })) }],
       from: { email: from, name: "fairleadadvisors.com" },
       ...(opts.replyTo ? { reply_to: { email: opts.replyTo } } : {}),
       subject: opts.subject,

@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { sendMail } from "@/lib/sendgrid";
+import { sendMail } from "@/lib/resend";
 
 export const runtime = "nodejs";
 
 const ROLES = new Set(["Sponsor", "Portfolio company", "Intermediary", "Other", ""]);
 const MAX = 4000;
 
-/** Contact form → SendGrid → info@ distribution list. §4.7. */
+/** Contact form → Resend → info@ distribution list. §4.7. */
 export async function POST(req: Request) {
   let body: Record<string, unknown>;
   try {
