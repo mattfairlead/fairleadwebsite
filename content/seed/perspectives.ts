@@ -1,7 +1,7 @@
 import type { Perspective } from "@/lib/types";
 
 /**
- * Perspectives, every post the firm has published, each a full article
+ * Perspectives: every post the firm has published, each a full article
  * (§4.6). The legacy press reposts back to 2010 are here in full, converted
  * from the WordPress export.
  *
@@ -9,7 +9,7 @@ import type { Perspective } from "@/lib/types";
  * table, edited in its Perspectives module (lib/data.ts → getPerspectives);
  * this snapshot serves when the hub is unreachable or not configured. It is
  * the same content the hub's migration 20260915000002_perspectives_full_posts.sql
- * seeds, edit there, not here.
+ * seeds. Edit there, not here.
  */
 export const perspectives: Perspective[] = [
   {
