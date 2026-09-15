@@ -16,8 +16,9 @@ operating platform for PE-backed companies.** Built to the spec in
   content is seed-backed until the tables in `supabase/schema.sql` are
   provisioned. Without env vars the site serves `content/seed/` — identical
   shapes
-- **SendGrid** for the contact form + newsletter (HubSpot is sunset); sends
-  are skipped and logged when unconfigured, so previews work
+- **Resend** for the contact form and **SendGrid** for the newsletter + the
+  register's emailed links (HubSpot is sunset); sends are skipped and logged
+  when unconfigured, so previews work
 - **Vercel** hosting; 301 redirects from the legacy WordPress URLs in
   `content/redirects.ts` (§3)
 
