@@ -40,7 +40,7 @@ export default function CareersPage() {
             alt=""
             width={1406}
             height={855}
-            className="h-auto w-72 max-md:mx-auto md:w-96 lg:w-[28rem]"
+            className="h-auto w-72 max-lg:mx-auto md:w-96 lg:w-[28rem]"
           />
         }
       />
@@ -48,7 +48,7 @@ export default function CareersPage() {
         <HairlineFrame columns={3}>
           <div className="grid md:grid-cols-3">
             {TRAITS.map(([head, body], i) => (
-              <div key={head} data-cell className="spot flex flex-col gap-3 p-6 md:p-10">
+              <div key={head} data-cell className="spot flex flex-col gap-3 p-6 md:p-7 lg:p-10">
                 <span className="label text-white-40 tabular">0{i + 1}</span>
                 <h2 data-anim="title" className="h4">
                   {head}

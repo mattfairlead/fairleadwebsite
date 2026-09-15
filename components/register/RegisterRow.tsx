@@ -57,18 +57,12 @@ export default function RegisterRow(props: Props) {
   const tags = (
     <div className="mt-2 flex flex-wrap gap-2">
       {row.work.map((w) => (
-        <span
-          key={w}
-          className="label rounded-[3px] px-2 py-1.5 text-white-50"
-          style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1)" }}
-        >
+        <span key={w} className="label tag">
           {workLabel(w)}
         </span>
       ))}
       {row.sponsor_backed && (
-        <span className="label rounded-[3px] px-2 py-1.5 text-gold/80" style={{ boxShadow: "inset 0 0 0 1px rgba(213,179,113,0.25)" }}>
-          Sponsor-backed
-        </span>
+        <span className="label tag tag-gold">Sponsor-backed</span>
       )}
     </div>
   );

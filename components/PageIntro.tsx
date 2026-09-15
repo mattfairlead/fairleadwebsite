@@ -30,7 +30,7 @@ export default function PageIntro({
       className={clsx("container-page pb-12 pt-44 max-md:pt-32", backdrop && "relative isolate", className)}
     >
       {backdrop}
-      <div className={clsx("grid gap-10 md:grid-cols-[1fr_auto] md:items-end", backdrop && "relative z-10")}>
+      <div className={clsx("grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end", backdrop && "relative z-10")}>
         <div className="flex max-w-4xl flex-col gap-6">
           <span data-anim="eyebrow" className="label flex items-center gap-3 text-white-50">
             <span className="inline-block h-px w-8 bg-gold" aria-hidden="true" />

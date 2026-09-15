@@ -12,6 +12,10 @@ import { prefersReducedMotion } from "@/lib/motion";
  * opt-in check (motion allowed, data-saver off) and fades in on `canplay`, so
  * the band never flashes black and reduced-motion users never download it.
  *
+ * The poster, when given, is painted as a plain <img> under the video from
+ * the first server render, so a reduced-motion or data-saver visitor still
+ * sees the still rather than the bare gradient.
+ *
  * The wrapper div is server-rendered so ScrollSmoother collects its
  * `data-speed` when effects initialise — only the <video> inside mounts later.
  * It overscans 10% top and bottom by default so parallax never shows an
@@ -59,6 +63,16 @@ export default function BackgroundVideo({
       style={{ inset }}
       aria-hidden="true"
     >
+      {poster && (
+        // eslint-disable-next-line @next/next/no-img-element -- decorative still, may be a remote media URL
+        <img
+          src={poster}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ filter: "saturate(0.85) contrast(1.05) brightness(0.85)" }}
+          draggable={false}
+        />
+      )}
       {enabled && (
         <video
           ref={videoRef}
@@ -72,7 +86,7 @@ export default function BackgroundVideo({
           disablePictureInPicture
           tabIndex={-1}
           onCanPlay={() => setVisible(true)}
-          className="h-full w-full object-cover transition-opacity duration-1000 ease-out"
+          className="relative h-full w-full object-cover transition-opacity duration-1000 ease-out"
           // graded toward the §5.1 blue-hour palette rather than raw footage
           style={{ opacity: visible ? 1 : 0, filter: "saturate(0.85) contrast(1.05) brightness(0.85)" }}
         />

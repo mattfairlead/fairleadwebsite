@@ -8,7 +8,8 @@ import BackgroundVideo from "@/components/BackgroundVideo";
  * the mandatory bottom dissolve into --blue-950 so sections melt into the
  * page. Pass `src` when real imagery is available, or `video` for a motion
  * band; the overlay stays either way, and the gradient stays underneath a
- * video as its poster/fallback.
+ * video as its poster/fallback. Pass `aspect="auto"` to size the band from
+ * `className` instead (e.g. one ratio on a phone, another from md up).
  *
  * The band is always dark imagery, so it carries `theme-dark` to keep white
  * ink for anything laid over it. What it dissolves into is the page ground:
@@ -47,7 +48,7 @@ export default function ImageBand({
   return (
     <div
       className={clsx("theme-dark relative w-full overflow-hidden", className)}
-      style={{ aspectRatio: minHeight ? undefined : aspect, minHeight }}
+      style={{ aspectRatio: minHeight || aspect === "auto" ? undefined : aspect, minHeight }}
     >
       {/* far layer — sky */}
       <div

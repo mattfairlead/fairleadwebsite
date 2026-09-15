@@ -153,6 +153,15 @@ ambient drift, the hero scroll cue, and the submit spinner loop. Reduced
 motion kills ScrollSmoother, skips every hidden initial state, and renders
 the resolved layout.
 
+Responsive grammar: the desktop header (five links + CTA) starts at `lg`;
+tablets get the glass sheet. Four-up hairline grids step to two-up at `md`
+(`HairlineFrame` `midColumns` + a `RowRule` on the cells that start the second
+row) and stack on a phone, where every stacked `[data-cell]` draws its own
+top rule. Buttons and chips have fixed heights on the 4px grid (56 / 44 /
+40 / 32) so pills with and without arrows line up. The type scale and the
+button recipes sit in Tailwind's `base` / `components` layers so utilities
+like `text-gold` and `group-hover:text-gold-soft` win where the markup says.
+
 ## Phase status (§8)
 
 - **Phase 1 (this build):** all seven routes + careers, design system, motion

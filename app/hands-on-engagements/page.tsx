@@ -4,7 +4,7 @@ import PageIntro from "@/components/PageIntro";
 import TeamHeroBackdrop from "@/components/TeamHeroBackdrop";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
-import HairlineFrame from "@/components/HairlineFrame";
+import HairlineFrame, { RowRule } from "@/components/HairlineFrame";
 import GlassStrip from "@/components/GlassStrip";
 import ImageBand from "@/components/ImageBand";
 import FeeBlock from "@/components/FeeBlock";
@@ -230,8 +230,7 @@ export default function HandsOnEngagementsPage() {
                     {scope.tags.map((t) => (
                       <span
                         key={t}
-                        className="label rounded-[3px] px-2 py-1.5 text-white-50"
-                        style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1)" }}
+                        className="label tag"
                       >
                         {t}
                       </span>
@@ -247,15 +246,16 @@ export default function HandsOnEngagementsPage() {
       {/* How an engagement runs — the four operating principles */}
       <SectionReveal className="section container-page">
         <SectionHead eyebrow="How it runs" title={<>Operating discipline, on the sponsor&rsquo;s clock.</>} />
-        <HairlineFrame columns={4} className="mt-14">
-          <div className="grid md:grid-cols-4">
+        <HairlineFrame columns={4} columnsFrom="lg" midColumns={2} className="mt-14">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4">
             {PILLARS.map((pillar, i) => (
               <div
                 key={pillar.id}
                 id={pillar.id}
                 data-cell
-                className="spot flex min-h-[16rem] scroll-mt-28 flex-col gap-4 p-6 md:p-10"
+                className="spot flex scroll-mt-28 flex-col gap-4 p-6 md:min-h-[16rem] md:p-8 xl:p-10"
               >
+                {i >= 2 && <RowRule className="max-md:hidden lg:hidden" />}
                 <span className="ghost-num" aria-hidden="true">
                   0{i + 1}
                 </span>
@@ -289,7 +289,7 @@ export default function HandsOnEngagementsPage() {
         </div>
         <div className="relative mt-14">
           <ImageBand aspect="1440/863" minHeight="24rem" overlayStrength={0.9}>
-            <div className="absolute left-6 top-8 md:left-10" aria-hidden="true">
+            <div className="absolute left-5 top-6 md:left-10 md:top-8" aria-hidden="true">
               <span className="label text-white-40">The engagement, in four beats</span>
             </div>
             <GlassStrip cells={PROCESS} />
@@ -299,7 +299,7 @@ export default function HandsOnEngagementsPage() {
 
       <FeeBlock />
 
-      <SectionReveal className="container-page flex flex-col gap-6 pb-16">
+      <SectionReveal className="container-page flex flex-col items-start gap-6 pb-16">
         <p className="body-lg max-w-2xl text-white-60" data-anim="fade-up">
           How we keep all of this visible —{" "}
           <Link href="/intelligence" className="link-underline text-white-100">

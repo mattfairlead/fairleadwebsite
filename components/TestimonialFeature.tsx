@@ -195,11 +195,7 @@ export default function TestimonialFeature({
               </p>
               <div className="flex flex-wrap gap-2">
                 {tags.map((t) => (
-                  <span
-                    key={t}
-                    className="label rounded-[3px] px-2 py-1.5 text-white-50"
-                    style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1)" }}
-                  >
+                  <span key={t} className="label tag">
                     {t}
                   </span>
                 ))}

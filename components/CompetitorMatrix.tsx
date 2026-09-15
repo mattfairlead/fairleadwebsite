@@ -62,7 +62,7 @@ export default function CompetitorMatrix() {
       <SectionHead eyebrow="The field" title={<>No competitor solves both halves.</>} eyebrowClass="text-gold" />
       <HairlineFrame className="mt-14">
         {/* column heads */}
-        <div className="grid grid-cols-[1fr_5rem_5rem] items-center gap-4 px-4 py-4 md:grid-cols-[14rem_1fr_9rem_9rem] md:px-6">
+        <div className="grid grid-cols-[1fr_4rem_4rem] items-center gap-4 px-4 py-4 md:grid-cols-[11rem_1fr_7rem_7rem] md:px-6 lg:grid-cols-[14rem_1fr_9rem_9rem]">
           <span className="label text-white-50">Who</span>
           <span className="label hidden text-white-50 md:block" />
           {COLUMNS.map((c) => (
@@ -77,7 +77,7 @@ export default function CompetitorMatrix() {
             {row.fairlead && <span className="absolute inset-y-0 left-0 w-0.5 bg-gold" aria-hidden="true" />}
             <div
               className={clsx(
-                "grid grid-cols-[1fr_5rem_5rem] items-center gap-4 px-4 py-6 md:grid-cols-[14rem_1fr_9rem_9rem] md:px-6",
+                "grid grid-cols-[1fr_4rem_4rem] items-center gap-4 px-4 py-6 md:grid-cols-[11rem_1fr_7rem_7rem] md:px-6 lg:grid-cols-[14rem_1fr_9rem_9rem]",
                 row.fairlead ? "" : "spot"
               )}
               style={

@@ -150,7 +150,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
           </>
         }
         aside={
-          <dl className="grid grid-cols-3 gap-8 md:gap-10">
+          <dl className="grid grid-cols-3 gap-6 md:gap-10 lg:justify-items-end lg:text-right">
             {[
               [stats.total, "engagements"],
               [stats.active, "active"],
@@ -224,7 +224,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
           <p
             className="body-md mt-10 flex items-start gap-3 text-gold"
             role="alert"
-            style={{ boxShadow: "inset 0 0 0 1px rgba(213,179,113,0.3)", padding: "1rem 1.25rem" }}
+            style={{ boxShadow: "inset 0 0 0 1px rgba(213,179,113,0.3)", padding: "1rem 1.25rem", borderRadius: "3px" }}
           >
             <span className="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-gold" aria-hidden="true" />
             That link has expired or was already used. Ask again and we&rsquo;ll send a fresh one.
