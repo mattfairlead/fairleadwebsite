@@ -3,7 +3,7 @@ import { SITE_URL } from "@/lib/seo";
 import { getEngagements, getPerspectives } from "@/lib/data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [engagements, posts] = await Promise.all([getEngagements(), getPerspectives("perspective")]);
+  const [engagements, posts] = await Promise.all([getEngagements(), getPerspectives()]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     "",

@@ -9,7 +9,7 @@ import { getPerspective, getPerspectives, getTeam } from "@/lib/data";
 import { articleJsonLd, pageMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
-  const posts = await getPerspectives("perspective");
+  const posts = await getPerspectives();
   return posts.filter((p) => p.body_md).map((p) => ({ slug: p.slug }));
 }
 
@@ -24,8 +24,8 @@ export default async function PerspectivePage({ params }: { params: Promise<{ sl
   const { slug } = await params;
   const post = await getPerspective(slug);
   if (!post) notFound();
-  // A transaction slug hit at the top level goes to the timeline.
-  if (post.kind === "transaction" || !post.body_md) redirect("/perspectives#transactions");
+  // A post with no body is listed only.
+  if (!post.body_md) redirect("/perspectives");
 
   const team = await getTeam();
   const author = team.find((m) => m.slug === post.author_slug);
@@ -47,6 +47,18 @@ export default async function PerspectivePage({ params }: { params: Promise<{ sl
       <article className="container-page pb-16">
         <div className="prose-measure">
           <Markdown>{post.body_md}</Markdown>
+          {post.external_url && (
+            <p className="body-sm mt-10 text-white-40">
+              <a
+                href={post.external_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-underline text-white-60"
+              >
+                Read the original release
+              </a>
+            </p>
+          )}
         </div>
       </article>
 

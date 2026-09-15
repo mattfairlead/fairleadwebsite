@@ -83,8 +83,6 @@ export interface Sector {
   sort: number;
 }
 
-export type PerspectiveKind = "perspective" | "transaction";
-
 /**
  * One row of the engagement hub's `perspectives` table — its Perspectives
  * module is the system of record, and the "Website" checkbox is
@@ -93,7 +91,6 @@ export type PerspectiveKind = "perspective" | "transaction";
  */
 export interface HubPerspectiveRow {
   id: number;
-  kind: PerspectiveKind;
   slug: string;
   title: string;
   published_at: string; // ISO date
@@ -110,11 +107,10 @@ export interface Perspective {
   slug: string;
   title: string;
   author_slug: string | null; // team slug
-  kind: PerspectiveKind;
   published_at: string; // ISO date
   excerpt: string;
-  body_md: string | null;
-  external_url: string | null; // transactions link out to the original release
+  body_md: string | null; // null = listed only, no page
+  external_url: string | null; // the original press release, when the post reposts one
   visible: boolean;
 }
 

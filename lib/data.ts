@@ -4,7 +4,6 @@ import type {
   HubPerspectiveRow,
   HubTeamRow,
   Perspective,
-  PerspectiveKind,
   Sector,
   TeamMember,
 } from "@/lib/types";
@@ -116,7 +115,7 @@ export async function getEngagement(slug: string): Promise<Engagement | null> {
   return all.find((e) => e.slug === slug) ?? null;
 }
 
-export async function getPerspectives(kind?: PerspectiveKind): Promise<Perspective[]> {
+export async function getPerspectives(): Promise<Perspective[]> {
   const sb = getSupabase();
   let rows: Perspective[] | null = null;
   if (sb) {
@@ -137,7 +136,7 @@ export async function getPerspectives(kind?: PerspectiveKind): Promise<Perspecti
       .filter((p) => p.visible)
       .sort((a, b) => b.published_at.localeCompare(a.published_at));
   }
-  return kind ? rows.filter((p) => p.kind === kind) : rows;
+  return rows;
 }
 
 export async function getPerspective(slug: string): Promise<Perspective | null> {

@@ -2,13 +2,30 @@ import type { ReactNode } from "react";
 
 /**
  * Minimal markdown renderer for seed/hub `*_md` fields — paragraphs,
- * `## `/`### ` headings, `- ` bullet lists, **bold**, *italic*. That is the
- * vocabulary the hub's Perspectives editor documents; anything richer can
- * move to MDX later (§7). Dependency-free on purpose.
+ * `## `/`### ` headings, `- ` bullet lists, **bold**, *italic*,
+ * [links](https://…). That is the vocabulary the hub's Perspectives editor
+ * documents; anything richer can move to MDX later (§7). Dependency-free on
+ * purpose.
  */
+const LINK = /^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/;
+
 function renderInline(text: string, keyPrefix: string): ReactNode[] {
-  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  const parts = text.split(/(\[[^\]]+\]\(https?:\/\/[^\s)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g);
   return parts.map((part, i) => {
+    const link = part.match(LINK);
+    if (link) {
+      return (
+        <a
+          key={`${keyPrefix}-${i}`}
+          href={link[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="link-underline text-white-100"
+        >
+          {link[1]}
+        </a>
+      );
+    }
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
         <strong key={`${keyPrefix}-${i}`} className="font-semibold text-white-100">
