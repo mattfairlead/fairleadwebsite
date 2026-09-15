@@ -49,8 +49,9 @@ lib/register-access.ts  signed link + grant tokens, the grant cookie
 components/          Hero, GlassStrip, HairlineFrame, SectionReveal, ...
 lib/motion.ts        GSAP constants + sectionReveal()/pulseDots()/headerIntro()
 lib/data.ts          content accessors (Supabase, seed fallback)
-content/seed/        engagements, sectors, perspectives seed data; team = hub snapshot
+content/seed/        engagements, sectors seed data; team + perspectives = hub snapshots (fallback)
 lib/team.ts          hub `team_members` row → TeamMember (slug, title/credentials, group)
+lib/perspectives.ts  hub `perspectives` row → Perspective (the hub's Perspectives module is the editor)
 app/api/team/photo/  serves hub headshots (stored inline as base64) with CDN caching
 content/redirects.ts legacy WordPress 301 map
 supabase/schema.sql  content schema + RLS policies
