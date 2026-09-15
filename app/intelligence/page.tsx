@@ -243,28 +243,16 @@ export default function IntelligencePage() {
         </HairlineFrame>
       </SectionReveal>
 
-      {/* Client portal + CTA */}
+      {/* CTA */}
       <SectionReveal className="container-page pb-24">
-        <HairlineFrame columns={2}>
-          <div className="grid md:grid-cols-2">
-            <div data-cell className="spot flex flex-col gap-3 p-6 md:p-10">
-              <span className="label text-white-50">Client portal</span>
-              <p data-anim="title" className="body-lg text-white-60">
-                Engagement clients work in the tools at{" "}
-                <a href="https://tools.fairleadadvisors.com" className="link-underline text-white-100">
-                  tools.fairleadadvisors.com
-                </a>{" "}
-                — two-factor authentication required.
-              </p>
-            </div>
-            <div data-cell className="spot flex flex-col items-start justify-center gap-5 p-6 md:p-10">
-              <p data-anim="title" className="body-lg text-white-60">
-                Want a deeper demo of Solaris — or a custom solution built for you?
-              </p>
-              <Btn href="/contact" arrow>
-                Talk to a partner
-              </Btn>
-            </div>
+        <HairlineFrame>
+          <div data-cell className="spot flex flex-col items-start justify-center gap-5 p-6 md:p-10">
+            <p data-anim="title" className="body-lg text-white-60">
+              Want a deeper demo of Solaris — or a custom solution built for you?
+            </p>
+            <Btn href="/contact" arrow>
+              Talk to a partner
+            </Btn>
           </div>
         </HairlineFrame>
       </SectionReveal>

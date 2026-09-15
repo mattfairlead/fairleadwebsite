@@ -73,7 +73,7 @@ export default function ContactPage() {
               <div className="flex flex-col gap-2">
                 <span className="label text-white-50">Elsewhere</span>
                 <a
-                  href="https://www.linkedin.com/company/fairlead-advisors"
+                  href="https://www.linkedin.com/company/fairlead-advisors-llc"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="body-lg link-underline self-start text-white-60"
