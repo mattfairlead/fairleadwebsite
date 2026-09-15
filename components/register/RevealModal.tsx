@@ -154,7 +154,7 @@ export default function RevealModal({ open, onClose, total }: { open: boolean; o
                 Request the full register.
               </h2>
               <p className="body-md max-w-lg text-white-60">
-                Every company, sponsor and engagement summary since 2010 —{" "}
+                Every company, sponsor and engagement summary since 2010,{" "}
                 <span className="text-white-100 tabular">{total}</span> in all, by sector, work and status. Tell us who
                 you are and what you&rsquo;re working on, and a partner will follow up directly.
               </p>
@@ -238,7 +238,7 @@ export default function RevealModal({ open, onClose, total }: { open: boolean; o
 
             {state === "error" && (
               <p className="body-sm text-gold" role="alert">
-                Something broke. Call us instead —{" "}
+                Something broke. Call us instead:{" "}
                 <a href="tel:+16173154822" className="link-underline tabular">
                   (617) 315-4822
                 </a>

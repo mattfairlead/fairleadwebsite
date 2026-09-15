@@ -54,7 +54,7 @@ export default function NewsletterForm() {
       </button>
       {state === "error" && (
         <p className="body-sm text-gold" role="alert">
-          Something broke — try again, or email us.
+          Something broke. Try again, or email us.
         </p>
       )}
     </form>

@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const engagement = await getEngagement(slug);
   if (!engagement) return {};
   return pageMetadata(
-    `${engagement.company_display} — Engagement`,
+    `${engagement.company_display} · Engagement`,
     engagement.summary_md,
     `/engagements/${engagement.slug}`
   );

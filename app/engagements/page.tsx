@@ -27,7 +27,7 @@ import { pageMetadata, videoJsonLd, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Results",
-  "The full Fairlead engagement register — every embedded engagement since 2010, by sector, work and status. What we did, in the open; the names at a partner's discretion.",
+  "The full Fairlead engagement register: every embedded engagement since 2010, by sector, work and status. What we did, in the open; the names at a partner's discretion.",
   "/engagements"
 );
 
@@ -145,7 +145,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
         title={<>The register.</>}
         lead={
           <>
-            Every embedded engagement since 2010 — sponsor-backed and founder-led, from a portfolio assessment to the
+            Every embedded engagement since 2010, sponsor-backed and founder-led, from a portfolio assessment to the
             seat itself. What we did is on the record; who it was for is a partner&rsquo;s call.
           </>
         }
@@ -185,7 +185,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             videoJsonLd({
-              name: "Dion Leadership — client testimonial",
+              name: "Dion Leadership client testimonial",
               description: DION_LABEL,
               contentUrl: DION_VIDEO.startsWith("/") ? `${SITE_URL}${DION_VIDEO}` : DION_VIDEO,
               thumbnailPath: DION_POSTER,
@@ -212,7 +212,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
             </div>
           ) : (
             <p className="body-md max-w-sm text-white-50" data-anim="fade-up">
-              Interim CFO and controller seats, operating-partner roles, M&amp;A and portfolio assessments — across
+              Interim CFO and controller seats, operating-partner roles, M&amp;A and portfolio assessments, across
               energy and infrastructure, venture-backed companies and family offices.{" "}
               <span className="text-white-100 tabular">{stats.active}</span> active today;{" "}
               <span className="text-white-100 tabular">{stats.sponsorBacked}</span> with a sponsor at the table.
@@ -232,7 +232,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
         )}
         {grant && !register.live && (
           <p className="body-md mt-10 text-white-50" role="status">
-            Unlocked for {grant.name} — but this preview has no connection to the engagement hub, so the rows below
+            Unlocked for {grant.name}, but this preview has no connection to the engagement hub, so the rows below
             stay redacted. The live site serves the full register.
           </p>
         )}
@@ -302,7 +302,7 @@ export default async function EngagementsPage({ searchParams }: { searchParams: 
           <div className="relative px-6 py-24 text-center md:px-10">
             <span className="dec left-0 top-0 h-px w-full" />
             <span className="dec bottom-0 left-0 h-px w-full" />
-            <span className="label text-gold">No match — yet</span>
+            <span className="label text-gold">No match yet</span>
             <h2 className="h2 mt-4">Nothing matches that combination.</h2>
             <p className="body-lg mx-auto mt-4 max-w-md text-white-60">
               Loosen a filter, or talk to a partner about the work you&rsquo;re actually facing.

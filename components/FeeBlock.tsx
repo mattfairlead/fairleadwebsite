@@ -41,7 +41,7 @@ export default function FeeBlock() {
             </h2>
             <p className="body-xl text-white-60" data-anim="fade-up">
               Our compensation is tied to the sponsor&rsquo;s success. We earn alongside the sponsor, not in
-              front of them — and current fees run a fraction of Big 4 and investment-bank rates.
+              front of them, and current fees run a fraction of Big 4 and investment-bank rates.
             </p>
             <div className="mt-4 flex flex-wrap justify-center gap-x-10 gap-y-4" data-anim="fade-up" data-anim-delay="0.15">
               {["Success-linked", "No retainer creep", "A fraction of Big 4"].map((t) => (

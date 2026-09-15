@@ -93,7 +93,7 @@ export default function RegisterRow(props: Props) {
       <div data-anim="slide-in" className="register-row is-open relative">
         <span className="dec left-0 top-0 h-px w-full" />
         {detail ? (
-          <Link href={`/engagements/${e.slug}`} className={clsx("spot group", GRID)} aria-label={`${e.company_display} — see the engagement`}>
+          <Link href={`/engagements/${e.slug}`} className={clsx("spot group", GRID)} aria-label={`${e.company_display}: see the engagement`}>
             {inner}
           </Link>
         ) : (

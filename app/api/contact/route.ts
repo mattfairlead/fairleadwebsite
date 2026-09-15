@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   }
 
   const { ok } = await sendMail({
-    subject: `Website contact — ${name}${role ? ` (${role})` : ""} at ${firm}`,
+    subject: `Website contact from ${name}${role ? ` (${role})` : ""} at ${firm}`,
     replyTo: email,
     text: [
       `Name:  ${name}`,

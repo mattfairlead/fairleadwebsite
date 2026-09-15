@@ -9,7 +9,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Contact",
-  "Talk to a partner. One form, one phone, four cities — Boston, Houston, Minneapolis, Annapolis.",
+  "Talk to a partner. One form, one phone, four cities: Boston, Houston, Minneapolis, Annapolis.",
   "/contact"
 );
 

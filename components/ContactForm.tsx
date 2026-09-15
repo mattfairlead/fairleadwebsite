@@ -130,7 +130,7 @@ export default function ContactForm() {
       </div>
       {state === "error" && (
         <p className="body-sm text-gold" role="alert">
-          Something broke. Call us instead — <a href="tel:+16173154822" className="link-underline tabular">(617) 315-4822</a>.
+          Something broke. Call us instead: <a href="tel:+16173154822" className="link-underline tabular">(617) 315-4822</a>.
         </p>
       )}
     </form>

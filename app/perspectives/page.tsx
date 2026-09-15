@@ -10,7 +10,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "Perspectives",
-  "The firm's point of view — written from inside engagements, one per quarter. Plus the transaction record.",
+  "The firm's point of view, written from inside engagements one per quarter. Plus the transaction record.",
   "/perspectives"
 );
 
@@ -39,7 +39,7 @@ export default async function PerspectivesPage() {
       <PageIntro
         eyebrow="Perspectives"
         title={<>The firm&rsquo;s point of view.</>}
-        lead={<>Written from inside engagements. One per quarter — worth the wait.</>}
+        lead={<>Written from inside engagements. One per quarter, worth the wait.</>}
       />
 
       <SectionReveal className="container-page pb-10">

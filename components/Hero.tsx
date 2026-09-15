@@ -104,8 +104,8 @@ export default function Hero() {
               Management runs the company. You steer it. We make sure you can see it.
             </p>
             <p className="body-md max-w-2xl text-white-50">
-              Embedded operating leadership for PE-backed companies — asset management, sell-side,
-              restructuring, fundraising, and finance — with the tools we build inside the work.
+              Embedded operating leadership for PE-backed companies: asset management, sell-side,
+              restructuring, fundraising, and finance, with the tools we build inside the work.
             </p>
           </div>
           <Link data-hero-cta href="/contact" className="btn btn-primary button mt-8 sm:mt-10">

@@ -26,7 +26,7 @@ export async function GET(req: Request) {
 
   const who = `${requester.name}${requester.role ? ` (${requester.role})` : ""} at ${requester.firm}`;
   await sendMail({
-    subject: `Register unlocked — ${who}`,
+    subject: `Register unlocked for ${who}`,
     replyTo: requester.email,
     text: [
       `Name:  ${requester.name}`,
