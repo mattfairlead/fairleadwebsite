@@ -85,6 +85,26 @@ export interface Sector {
 
 export type PerspectiveKind = "perspective" | "transaction";
 
+/**
+ * One row of the engagement hub's `perspectives` table — its Perspectives
+ * module is the system of record, and the "Website" checkbox is
+ * `show_on_website`. `author` is the embedded team member: null when no
+ * author is set, or when that member's own Website checkbox is off.
+ */
+export interface HubPerspectiveRow {
+  id: number;
+  kind: PerspectiveKind;
+  slug: string;
+  title: string;
+  published_at: string; // ISO date
+  excerpt: string;
+  body_md: string | null;
+  external_url: string | null;
+  show_on_website: boolean;
+  author: { name: string } | null;
+}
+
+/** The website's view of a post — derived from HubPerspectiveRow by lib/perspectives.ts. */
 export interface Perspective {
   id: string;
   slug: string;

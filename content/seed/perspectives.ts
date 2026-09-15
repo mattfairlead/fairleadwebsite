@@ -4,6 +4,12 @@ import type { Perspective } from "@/lib/types";
  * Perspectives — the firm's point of view (target: one per quarter), plus
  * the historical press reposts archived as "Transactions" (§4.6).
  *
+ * FALLBACK ONLY. The live content is the engagement hub's `perspectives`
+ * table, edited in its Perspectives module (lib/data.ts → getPerspectives);
+ * this snapshot serves when the hub is unreachable or not configured. It
+ * was seeded into the hub by its migration
+ * 20260915000001_website_perspectives.sql — edit there, not here.
+ *
  * The transaction archive (§9) is imported in full from the WordPress
  * export, back to 2010. Each transaction is a compact timeline row: title,
  * date, one line, link out.
