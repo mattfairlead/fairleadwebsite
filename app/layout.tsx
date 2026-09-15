@@ -10,9 +10,10 @@ import { organizationJsonLd, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL
 
 // Inter is the only typeface — §5.2. Personality comes from weight 600 +
 // negative tracking (and Inter's cv11/ss03 alternates), not a second face.
+// Only the three weights the type scale uses are loaded.
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   display: "swap",
   variable: "--font-inter",
 });

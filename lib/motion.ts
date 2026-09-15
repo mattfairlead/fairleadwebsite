@@ -41,18 +41,22 @@ export function isMobile(): boolean {
 }
 
 /**
- * ScrollSmoother — desktop only, killed entirely under reduced-motion.
+ * ScrollSmoother — pointer devices from lg up only; killed entirely under
+ * reduced-motion. On touch it would transform the whole page every frame
+ * to fake momentum the platform already has, so phones and tablets get
+ * native scrolling (and no parallax — the bands simply sit still).
  * Wrapper/content structure is required: .page-wrapper > .main-wrapper.
  */
 export function initSmoother() {
   registerGsap();
   if (prefersReducedMotion()) return null;
+  if (window.matchMedia("(hover: none), (pointer: coarse), (max-width: 1023px)").matches) return null;
   return ScrollSmoother.create({
     wrapper: ".page-wrapper",
     content: ".main-wrapper",
     smooth: 1.2,
     effects: true,
-    smoothTouch: 0.1,
+    smoothTouch: false,
   });
 }
 
