@@ -20,20 +20,20 @@ export default function Advantage() {
             The compounding asset
           </span>
           <h2 data-anim="h2" className="h2">
-            AI gets better with high-quality data.
+            AI gets better with operators behind it.
           </h2>
           <p className="h3 italic" style={{ color: "var(--color-gold-soft)" }} data-anim="fade-up">
-            Fairlead has 15 years of it, from inside the companies.
+            Fairlead has fifteen years of them, inside the companies.
           </p>
           <p className="body-lg max-w-xl text-white-60" data-anim="fade-up" data-anim-delay="0.15">
-            Every engagement deepens the operating intelligence behind our tools — captured, structured,
-            source-cited.
+            More data doesn&rsquo;t make AI smarter. An operator who&rsquo;s done the job does — and every
+            engagement adds another one.
           </p>
           <ul className="mt-2 grid max-w-xl gap-3 sm:grid-cols-3 sm:gap-6" data-anim="fade-up" data-anim-delay="0.25">
             {[
-              ["Captured", "inside the seat"],
-              ["Structured", "one schema"],
-              ["Cited", "to the source"],
+              ["Built", "inside the seat"],
+              ["Used", "on live work"],
+              ["Reused", "across the portfolio"],
             ].map(([head, sub]) => (
               <li key={head} className="relative flex items-baseline gap-2 pl-4 sm:flex-col sm:items-stretch sm:gap-1">
                 <span className="absolute left-0 top-1 h-[calc(100%-0.25rem)] w-px bg-gold/70" aria-hidden="true" />
