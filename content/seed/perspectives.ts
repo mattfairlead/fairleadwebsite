@@ -3,13 +3,13 @@ import type { Perspective } from "@/lib/types";
 /**
  * Perspectives: every post the firm has published, each a full article
  * (§4.6). The legacy press reposts back to 2010 are here in full, converted
- * from the WordPress export.
+ * from the WordPress export and copy-edited.
  *
  * FALLBACK ONLY. The live content is the engagement hub's `perspectives`
  * table, edited in its Perspectives module (lib/data.ts → getPerspectives);
  * this snapshot serves when the hub is unreachable or not configured. It is
- * the same content the hub's migration 20260915000002_perspectives_full_posts.sql
- * seeds. Edit there, not here.
+ * the same content the hub's migrations 20260915000002 and 20260915000003
+ * load. Edit there, not here.
  */
 export const perspectives: Perspective[] = [
   {
@@ -27,25 +27,25 @@ Our team uses AI daily across analysis, preparation, and internal workflows. In 
 
 When we work with CFOs and management teams on AI adoption, we are not extrapolating from vendor demonstrations or industry commentary. We have already navigated the gap between theoretical capability and practical execution, where invoice formats vary, covenant definitions differ by agreement, and data lives across multiple systems.
 
-##** What this looks like in practice**
+## What this looks like in practice
 
 We have embedded AI-driven capabilities across several core operational areas:
 
-###** Back-office automation.**
+### Back-office automation
 
 AI-assisted invoice intake, exception handling, and fraud flagging designed to accommodate variability that often breaks traditional automation. Finance teams are able to process higher volumes without adding headcount.
 
-###** Cash and covenant visibility.**
+### Cash and covenant visibility
 
 Workflows that pull actuals, maintain forecast logic, and surface variance explanations automatically. This allows finance leaders to focus on decisions rather than rebuilding spreadsheets.
 
-###** Document intelligence.**
+### Document intelligence
 
 Multi-stage processing of compliance, operational, and financial documents across asset portfolios. In one engagement, this reduced approximately $250,000 of annual manual effort.
 
 These are not products we sell. They are examples of what becomes possible when advisors have already crossed the implementation threshold internally.
 
-##** Why this matters for portfolio companies**
+## Why this matters for portfolio companies
 
 Many AI initiatives fail during execution because the advisors involved have not operated within the underlying constraints. Tools are recommended without accounting for integration friction, data quality issues, or the exceptions that still require human judgment.
 
@@ -53,7 +53,7 @@ Our advice is informed by having worked inside those constraints ourselves.
 
 As a result, implementations are designed to embed into existing workflows rather than requiring new habits to succeed. Systems are built to scale without proportional increases in cost or headcount, and guidance is grounded in production experience rather than theory.
 
-##** Conclusion**
+## Conclusion
 
 We are not the most vocal participants in discussions about AI in private equity. However, when portfolio companies ask whether an approach will work in practice, we are able to answer based on experience rather than optimism.
 
@@ -70,13 +70,13 @@ If this approach is relevant to your portfolio, we are happy to share what we ar
     excerpt: "At Fairlead Advisors, we’ve long believed that the most enduring companies aren’t just built on clean financials. They’re built on trust, clarity, and a deep understanding of what…",
     body_md: `**At Fairlead Advisors, we’ve long believed that the most enduring companies aren’t just built on clean financials. They’re built on trust, clarity, and a deep understanding of what drives value beneath the surface. That’s why we were proud to support Dion Leadership, a Detroit-based executive coaching and leadership development firm, in its acquisition by Arthur J. Gallagher & Co., a global leader in insurance and HR consulting.**
 
-**What Made This Engagement Unique?**
+### What Made This Engagement Unique?
 
 Dion Leadership isn’t a conventional consulting business. Since its founding in 2019, the firm has built a national reputation with over 60 coaches and consultants helping organizations lead more effectively. Dion was growing steadily, but the real asset wasn’t only in the financials. It was the way the firm delivers client results, scales talent, and sustains long-term client relationships.
 
 Fairlead wasn’t brought in just to clean up spreadsheets. We were engaged to translate Dion’s value into language that investors and strategic buyers would understand. That meant examining the entire business model, not just the metrics.
 
-**Our Role**
+### Our Role
 
 We worked closely with founder Steve Dion and his leadership team to:
 
@@ -85,23 +85,21 @@ We worked closely with founder Steve Dion and his leadership team to:
 - Support the negotiation and deal structure to reflect both immediate value and long-term potential
 - Align founder and buyer around a shared post-transaction vision
 
-**The Result**
+### The Result
 
-Dion Leadership will now operate within Gallagher’s Talent Consulting Practice, adding depth in executive coaching, leadership development, and organizational effectiveness. Gallagher’s CEO J. Patrick Gallagher, Jr. shared, “Dion Leadership’s strong client relationships and expertise... will expand our capabilities in the executive consulting space.”
+Dion Leadership will now operate within Gallagher’s Talent Consulting Practice, adding depth in executive coaching, leadership development, and organizational effectiveness. Gallagher’s CEO, J. Patrick Gallagher, Jr., shared, “Dion Leadership’s strong client relationships and expertise... will expand our capabilities in the executive consulting space.”
 
 This outcome speaks to the value of Dion’s team, the clarity of their model, and the strength of the positioning that led to a successful transaction.
 
-**Looking Ahead**
+### Looking Ahead
 
 This engagement is a clear example of how Fairlead helps surface and communicate real value. We don’t rely on standard playbooks. We dig in, identify what matters most, and help move deals forward with confidence.
 
 Whether you are a founder, investor, or buyer, we bring seasoned operational insight and transactional support to drive results.
 
-**Hear from Steve Dion**
+### Hear from Steve Dion
 
-Steve recently shared his firsthand experience in a thoughtful video reflecting on the sale of Dion Leadership. Hear Steve’s experience with Fairlead Advisors.
-
-▶ Download the full video`,
+Steve recently shared his firsthand experience in a video reflecting on the sale of Dion Leadership. [Watch Steve’s reflections on working with Fairlead](https://fairleadadvisors.com/engagements).`,
     external_url: null,
     visible: true,
   },
@@ -114,23 +112,23 @@ Steve recently shared his firsthand experience in a thoughtful video reflecting 
     excerpt: "We are pleased to announce that Fairlead Advisors provided strategic financial advisory services for the successful sale of Product Insight, a consultancy focused on improving…",
     body_md: `We are pleased to announce that Fairlead Advisors provided strategic financial advisory services for the successful sale of Product Insight, a consultancy focused on improving operational efficiency through labor-centered product development.
 
-**About Product Insight**
+### About Product Insight
 
 Product Insight has built a strong reputation for delivering high-impact solutions that improve the productivity of workers across various industries. The firm’s commitment to efficiency, transparency, and excellence has established it as a leader in the development of professional products.
 
-**The Sale Process**
+### The Sale Process
 
 In July 2024, Fairlead Advisors assisted Product Insight’s owners in selling the company to an internal buyer. We conducted a comprehensive financial valuation, which informed the negotiation of key sale terms to align with the owners’ financial goals.
 
-**Legal and Transactional Support**
+### Legal and Transactional Support
 
 Our team worked closely with legal counsel to finalize the transaction, ensuring all legal and regulatory requirements were met and the deal was completed smoothly.
 
-**Outcome**
+### Outcome
 
 The successful sale allowed the owners to achieve their financial objectives, while positioning Product Insight for continued success under new leadership.
 
-**Our Commitment**
+### Our Commitment
 
 Fairlead Advisors is proud to have supported Product Insight in this significant milestone and looks forward to the company’s ongoing success.`,
     external_url: null,
@@ -151,7 +149,7 @@ Currently under construction, the project comprises the design, development, ope
 
 The facility, about 150 km north of Abidjan, could supply electricity to 100,000 households and reduce Côte d’Ivoire’s CO2 emissions by 109,000 tons annually. The project will create 500 jobs during the construction phase, including 150 skilled jobs, and 28 jobs during the operational phase.
 
-A long-term power purchase agreement will see all the energy produced by the Singrobo plant sold to Compagnie Ivoirienne d’Electricite, the operator of Cote d’Ivoire’s national grid. Upon completion, the plant will contribute to Côte d’Ivoire’s energy goal of generating 42% of its electricity from renewable sources by 2030.
+A long-term power purchase agreement will see all the energy produced by the Singrobo plant sold to Compagnie Ivoirienne d’Électricité, the operator of Côte d’Ivoire’s national grid. Upon completion, the plant will contribute to Côte d’Ivoire’s energy goal of generating 42% of its electricity from renewable sources by 2030.
 
 Hydro Review reported that the Singrobo-Ahouaty hydropower plant project achieved a 78.93% completion rate as of the end of March 2023, according to the African Development Bank.
 
@@ -159,8 +157,8 @@ Wale Shonibare, the Bank’s Director for Energy Financial Solutions, Policy & R
 
 The IJGlobal independent, peer-reviewed awards recognize notable global greenfield and refinancing deals in infrastructure and energy and the organizations that made them happen.
 
-Full article reference: https://www.hydroreview.com/business-finance/finance/singrobo-hydropower-plant-wins-power-deal-of-the-year-award/`,
-    external_url: null,
+Source: [Hydro Review](https://www.hydroreview.com/business-finance/finance/singrobo-hydropower-plant-wins-power-deal-of-the-year-award).`,
+    external_url: "https://www.hydroreview.com/business-finance/finance/singrobo-hydropower-plant-wins-power-deal-of-the-year-award/",
     visible: true,
   },
   {
@@ -169,14 +167,14 @@ Full article reference: https://www.hydroreview.com/business-finance/finance/sin
     title: "Power & Digital Infrastructure Acquisition II Corp. (XPDB) Announces Closing of Business Combination with Montana Technologies LLC",
     author_slug: "adam-carte",
     published_at: "2024-03-14",
-    excerpt: "Total Capital Commitments Exceeded $50 Million Target Minimum Cash Condition, Led by Carrier, GE Vernova and Rice Investment Group, Providing All Funding Required to Commercialize…",
+    excerpt: "Power & Digital Infrastructure Acquisition II Corp. (\"XPDB\") (NASDAQ: XPDB, XPDBW, XPDBU), a special purpose acquisition company focused on the renewable and transition energy…",
     body_md: `*Total Capital Commitments Exceeded $50 Million Target Minimum Cash Condition, Led by Carrier, GE Vernova and Rice Investment Group, Providing All Funding Required to Commercialize AirJoule®*
 
 *Combination to Fuel Launch of Recently Announced Joint Venture Between GE Vernova and Montana Technologies to Commercialize AirJoule® Technology for Atmospheric Water Generation and Carrier Air Conditioning Products*
 
 *Montana Technologies Corporation Will Commence Trading on NASDAQ Under the Symbols "AIRJ" and "AIRJW", Respectively*
 
-CHICAGO and RONAN, Mont., March 14, 2024 /PRNewswire/ -- Power & Digital Infrastructure Acquisition II Corp. ("XPDB") (NASDAQ: [XPDB](https://www.prnewswire.com/news-releases/power--digital-infrastructure-acquisition-ii-corp-xpdb-announces-closing-of-business-combination-with-montana-technologies-llc-302089782.html#financial-modal), XPDBW, XPDBU), a special purpose acquisition company focused on the renewable and transition energy sectors, today announced closing of its business combination with Montana Technologies LLC ("Montana"), the inventor of AirJoule® -- a transformational renewable energy and cooling technology.
+CHICAGO and RONAN, Mont., March 14, 2024 /PRNewswire/ – Power & Digital Infrastructure Acquisition II Corp. ("XPDB") (NASDAQ: XPDB, XPDBW, XPDBU), a special purpose acquisition company focused on the renewable and transition energy sectors, today announced closing of its business combination with Montana Technologies LLC ("Montana"), the inventor of AirJoule®, a transformational renewable energy and cooling technology.
 
 XPDB and Montana Technologies LLC [exceeded the $50 million target minimum cash condition](https://www.prnewswire.com/news-releases/power--digital-infrastructure-acquisition-ii-corp-xpdb-and-montana-technologies-exceed-50-million-in-private-capital-commitments-led-by-carrier-and-rice-investment-group-expected-to-satisfy-minimum-cash-condition-and-clears-302078516.html) by securing private investments from [Carrier Corporation](https://www.prnewswire.com/news-releases/carrier-signs-agreement-with-montana-technologies-to-commercialize-carbon-reducing-cooling-technology-for-hvac-solutions-302028558.html), the [Rice Investment Group](https://www.prnewswire.com/news-releases/montana-technologies-announces-investment-from-rice-investment-group-302065566.html), and [GE Vernova](https://www.prnewswire.com/news-releases/ge-vernova-and-montana-technologies-close-joint-venture-to-manufacture-transformational-air-conditioning-and-atmospheric-water-harvesting-products-302084809.html?tc=eml_cleartime), among other third parties. The minimum cash condition was also satisfied by joint venture funding commitments and cash that currently remains in XPDB's trust. These capital commitments provide the total funding required to commercialize Montana's AirJoule® technology.
 
@@ -188,15 +186,15 @@ Matt Jore, CEO of Montana Technologies Corporation, said, "We are in the process
 
 The formal results of the XPDB shareholder vote, as well as the number of holders of shares of Class A Common Stock who exercised their right to redeem their shares for cash, will be included in a Current Report on Form 8-K to be filed by XPDB with the Securities and Exchange Commission ("SEC"). Additional details on the proposed business combination can be found in the definitive proxy statement/prospectus of XPDB, which was filed with the SEC on January 17, 2024.
 
-**About Power & Digital Infrastructure Acquisition II Corp**
+### About Power & Digital Infrastructure Acquisition II Corp.
 
 Power & Digital Infrastructure Acquisition II Corp (XPDB) is a blank check company incorporated in Delaware for the purpose of effecting a merger, capital stock exchange, asset acquisition, share purchase, reorganization or similar business combination with one or more businesses.
 
-**About Montana Technologies**
+### About Montana Technologies
 
-Montana Technologies is an atmospheric thermal energy and water harvesting technology company that provides efficient and sustainable air conditioning and pure water from air through its transformational AirJoule *® * technology. For more information, visit [**www.mt.energy** ](https://c212.net/c/link/?t=0&l=en&o=4078297-1&h=1789554647&u=http://www.mt.energy/&a=www.mt.energy).
+Montana Technologies is an atmospheric thermal energy and water harvesting technology company that provides efficient and sustainable air conditioning and pure water from air through its transformational AirJoule® technology. For more information, visit [mt.energy](http://www.mt.energy).
 
-**Forward Looking Statements**
+### Forward-Looking Statements
 
 This press release contains forward-looking statements within the meaning of the United States Private Securities Litigation Reform Act of 1995. Forward-looking statements may include, but are not limited to, statements about the anticipated benefits of the business combination, including the financial and business performance of Montana Technologies Corporation, and Montana Technologies Corporation's anticipated results from operations in future periods; the products and services offered by Montana Technologies Corporation and the markets in which it operates. In addition, any statements that refer to projections, forecasts or other characterizations of future events or circumstances, including any underlying assumptions, are forward-looking statements. Forward-looking statements are typically identified by words such as "plan," "believe," "expect," "anticipate," "intend," "outlook," "estimate," "forecast," "project," "continue," "could," "may," "might," "possible," "potential," "predict," "should," "would" and other similar words and expressions, but the absence of these words does not mean that a statement is not forward-looking.
 
@@ -206,13 +204,11 @@ Should one or more of these risks or uncertainties materialize or should any of 
 
 These forward-looking statements are provided for illustrative purposes only and are not intended to serve as, and must not be relied on by investors as, a guarantee, an assurance, a prediction or a definitive statement of fact or probability. You should carefully consider the foregoing factors and the other risks and uncertainties described in the "Risk Factors" section of the definitive proxy statement/prospectus filed by XPDB on January 18, 2024 and the other documents filed by XPDB and Montana Technologies Corporation from time to time with the SEC. These filings identify and address other important risks and uncertainties that could cause actual events and results to differ materially from those contained in the forward-looking statements. Forward-looking statements speak only as of the date they are made. All subsequent written and oral forward-looking statements concerning the business combination or other matters addressed herein and attributable to Montana Technologies Corporation, XPDB, Montana Technologies or any person acting on their behalf are expressly qualified in their entirety by the cautionary statements contained or referred to herein. Except to the extent required by applicable law or regulation, Montana Technologies Corporation undertakes no obligation to update these forward-looking statements to reflect events or circumstances after the date hereof to reflect the occurrence of unanticipated events.
 
-**Media Contact**
+### Media Contact
 
-Andy Maas; Daniel Yunger
-Kekst CNC
-MTMediaInquiries@kekstcnc.com
+Andy Maas and Daniel Yunger, Kekst CNC: MTMediaInquiries@kekstcnc.com
 
-SOURCE Montana Technologies; Power & Digital Infrastructure Acquisition II Corp. (XPDB)`,
+Source: Montana Technologies; Power & Digital Infrastructure Acquisition II Corp. (XPDB)`,
     external_url: "https://www.prnewswire.com/news-releases/power--digital-infrastructure-acquisition-ii-corp-xpdb-announces-closing-of-business-combination-with-montana-technologies-llc-302089782.html",
     visible: true,
   },
@@ -225,9 +221,9 @@ SOURCE Montana Technologies; Power & Digital Infrastructure Acquisition II Corp.
     excerpt: "In a few weeks, Mary Day will begin reducing her workload with the goal of fully retiring in the not-too-distant future. But before she gets distracted by future adventures, we…",
     body_md: `In a few weeks, Mary Day will begin reducing her workload with the goal of fully retiring in the not-too-distant future. But before she gets distracted by future adventures, we sat down with Mary to capture what she’s learned during her tenure with Fairlead.
 
-## A Decade as a Consulting Controller, Key Takeaways for Investors
+## A Decade as a Consulting Controller: Key Takeaways for Investors
 
-Before delving into a decade's worth of insights, it's essential to spotlight the person behind these observations: Mary Day. A CPA (expired) and Senior Consultant at Fairlead Advisors with an illustrious background, Mary has carved a niche in the financial landscape. Her tenure in accounting included large companies (e.g., Honeywell and NRG Energy), private equity (e.g., Wayzata Partners), and a wide range of P.E. and V.C.-backed companies while with Fairlead Advisors. Mary's role as a Consulting Controller transcends traditional consultancy. She combines "outside expert" expertise in best practices with a focus on hands-on implementation, subject to real-world budget and human resource constraints. It is from this deep well of experience and knowledge that she draws upon as she shares her journey.
+Before delving into a decade's worth of insights, it's essential to spotlight the person behind these observations: Mary Day. A CPA (expired) and Senior Consultant at Fairlead Advisors with an illustrious background, Mary has carved a niche in the financial landscape. Her tenure in accounting included large companies (e.g., Honeywell and NRG Energy), private equity (e.g., Wayzata Partners), and a wide range of P.E. and V.C.-backed companies while with Fairlead Advisors. Mary's role as a Consulting Controller transcends traditional consultancy. She combines "outside expert" expertise in best practices with a focus on hands-on implementation, subject to real-world budget and human resource constraints. It is from this deep well of experience and knowledge that she draws as she shares her journey.
 
 ## Observations from Ten Years as Fairlead's Consulting Controller
 
@@ -255,7 +251,7 @@ New and inexpensive reporting tools can often deliver quality reporting formerly
 
 Companies with underperforming accounting groups start by searching for what's good enough and forget to ask for what's possible. Spend time with the CEO and other executives to learn what additional business reporting will help them.
 
-## Every Situation is Different
+## Every Situation Is Different
 
 Every time a new engagement came my way, signaling a new challenge, it wasn't just about applying prior experience to a new company. It was about delving into a new story, understanding the unique fabric of that company, and finding the best solutions for them. While I've seen many problems repeatedly, I started each engagement with the humility that every company is different. I enjoyed the personal growth that came from every new engagement, and our team was able to combine Fairlead's background knowledge with company-specific variables to exceed client expectations.
 
@@ -265,18 +261,18 @@ Behind every tool, process, and report are people. Empower them with the knowled
 
 ## Retrospective
 
-Looking back at a decade of challenges, transformations, and successes, I'm grateful and fulfilled for my time at Fairlead. Every company, every challenge, and every number told a unique story, and I am honored to have been a part of so many. As I spend more time with my friends, family, and scuba-diving adventures, my colleagues and successor at Fairlead will continue the journey.`,
+Looking back at a decade of challenges, transformations, and successes, I'm grateful for, and fulfilled by, my time at Fairlead. Every company, every challenge, and every number told a unique story, and I am honored to have been a part of so many. As I spend more time with my friends, family, and scuba-diving adventures, my colleagues and successor at Fairlead will continue the journey.`,
     external_url: null,
     visible: true,
   },
   {
     id: "7",
     slug: "team-member-spotlight-carolina-andres",
-    title: "Team Member Spotlight - Carolina Andrés",
+    title: "Team Member Spotlight – Carolina Andrés",
     author_slug: "adam-carte",
     published_at: "2023-07-24",
-    excerpt: "Introducing Fairlead Advisor's newest team member, Carolina Andrés! Hailing from Portugal with an 11-year professional journey spanning Slovakia and Portugal, Carolina's expertise…",
-    body_md: `Introducing Fairlead Advisor's newest team member, Carolina Andrés! Hailing from Portugal with an 11-year professional journey spanning Slovakia and Portugal, Carolina's expertise lies in shared service center operations. What she finds most rewarding is embracing challenges and tackling unconventional projects. With fluency in Portuguese, English, and Spanish, Carolina effortlessly bridges cultural gaps in her work. Her ability to manage diverse accounting principles across business units is truly commendable. Notably, she developed a real-time data consolidation tool that enhanced a company's bottom line significantly. In times of crisis, Carolina's adaptability and willingness to learn shine through. For investors managing multi-country investments, she offers valuable advice on understanding different work cultures.
+    excerpt: "Introducing Fairlead Advisors' newest team member, Carolina Andrés! Hailing from Portugal with an 11-year professional journey spanning Slovakia and Portugal, Carolina's expertise…",
+    body_md: `Introducing Fairlead Advisors' newest team member, Carolina Andrés! Hailing from Portugal with an 11-year professional journey spanning Slovakia and Portugal, Carolina's expertise lies in shared service center operations. What she finds most rewarding is embracing challenges and tackling unconventional projects. With fluency in Portuguese, English, and Spanish, Carolina effortlessly bridges cultural gaps in her work. Her ability to manage diverse accounting principles across business units is truly commendable. Notably, she developed a real-time data consolidation tool that enhanced a company's bottom line significantly. In times of crisis, Carolina's adaptability and willingness to learn shine through. For investors managing multi-country investments, she offers valuable advice on understanding different work cultures.
 
 **Tell me a bit about yourself and what you like most about your work.**
 
@@ -284,7 +280,7 @@ I am Portuguese, born and raised. My professional journey spans 11 years, during
 
 The aspect of my work that I find the most rewarding is the opportunity to tackle challenges head-on. I thrive when pushed out of my comfort zone and tasked with novel, unconventional projects. This aligns perfectly with my new role at Fairlead, whose clients are often in a time of rapid change. I consider myself fortunate for this opportunity.
 
-**You speak Portuguese, English, and Spanish fluently. How did you do this? Has being tri-lingual influenced the work you’ve done?**
+**You speak Portuguese, English, and Spanish fluently. How did you do this? Has being trilingual influenced the work you’ve done?**
 
 As a native of Portugal, we naturally gravitate towards learning Spanish due to our close geographical and cultural bonds. I started learning Spanish during an internship when I opted to take a language class. Paradoxically, my learning curve for Spanish accelerated when I moved to Slovakia, where I served the Spanish market and shared my life with Spanish locals. This immersive experience caused Spanish to come to me almost effortlessly, becoming a valuable tool in my professional toolkit and personal interactions.
 
@@ -300,13 +296,13 @@ It doesn't work well just to tell people, "This is how it's done." It's crucial 
 
 Working with US GAAP and IFRS across varied business units is a fun challenge. They share similar foundations, but the devil is in the details. It's like speaking different dialects of the same language.
 
-The trickiest part? Balancing unique reporting needs of each unit while keeping true to their accounting principles. Take for example, in Portugal, where we tweaked US GAAP to fit our local context. The key was to understand these adaptations yet ensure they still sang to the tune of US GAAP.
+The trickiest part? Balancing unique reporting needs of each unit while keeping true to their accounting principles. Take Portugal, for example, where we tweaked US GAAP to fit our local context. The key was to understand these adaptations yet ensure they still sang to the tune of US GAAP.
 
 My secret to managing these challenges? Flexibility and an open mind. It's not just about knowing accounting rules but comprehending how they dance with the rhythm of each unit. I learned to collaborate closely with teams, understanding their needs and aligning their processes with the accounting standards. It was a fantastic balancing act that taught me the value of continuous learning and adaptation in the fascinating world of finance.
 
 **Can you give an example of how you helped a company improve its bottom line, perhaps by making an existing process more efficient or surfacing business insights needed to improve sales and operations?**
 
-In my previous role, we developed a tool that consolidated data from multiple systems for the first time providing vital, real-time insights into the company’s performance. This enabled leaders to identify operational inefficiencies and potential cost savings, offering a live snapshot of the business. Such a tool is incredibly beneficial for the Board of Directors, too, providing immediate, comprehensive insights into the business.
+In my previous role, we developed a tool that consolidated data from multiple systems for the first time, providing vital, real-time insights into the company’s performance. This enabled leaders to identify operational inefficiencies and potential cost savings, offering a live snapshot of the business. Such a tool is incredibly beneficial for the Board of Directors, too, providing immediate, comprehensive insights into the business.
 
 **You’ve been asked to step into a crisis after the sudden departure of multiple team members. Tell me about that experience. What did you learn from it and what advice would you give others in a similar situation?**
 
@@ -318,20 +314,20 @@ My advice to anyone in a similar situation is to remain adaptable and open-minde
 
 Working across different countries, I encountered diverse work habits and cultural variations. For instance, in South America, there's a more relaxed approach to work, with flexibility in hours and a focus on getting things done. In contrast, countries like Denmark prioritize efficiency, starting early and finishing promptly. Adapting to these differences in work culture and scheduling was crucial. Understanding and respecting varying work styles is key when collaborating across borders. Flexibility and adapting meeting times accordingly have been essential in navigating these cultural nuances.
 
-**How do you use business report tools like PowerBI, Oracle, and Excel to give management easy-to-understand data and insights?**
+**How do you use business report tools like Power BI, Oracle, and Excel to give management easy-to-understand data and insights?**
 
-I utilize tools like Power BI, Oracle, and Excel to translate complex data into simple, clear insights for owners and managers. I'm particularly fond of Power BI. Its interactive nature allows me to create dynamic dashboards that investors can access anytime, anywhere. With real-time updates and visually engaging graphs, I make it easy for investors to track key metrics and understand the company's performance, the ability to break down complex financial data into user-friendly visualizations aids in providing quick yet effective insights.
+I utilize tools like Power BI, Oracle, and Excel to translate complex data into simple, clear insights for owners and managers. I'm particularly fond of Power BI. Its interactive nature allows me to create dynamic dashboards that investors can access anytime, anywhere. With real-time updates and visually engaging graphs, I make it easy for investors to track key metrics and understand the company's performance. The ability to break down complex financial data into user-friendly visualizations aids in providing quick yet effective insights.
 
-**What tips would you give investors managing investments in multiple countries?**
+### What tips would you give investors managing investments in multiple countries?
 
-Make sure you have access to trustworthy financial and business reporting in new countries. This comes from having team members that speak the language and have immersed themselves in the target country. Spend time there, understand the work culture, and adapt to their ways of doing business.`,
+Make sure you have access to trustworthy financial and business reporting in new countries. This comes from having team members who speak the language and have immersed themselves in the target country. Spend time there, understand the work culture, and adapt to their ways of doing business.`,
     external_url: null,
     visible: true,
   },
   {
     id: "8",
     slug: "case-study-survival-sprint-a-startup-manufacturers-race-to-fundraise",
-    title: "Case Study: Survival Sprint - A Startup Manufacturer’s Race to Fundraise",
+    title: "Case Study: Survival Sprint – A Startup Manufacturer’s Race to Fundraise",
     author_slug: "adam-carte",
     published_at: "2023-06-01",
     excerpt: "Several years ago, a venture-stage company that we'll call ACME Metals built a commercial-scale manufacturing plant to produce a substance used by high-end computers and cell…",
@@ -345,32 +341,30 @@ The financial statements were incomprehensible, and Fairlead subsequently uncove
 
 Fairlead's mandate was to help ACME prepare and arrange for additional financing or a company sale before the company ran out of money in about twelve months. We knew we had to prepare credible financial statements as part of the fundraising process, but demonstrating that ACME's plant was more efficient than its competitors was of existential importance. ACME had to prove to skeptical industry engineers that it could deliver high-volume, medium-grade products more efficiently than its competitors and profitably produce low-volume, high-grade products that its competitors couldn't.
 
-Thus began our race against the clock. With less than a year before the money ran out, implementing a manufacturing-focused ERP to measure plant efficiency was out of the question. So while our accounting team worked to restate historical financial statements, our analysis team worked with the VP of Operations, to replicate the production process in Excel.
+Thus began our race against the clock. With less than a year before the money ran out, implementing a manufacturing-focused ERP to measure plant efficiency was out of the question. So while our accounting team worked to restate historical financial statements, our analysis team worked with the VP of Operations to replicate the production process in Excel.
 
 Each product batch required a month before it was ready for final testing and shipment, with several batches at various stages of production at any given moment. The processing model improved with each new production run. First, we calculated a baseline efficiency calculation that validated the founder's original thesis. Next, the VP of Operations studied the data he now had at his fingertips, made adjustments, and improved plant efficiency during the fundraising process.
 
 With proof of the plant's performance, ACME garnered significant customer and competitor interest. After a competitive auction, ACME's largest customer bought the company at a premium to its invested capital three weeks before running out of money.
 
-(ACME also delivered three years of audited financials at close so the buyer could check a box on its due diligence list).
+(ACME also delivered three years of audited financials at close so the buyer could check a box on its due diligence list.)
 
-The hero of this story is ACME's founder, who had the vision and ability to develop and build a better production process. But, while his accomplishment was necessary, it was insufficient. ACME had to demonstrate its breakthrough to skeptical industry insiders and engineers with limited capital and time. Young companies always need more time and money to do everything right, so they prioritize and sometimes make mistakes. These mistakes create challenges when they need more capital that can be overcome by focusing on what's essential to prove the value of the company.`,
+The hero of this story is ACME's founder, who had the vision and ability to develop and build a better production process. But while his accomplishment was necessary, it was insufficient. ACME had to demonstrate its breakthrough to skeptical industry insiders and engineers with limited capital and time. Young companies always need more time and money to do everything right, so they prioritize and sometimes make mistakes. These mistakes create challenges when they need more capital, challenges that can be overcome by focusing on what's essential to prove the value of the company.`,
     external_url: null,
     visible: true,
   },
   {
     id: "9",
     slug: "fairlead-advises-breakthrough-computer-vision-company-nirenberg-neuroscience-on-its-2022-acquisition-by-a-u-s-based-tech-giant",
-    title: "Case Study: Fairlead advises breakthrough computer vision company Nirenberg Neuroscience on its 2022 acquisition by a U.S.-based tech giant.",
+    title: "Case Study: Fairlead Advises Breakthrough Computer Vision Company Nirenberg Neuroscience on Its 2022 Acquisition by a U.S.-Based Tech Giant",
     author_slug: "adam-carte",
     published_at: "2023-05-01",
-    excerpt: "Fairlead advises breakthrough computer vision company Nirenberg Neuroscience on its 2022 acquisition by a U.S.-based tech giant.",
-    body_md: `Fairlead advises breakthrough computer vision company Nirenberg Neuroscience on its 2022 acquisition by a U.S.-based tech giant.
-
-Fairlead provided strategic planning, executive management, and accounting services to Nirenberg Neuroscience (NN), a computer-vision-focused AI company based in New York City. Fairlead supported NN from the company’s initial seed-stage financing until a prominent California-based tech giant acquired NN in early 2022.
+    excerpt: "Fairlead provided strategic planning, executive management, and accounting services to Nirenberg Neuroscience (NN), a computer-vision-focused AI company based in New York City.…",
+    body_md: `Fairlead provided strategic planning, executive management, and accounting services to Nirenberg Neuroscience (NN), a computer-vision-focused AI company based in New York City. Fairlead supported NN from the company’s initial seed-stage financing until a prominent California-based tech giant acquired NN in early 2022.
 
 The company’s founder, Dr. Sheila Nirenberg ["broke the neural code"](https://www.ted.com/talks/sheila_nirenberg_a_prosthetic_eye_to_treat_blindness) used by human vision to make sense of what we see, efficiently identifying what is necessary and ignoring nonessential visual data, a breakthrough for which she received the MacArthur "Genius" award. She harnessed the neural code for use in computers, dramatically reducing the dimensionality of visual data for computers, as it does for humans. Computers trained to "see" with NN's [software successfully identify objects and behaviors where other approaches fail](https://www.tedmed.com/talks/show?id=619685), and do so with far less data.
 
-Less than six months after raising an angel round of seed financing, NN was wowing audiences with pilot demonstrations, but the company faced a business problem. The technology solved a general problem common to most computer vision tasks, but customers only pay for fully developed solutions to their particular use cases (e.g., detecting shoplifting, violence on subways, etc.) Developing and selling each use case requires a significant investment in engineering and sales resources while leaving most of the software's value unutilized.
+Less than six months after raising an angel round of seed financing, NN was wowing audiences with pilot demonstrations, but the company faced a business problem. The technology solved a general problem common to most computer vision tasks, but customers only pay for fully developed solutions to their particular use cases (e.g., detecting shoplifting or violence on subways). Developing and selling each use case requires a significant investment in engineering and sales resources while leaving most of the software's value unutilized.
 
 NN overcame this challenge in three ways. First, rather than developing a solution for a narrow use case, Nirenberg created pilot applications that proved the software’s power to solve a wide range of common problems. Armed with proof of what NN could do, the company overcame the skepticism of technical “experts” trained to use conventional deep learning algorithms.
 
@@ -378,21 +372,21 @@ Second, NN focused on customers with high-value and general computer vision prob
 
 Following the agreement with Ford, the company partnered with a prominent chip manufacturer to design a chip that gives the power of NN's software to any company, large or small, seeking solutions to computer vision challenges. By embedding the technology on a chip, the complete value of the neural coding software becomes accessible to everyone while protecting the company's patented technology from theft.
 
-This successful partnership ultimately led to this California-based tech giant's acquisition of Nirenberg Neuroscience.
+This successful partnership ultimately led to the California-based tech giant's acquisition of Nirenberg Neuroscience.
 
 Third, a key aspect of Nirenberg’s success was efficient use of the company’s capital. She shunned image-conscious additions to the team, fancy facilities, and discretionary marketing; instead, she kept NN’s cost structure to a minimum and contracted for fractional commercial, financial, and back-office support from Fairlead Advisors, giving it the benefits of an experienced management team at a small fraction of the cost.
 
 The acquisition of Nirenberg Neuroscience by the U.S.-based tech giant marks a significant achievement for the New York-based company and its founder, Dr. Sheila Nirenberg. By focusing on the science and the strengths of the technology and keeping its cost structure low, the company had the time needed to find a path to make a step-change improvement in the field of computer vision and deliver stellar returns to its investors. The support of Fairlead Advisors played a key role in this achievement.
 
-**About Nirenberg Neuroscience:**
+### About Nirenberg Neuroscience
 
 Nirenberg Neuroscience is a New York-based neuroscience company that has made significant advancements in AI-powered computer vision software. Dr. Sheila Nirenberg's work decoding the mysteries of human vision has led to the creation of lightweight and efficient learning algorithms by NN and a potential treatment for returning sight to patients with degenerative retinal diseases through an affiliate, Bionic Sight Inc.
 
-**About Fairlead Advisors:**
+### About Fairlead Advisors
 
 Fairlead Advisors supports companies through growth and change, offering a comprehensive range of operating partner services backed by their experienced executive management team. Their expertise spans strategic, managerial, financial, technical, and operational areas, and they have worked with various industries, from fast-growing startups to distressed companies. Fairlead Advisors provides personalized attention and tailored solutions, filling advisory, board representation, and interim-management needs that help attract new investors and monetize investments. Since 2010, Fairlead has enabled companies to unlock untapped value, driving growth and successful transactions with their dedicated team of professionals.
 
-**Additional Information:**
+### Additional Information
 
 To learn more, contact Fairlead Advisors at acarte@fairleadadvisors.com.`,
     external_url: null,
@@ -404,10 +398,8 @@ To learn more, contact Fairlead Advisors at acarte@fairleadadvisors.com.`,
     title: "KLX Energy Services Completes Acquisition of Greene's Energy Group in a Deleveraging, Accretive All-Stock Transaction, Adding Scope and Scale to its Southwest Segment",
     author_slug: "renee-sass",
     published_at: "2023-03-08",
-    excerpt: "KLX Energy Services Holdings, Inc. (NASDAQ: KLXE), (\"KLX\" or the \"Company\") announced today it has acquired all of the equity interests of Greene's Energy Group, LLC (\"Greene's\")…",
-    body_md: `HOUSTON, March 8, 2023
-
-KLX Energy Services Holdings, Inc. (NASDAQ: KLXE), ("KLX" or the "Company") announced today it has acquired all of the equity interests of Greene's Energy Group, LLC ("Greene's"), including $1.7 million in cash remaining with Greene's, in an all-stock transaction. The total consideration for the acquisition consisted of the issuance of approximately 2.4 million shares of KLX common stock, par value $0.01 per share, subject to customary post-closing adjustments, with an implied enterprise value of approximately $30.3 million based on a 30-day volume weighted average price ("VWAP") as of March 7, 2023 and less acquired cash. Following the closing of the transaction, former shareholders of Greene's hold approximately 14.7% of the fully diluted common stock of the Company.
+    excerpt: "KLX Energy Services Holdings, Inc. (NASDAQ: KLXE) (\"KLX\" or the \"Company\") announced today it has acquired all of the equity interests of Greene's Energy Group, LLC (\"Greene's\")…",
+    body_md: `HOUSTON, March 8, 2023 – KLX Energy Services Holdings, Inc. (NASDAQ: KLXE) ("KLX" or the "Company") announced today it has acquired all of the equity interests of Greene's Energy Group, LLC ("Greene's"), including $1.7 million in cash remaining with Greene's, in an all-stock transaction. The total consideration for the acquisition consisted of the issuance of approximately 2.4 million shares of KLX common stock, par value $0.01 per share, subject to customary post-closing adjustments, with an implied enterprise value of approximately $30.3 million based on a 30-day volume weighted average price ("VWAP") as of March 7, 2023 and less acquired cash. Following the closing of the transaction, former shareholders of Greene's hold approximately 14.7% of the fully diluted common stock of the Company.
 
 Greene's is a leading provider of wellhead protection, flowback and well testing services. The acquisition of Greene's, which is expected to be accretive to KLX in 2023, augments the KLX frac rental and flowback offering, providing KLX with a broader presence in the Permian and Eagle Ford basins.
 
@@ -415,20 +407,20 @@ Commenting on the acquisition, Chris Baker, KLX President and Chief Executive Of
 
 "Additionally, this transaction is deleveraging for KLX and is expected to be accretive to KLX on all financial metrics," added Baker. "We expect $2.0 million to $3.0 million in annualized cost synergies within twelve months and believe this further enhances KLX's ability to effect industry consolidation as we continue to focus on increasing returns and enhancing shareholder value."
 
-Adam Doyle, President of Greene's, said, "We believe KLX and Greene's will form a strong partnership based on a common culture focused on safety, execution, customer service and returns. We believe the combined company is better positioned to serve the Greene's customer base and support the team members with the addition of KLX's best in-class diversified offerings."
+Adam Doyle, President of Greene's, said, "We believe KLX and Greene's will form a strong partnership based on a common culture focused on safety, execution, customer service and returns. We believe the combined company is better positioned to serve the Greene's customer base and support the team members with the addition of KLX's best-in-class diversified offerings."
 
-KLX's legal advisor was Vinson & Elkins LLP. Greene's legal advisor was Sidley Austin LLP. Simmons Energy, a Division of Piper Sandler, acted as Greene's financial advisors for the transaction.`,
+KLX's legal advisor was Vinson & Elkins LLP. Greene's legal advisor was Sidley Austin LLP. Simmons Energy, a Division of Piper Sandler, acted as Greene's financial advisor for the transaction.`,
     external_url: null,
     visible: true,
   },
   {
     id: "11",
     slug: "grp-holdco-monetizes-82-5-million-of-production-tax-credits-for-116-mw-of-biomass-projects-in-georgia",
-    title: "GRP Holdco Monetizes $82.5 million of Production Tax Credits for 116 MW of Biomass Projects in Georgia",
+    title: "GRP Holdco Monetizes $82.5 Million of Production Tax Credits for 116 MW of Biomass Projects in Georgia",
     author_slug: "charlie-abbott",
     published_at: "2023-03-07",
-    excerpt: "NEW YORK, March 7, 2023 /PRNewswire/ -- Today, GRP Holdco, LLC (\"GRP\"), the owner of two operating biomass projects (the \"Projects\") in Georgia, is pleased to announce the recent…",
-    body_md: `NEW YORK, March 7, 2023 /PRNewswire/ -- Today, GRP Holdco, LLC ("GRP"), the owner of two operating biomass projects (the "Projects") in Georgia, is pleased to announce the recent closing of a $82.5 million tax equity financing from Greenprint Capital Management, LLC ("Greenprint"). The financing enables GRP to monetize production tax credits generated by the Projects through 2029.
+    excerpt: "Today, GRP Holdco, LLC (\"GRP\"), the owner of two operating biomass projects (the \"Projects\") in Georgia, is pleased to announce the recent closing of an $82.5 million tax equity…",
+    body_md: `NEW YORK, March 7, 2023 /PRNewswire/ – Today, GRP Holdco, LLC ("GRP"), the owner of two operating biomass projects (the "Projects") in Georgia, is pleased to announce the recent closing of an $82.5 million tax equity financing from Greenprint Capital Management, LLC ("Greenprint"). The financing enables GRP to monetize production tax credits generated by the Projects through 2029.
 
 The Projects are located in Franklin and Madison counties of Georgia and were placed into commercial operation in December 2019. Combined, they provide 116 MW of energy capacity to Georgia Power Company under 30-year power purchase agreements.
 
@@ -438,23 +430,23 @@ GRP is managed by Fairlead Advisors LLC ("Fairlead") and has project debt from a
 
 "NextPower is proud to participate in the collaboration between GRP, Fairlead, and Greenprint," said David Goldman, Managing Partner at NextPower Capital. "We appreciated the opportunity to help GRP monetize its tax credits and continue to improve the economics of the Projects."
 
-"Greenprint is focused on structuring win/win transactions for our partners and this deal was a great of example of that," said Peter DeFazio, Managing Director at Greenprint. "It was great to work with NextPower Capital on another transaction and form a new relationship with GRP and Fairlead."
+"Greenprint is focused on structuring win/win transactions for our partners and this deal was a great example of that," said Peter DeFazio, Managing Director at Greenprint. "It was great to work with NextPower Capital on another transaction and form a new relationship with GRP and Fairlead."
 
-**About Greenprint Capital Management**
+### About Greenprint Capital Management
 
-Greenprint specializes in renewable energy tax credit acquisitions and is a market leader in tax credit underwriting and verification. Greenprint is solely dedicated to investing in climate positive solutions, providing capital to leading companies in energy efficiency, renewable energy, and other sustainable infrastructure markets. For more information, visit [greenprintcapital.com.](http://www.greenprintcapital.com/)
+Greenprint specializes in renewable energy tax credit acquisitions and is a market leader in tax credit underwriting and verification. Greenprint is solely dedicated to investing in climate positive solutions, providing capital to leading companies in energy efficiency, renewable energy, and other sustainable infrastructure markets. For more information, visit [greenprintcapital.com](http://www.greenprintcapital.com).
 
-**About Fairlead Advisors**
+### About Fairlead Advisors
 
 Founded in 2010, Fairlead Advisors provides operating partner services to portfolio companies of private equity and venture capital investors. For PE and VC investors seeking to optimize outcomes, Fairlead is the path to success. For more information, visit fairleadadvisors.com.
 
-**About NextPower Capital**
+### About NextPower Capital
 
-Founded in 2016, NextPower Capital is a clean energy investment bank focused on capital raises, M&A, and advisory services across North America. Leveraging its extensive network of capital providers, NextPower Capital specializes in structuring tax-equity and debt transactions across utility-scale, commercial, and residential projects that employ renewable energy and storage technologies. For more information, visit [nextpowercapital.com.](http://www.nextpowercapital.com/) The principals of NextPower Capital acted in their capacity of licensed securities agents of Burch & Company, Inc., member FINRA/SiPC.
+Founded in 2016, NextPower Capital is a clean energy investment bank focused on capital raises, M&A, and advisory services across North America. Leveraging its extensive network of capital providers, NextPower Capital specializes in structuring tax-equity and debt transactions across utility-scale, commercial, and residential projects that employ renewable energy and storage technologies. For more information, visit [nextpowercapital.com](http://www.nextpowercapital.com). The principals of NextPower Capital acted in their capacity of licensed securities agents of Burch & Company, Inc., member FINRA/SIPC.
 
-CONTACT: David Goldman, dgoldman@nextpowercapital.com
+Contact: David Goldman, dgoldman@nextpowercapital.com
 
-SOURCE GRP Holdco, LLC`,
+Source: GRP Holdco, LLC`,
     external_url: null,
     visible: true,
   },
@@ -464,10 +456,10 @@ SOURCE GRP Holdco, LLC`,
     title: "Lighthouse Guild and Bionic Sight Announce Partnership to Expand Treatment Options for People Who Are Blind",
     author_slug: "adam-carte",
     published_at: "2022-11-29",
-    excerpt: "Lighthouse Guild, the leading not-for-profit vision and healthcare organization, and Bionic Sight, the developer of treatments and technologies for advanced stage blindness…",
-    body_md: `Lighthouse Guild, the leading not-for-profit vision and healthcare organization, and Bionic Sight, the developer of treatments and technologies for advanced stage blindness, announced today that they are entering into a partnership that will change the landscape of treatment for people who are blind.
+    excerpt: "Lighthouse Guild, the leading not-for-profit vision and healthcare organization, and Bionic Sight, the developer of treatments and technologies for advanced-stage blindness…",
+    body_md: `Lighthouse Guild, the leading not-for-profit vision and healthcare organization, and Bionic Sight, the developer of treatments and technologies for advanced-stage blindness, announced today that they are entering into a partnership that will change the landscape of treatment for people who are blind.
 
-Bionic Sight’s technology focuses on restoring sight to patients with advanced stage blindness due to retinal degenerative diseases, such as [retinitis pigmentosa](https://lighthouseguild.org/retinitis-pigmentosa/). The technology is based on discoveries by researcher and developer Sheila Nirenberg, PhD, a professor at Weill Medical College of Cornell University and the founder of Bionic Sight, who unraveled the neural code of the retina – that is, the code the retina uses to tell the brain what you’re seeing. Dr. Nirenberg has won numerous awards for this work, including a MacArthur Genius Award, and she and Bionic Sight are using it to develop a new approach for treating blindness.
+Bionic Sight’s technology focuses on restoring sight to patients with advanced-stage blindness due to retinal degenerative diseases, such as [retinitis pigmentosa](https://lighthouseguild.org/retinitis-pigmentosa). The technology is based on discoveries by researcher and developer Sheila Nirenberg, PhD, a professor at Weill Medical College of Cornell University and the founder of Bionic Sight, who unraveled the neural code of the retina – that is, the code the retina uses to tell the brain what you’re seeing. Dr. Nirenberg has won numerous awards for this work, including a MacArthur Genius Award, and she and Bionic Sight are using it to develop a new approach for treating blindness.
 
 “Lighthouse Guild’s mission includes both providing exceptional services today for people who are visually impaired and creating a future of unlimited potential for our clients and patients. By investing in breakthrough technologies and therapies, Lighthouse Guild can help impact the direction of medical innovation,” said Calvin W. Roberts, MD, President and CEO of Lighthouse Guild. “Retinitis pigmentosa is a common condition among our clients and the discoveries by Bionic Sight may lead to significantly improved vision for people with this eye disorder.”
 
@@ -475,13 +467,13 @@ Bionic Sight’s technology focuses on restoring sight to patients with advanced
 
 “Game-changing developments in eye science are breaking down barriers for people who are blind or visually impaired,” said James M. Dubin, Chairman of the Board at Lighthouse Guild. “This partnership with Bionic Sight is a mission-driven initiative that furthers our commitment to providing the most advanced services and programs.”
 
-**About Bionic Sight**
+### About Bionic Sight
 
-[Bionic Sight](https://www.bionicsightllc.com./) is a biotech company that develops optogenetic gene therapy vectors and devices to treat retinal degenerative diseases. The company leverages the research of Dr. Sheila Nirenberg, the company’s founder and a professor at Weill Medical College of Cornell University. Her work focuses on neuroscience and its applications to brain/machine interfaces and computer vision. Her work on deciphering the retina’s neural code has been described in TED talks, an NBC documentary, a Bloomberg documentary, the Discovery Channel, Scientific American, as well as peer-reviewed journals and patents.
+[Bionic Sight](https://www.bionicsightllc.com) is a biotech company that develops optogenetic gene therapy vectors and devices to treat retinal degenerative diseases. The company leverages the research of Dr. Sheila Nirenberg, the company’s founder and a professor at Weill Medical College of Cornell University. Her work focuses on neuroscience and its applications to brain/machine interfaces and computer vision. Her work on deciphering the retina’s neural code has been described in TED talks, an NBC documentary, a Bloomberg documentary, the Discovery Channel, Scientific American, as well as peer-reviewed journals and patents.
 
-**About Lighthouse Guild**
+### About Lighthouse Guild
 
-[Lighthouse Guild](https://lighthouseguild.org/) provides exceptional services that inspire people who are visually impaired to attain their goals, offering coordinated care for eye health, vision rehabilitation, technology, and behavioral health as well as related services. The Lighthouse Guild Technology Center provides people with vision loss access to the latest assistive devices and state-of-the-art technology. The Lighthouse Guild podcast series,** “**[On Tech & Vision with Dr. Cal Roberts,](https://lighthouseguild.org/technology/on-tech-and-vision-podcast/)” offers information and insights about technological innovations that are tearing down barriers for people who are blind or visually impaired.`,
+[Lighthouse Guild](https://lighthouseguild.org) provides exceptional services that inspire people who are visually impaired to attain their goals, offering coordinated care for eye health, vision rehabilitation, technology, and behavioral health as well as related services. The Lighthouse Guild Technology Center provides people with vision loss access to the latest assistive devices and state-of-the-art technology. The Lighthouse Guild podcast series, “[On Tech & Vision with Dr. Cal Roberts](https://lighthouseguild.org/technology/on-tech-and-vision-podcast),” offers information and insights about technological innovations that are tearing down barriers for people who are blind or visually impaired.`,
     external_url: null,
     visible: true,
   },
@@ -496,19 +488,19 @@ Bionic Sight’s technology focuses on restoring sight to patients with advanced
 
 The Company has an attractive portfolio of district cooling and heating systems diversified by location, technology and customers, alongside an experienced management team that will support the platform, its existing customer base and its long-term growth following closing. The Company currently operates across six states, providing reliable, sustainable, and cost-efficient sources of energy solutions to a diverse customer base including universities, urban centers, hospitals, and commercial and industrial customers.
 
-Under Basalt's ownership, the Company enhanced its asset base and executed on a number of strategic projects and opportunities. Following the completion of the acquisition, Vauban will partner with DCO Energy who will continue to operate and maintain the facilities under a long-term contract. DCO Energy will also support the Vauban team with its carbon footprint reduction objectives and ongoing investment in the development and expansion of the facilities and asset base. DCO Energy is an industry-leading developer and operator with experience managing the facilities, as it has driven the development and/or acquisition of the facilities in the Northeast and has operated these facilities post-development or acquisition.
+Under Basalt's ownership, the Company enhanced its asset base and executed on a number of strategic projects and opportunities. Following the completion of the acquisition, Vauban will partner with DCO Energy, which will continue to operate and maintain the facilities under a long-term contract. DCO Energy will also support the Vauban team with its carbon footprint reduction objectives and ongoing investment in the development and expansion of the facilities and asset base. DCO Energy is an industry-leading developer and operator with experience managing the facilities, as it has driven the development and/or acquisition of the facilities in the Northeast and has operated these facilities post-development or acquisition.
 
 This acquisition will expand Vauban's global footprint to the United States and demonstrates Vauban's strong commitment to sustainability, while building upon its significant experience owning and managing district energy systems. Vauban's interest in acquiring the Company and the facilities is also driven by its commitment to support the ongoing operations of the Company and advance the Company's long-term growth, as it believes there is an opportunity to substantially expand the Company's customer base while reducing the environmental impact of the facilities over time.
 
-The transaction will leverage Vauban's significant experience in the district energy and heating sector since 2016. Vauban currently holds controlling interests in five assets, totaling ~USD 2.2bn in enterprise value in Finland, France, Italy, Norway, and Spain. The deal echoes Vauban's strategy of building long-term relationships with industrial partners. Vauban benefited from the support of its three local Senior Advisors and experts (Leonie Maruani, Steven Klein, and Olivier Ta) with combined experience of over 60 years in the North American infrastructure market.
+The transaction will leverage Vauban's significant experience in the district energy and heating sector since 2016. Vauban currently holds controlling interests in five assets, totaling approximately USD 2.2 billion in enterprise value in Finland, France, Italy, Norway, and Spain. The deal echoes Vauban's strategy of building long-term relationships with industrial partners. Vauban benefited from the support of its three local Senior Advisors and experts (Leonie Maruani, Steven Klein, and Olivier Ta) with combined experience of over 60 years in the North American infrastructure market.
 
-Gwenola Chambon, CEO and Founding Partner at Vauban Infrastructure Partners comments: "Through this landmark transaction, Vauban Infrastructure Partners enters into the U.S. district energy market. This acquisition will allow Vauban to leverage its considerable experience in the European district energy market and is an important first step for Vauban in building a sustainable, long-term platform in the United States."
+Gwenola Chambon, CEO and Founding Partner at Vauban Infrastructure Partners, commented: "Through this landmark transaction, Vauban Infrastructure Partners enters into the U.S. district energy market. This acquisition will allow Vauban to leverage its considerable experience in the European district energy market and is an important first step for Vauban in building a sustainable, long-term platform in the United States."
 
-Mounir Corm, Deputy CEO and Founding Partner comments: "This groundbreaking acquisition in the U.S. district energy market expands our global energy transition and district energy footprint. Vauban is delighted to strengthen its presence in district heating networks and to support their development in the United States, through a long-term collaboration with DCO Energy, which is in line with our strategy to build long-term relationships with industrial partners."
+Mounir Corm, Deputy CEO and Founding Partner, commented: "This groundbreaking acquisition in the U.S. district energy market expands our global energy transition and district energy footprint. Vauban is delighted to strengthen its presence in district heating networks and to support their development in the United States, through a long-term collaboration with DCO Energy, which is in line with our strategy to build long-term relationships with industrial partners."
 
-Gary Fromer, Chief Executive Officer at DCO Energy also remarked: "Over the last few years, in partnership with Basalt, we have significantly invested in and scaled our portfolio of district energy assets. We are excited by our new long-term partnership with Vauban Infrastructure Partners, and look forward to continuing to deliver reliable services to the customers, supporting the communities in which we operate, and participating in the continued development of the Company and its facilities."
+Gary Fromer, Chief Executive Officer at DCO Energy, also remarked: "Over the last few years, in partnership with Basalt, we have significantly invested in and scaled our portfolio of district energy assets. We are excited by our new long-term partnership with Vauban Infrastructure Partners, and look forward to continuing to deliver reliable services to the customers, supporting the communities in which we operate, and participating in the continued development of the Company and its facilities."
 
-David Greenblatt, Head of North America at Basalt said: "Basalt Infrastructure Partners LLC is pleased to have had the opportunity to partner with DCO Energy and the management teams at DBEA and Detroit Thermal. Their steadfast commitment to safely providing sustainable energy across our district energy customer base while executing on organic growth and follow-on acquisitions meaningfully contributed to the success of the business."
+David Greenblatt, Head of North America at Basalt, said: "Basalt Infrastructure Partners LLC is pleased to have had the opportunity to partner with DCO Energy and the management teams at DBEA and Detroit Thermal. Their steadfast commitment to safely providing sustainable energy across our district energy customer base while executing on organic growth and follow-on acquisitions meaningfully contributed to the success of the business."
 
 The closing of the transaction is subject to the satisfaction of customary regulatory and other approvals.
 
@@ -516,19 +508,19 @@ Vauban was advised by RBC Capital Markets as a financial advisor and Allen & Ove
 
 Basalt and DCO Energy were advised by TD Securities as financial advisor and Morgan Lewis & Bockius as legal advisor.
 
-About Vauban Infrastructure Partners
+### About Vauban Infrastructure Partners
 
-Vauban Infrastructure Partners is a leading Infrastructure Asset Manager focused on the core infrastructure investments. Headquartered in Paris, it employs 56 professionals who have been working together for a decade. Vauban is the fully fledged affiliate of Natixis Investment Managers, dedicated to sustainable infrastructure equity investments. Vauban targets predominantly midmarket infrastructure assets pursuing a long-term yield-driven strategy matching the underlying nature of assets and long-term commitment to all stakeholders' interests through a strong focus on creating sustainable value. Vauban has raised c. $7.3 billion across 6 funds in core infrastructure from over 70 investors within 14 different countries and has invested in over 65 assets in mobility, energy transition, social & digital infrastructure across 11 different geographies.
+Vauban Infrastructure Partners is a leading Infrastructure Asset Manager focused on the core infrastructure investments. Headquartered in Paris, it employs 56 professionals who have been working together for a decade. Vauban is the fully fledged affiliate of Natixis Investment Managers, dedicated to sustainable infrastructure equity investments. Vauban targets predominantly midmarket infrastructure assets pursuing a long-term yield-driven strategy matching the underlying nature of assets and long-term commitment to all stakeholders' interests through a strong focus on creating sustainable value. Vauban has raised approximately $7.3 billion across six funds in core infrastructure from over 70 investors within 14 different countries and has invested in over 65 assets in mobility, energy transition, social & digital infrastructure across 11 different geographies.
 
-[https://vauban-ip.com/](https://vauban-ip.com/)
+For more information, visit [vauban-ip.com](https://vauban-ip.com).
 
-About DCO Energy, LLC
+### About DCO Energy, LLC
 
-DCO Energy, LLC is an independent developer and operator of energy assets, specializing in the development, engineering, construction, start up, commissioning, operation, maintenance and management, as well as, ownership of district energy assets, renewable energy projects and power generation facilities. DCO was formed in 2000 with a core team of energy experts.
+DCO Energy, LLC is an independent developer and operator of energy assets, specializing in the development, engineering, construction, start-up, commissioning, operation, maintenance and management, as well as ownership of district energy assets, renewable energy projects and power generation facilities. DCO was formed in 2000 with a core team of energy experts.
 
-[https://www.dcoenergy.com/](https://www.dcoenergy.com/)
+For more information, visit [dcoenergy.com](https://www.dcoenergy.com).
 
-About Basalt Infrastructure Partners LLC
+### About Basalt Infrastructure Partners LLC
 
 Basalt Infrastructure Partners LLC is a leading mid-market infrastructure firm with offices in London and New York focused on equity investments in utilities, power, transport, and digital infrastructure in North America and Europe.`,
     external_url: null,
@@ -545,13 +537,13 @@ Basalt Infrastructure Partners LLC is a leading mid-market infrastructure firm w
 
 The investment round was led by Reliance New Energy Solar Ltd, a unit of Reliance Industries Limited; Paulson & Co. Inc., a group that includes Ambri’s largest shareholder, Bill Gates; and new investors, including Fortistar, Goehring & Rozencwajg Associates, Japan Energy Fund, and others.
 
-The [company plans to use proceeds](https://ambri.com/) to commercialize and grow its long-duration system technology and to build manufacturing facilities, both in the U.S. and internationally.
+The [company plans to use proceeds](https://ambri.com) to commercialize and grow its long-duration system technology and to build manufacturing facilities, both in the U.S. and internationally.
 
 Ambri also entered into a long-term antimony supply agreement with Perpetua Resources. The agreement helps secure a domestic source of antimony for its supply chain.
 
 ## Chemistry
 
-The liquid metal battery is comprised of a liquid calcium alloy anode, a molten salt electrolyte, and a cathode comprised of solid particles of antimony, enabling the use of low-cost materials and a low number of steps in the cell assembly process.
+The liquid metal battery is composed of a liquid calcium alloy anode, a molten salt electrolyte, and a cathode composed of solid particles of antimony, enabling the use of low-cost materials and a low number of steps in the cell assembly process.
 
 The company said that the active materials in its cells reversibly alloy and de-alloy while charging and discharging. The electrolyte is thermodynamically stable with the electrodes, avoiding side reactions such as film-formation that can lead to performance degradation. The negative electrode is fully consumed when discharged, and reformed on every cycle, resulting in what the company said is a “highly repeatable process with no memory effect.”
 
@@ -567,8 +559,8 @@ Ambri said that following the funding round it now is able to scale for projects
     title: "Fairlead advises Greenleaf Power on $36.7M renewable project financing",
     author_slug: "renee-sass",
     published_at: "2021-06-14",
-    excerpt: "Greenleaf Power Consolidated LLC (Greenleaf), backed by Denham Capital, has secured USD36.7 million in project financing from East West Bank through its wholly-owned subsidiary…",
-    body_md: `Greenleaf Power Consolidated LLC (Greenleaf), backed by Denham Capital, has [secured USD36.7 million in project](https://www.privateequitywire.co.uk/2021/06/08/301555/greenleaf-power-secures-usd367m-financing-east-west-bank) financing from East West Bank through its wholly-owned subsidiary Greenleaf Biomass Holdings LLC. This transaction marks one of the largest biomass power project financings in recent North American history.`,
+    excerpt: "Greenleaf Power Consolidated LLC (Greenleaf), backed by Denham Capital, has secured USD 36.7 million in project financing from East West Bank through its wholly-owned subsidiary…",
+    body_md: `Greenleaf Power Consolidated LLC (Greenleaf), backed by Denham Capital, has [secured USD 36.7 million in project financing](https://www.privateequitywire.co.uk/2021/06/08/301555/greenleaf-power-secures-usd367m-financing-east-west-bank) from East West Bank through its wholly-owned subsidiary Greenleaf Biomass Holdings LLC. This transaction marks one of the largest biomass power project financings in recent North American history.`,
     external_url: "https://www.privateequitywire.co.uk/2021/06/08/301555/greenleaf-power-secures-usd367m-financing-east-west-bank",
     visible: true,
   },
@@ -578,8 +570,8 @@ Ambri said that following the funding round it now is able to scale for projects
     title: "Bentley Systems Announces Acquisition of sensemetrics",
     author_slug: "renee-sass",
     published_at: "2021-04-29",
-    excerpt: "EXTON, Pa.--(BUSINESS WIRE)--Bentley Systems, Incorporated (Nasdaq: BSY), the infrastructure engineering software company, today announced its acquisitions of sensemetrics…",
-    body_md: `EXTON, Pa.--([BUSINESS WIRE](https://www.businesswire.com/))--Bentley Systems, Incorporated (Nasdaq: BSY), the *infrastructure engineering software* company, today announced its acquisitions of sensemetrics (agreement executed) and Vista Data Vision (closed), leading providers of software for Internet of Things (IoT) applications used extensively in infrastructure. sensemetrics and Vista Data Vision will expand the scope of the Bentley iTwin platform to add intrinsic IoT capabilities for infrastructure digital twins to incorporate real-time sensor data. By virtue of the resulting “infrastructure IoT” standardization, the full IoT ecosystem will finally be seamlessly accessible for IT/OT/ET integration, through infrastructure digital twins, to advance asset performance and to mitigate environmental risks.`,
+    excerpt: "EXTON, Pa. (Business Wire) – Bentley Systems, Incorporated (Nasdaq: BSY), the infrastructure engineering software company, today announced its acquisitions of sensemetrics…",
+    body_md: `EXTON, Pa. (Business Wire) – Bentley Systems, Incorporated (Nasdaq: BSY), the infrastructure engineering software company, today announced its acquisitions of sensemetrics (agreement executed) and Vista Data Vision (closed), leading providers of software for Internet of Things (IoT) applications used extensively in infrastructure. sensemetrics and Vista Data Vision will expand the scope of the Bentley iTwin platform to add intrinsic IoT capabilities for infrastructure digital twins to incorporate real-time sensor data. By virtue of the resulting “infrastructure IoT” standardization, the full IoT ecosystem will finally be seamlessly accessible for IT/OT/ET integration, through infrastructure digital twins, to advance asset performance and to mitigate environmental risks.`,
     external_url: null,
     visible: true,
   },
@@ -602,14 +594,14 @@ Fairlead supported Bionic Sight during the negotiation process.`,
     title: "Veolia Completes the Sale of Its District Energy Assets in the United States for USD 1.25 Billion to Antin Infrastructure Partners",
     author_slug: "charlie-abbott",
     published_at: "2019-08-19",
-    excerpt: "Veolia (Paris:VIE) regularly reviews its asset portfolio in the light of its strategy and development plan. This review reinforces the capacity and flexibility of the Group to…",
-    body_md: `**Veolia (Paris:VIE) regularly reviews its asset portfolio in the light of its strategy and development plan. This review reinforces the capacity and flexibility of the Group to position itself on the best growth opportunities, where Veolia can bring the most added value, and in coherence with the next strategic plan to be presented early 2020. It is within this framework that Veolia, through its subsidiary Veolia Energy North America Holdings, Inc, has finalized today the sale of its district energy assets in the United States to Antin Infrastructure Partners.**
+    excerpt: "Veolia (Paris:VIE) regularly reviews its asset portfolio in light of its strategy and development plan. This review reinforces the capacity and flexibility of the Group to…",
+    body_md: `**Veolia (Paris:VIE) regularly reviews its asset portfolio in light of its strategy and development plan. This review reinforces the capacity and flexibility of the Group to position itself on the best growth opportunities, where Veolia can bring the most added value, and in coherence with the next strategic plan to be presented in early 2020. It is within this framework that Veolia, through its subsidiary Veolia Energy North America Holdings, Inc., has finalized today the sale of its district energy assets in the United States to Antin Infrastructure Partners.**
 
 The portfolio comprises steam, hot and chilled water and electricity production plants, including cogeneration, and 13 networks in 10 US cities. An investment fund dedicated to infrastructure, Antin Infrastructure Partners has invested over 7 billion euros in 24 companies in 12 years of existence. Antin Infrastructure Partners is notably the owner since 2018 of Idex, which operates around 40 heating and cooling networks in France.
 
 Veolia group is the global leader in optimized resource management. With over 171,000 employees worldwide, the Group designs and provides water, waste and energy management solutions which contribute to the sustainable development of communities and industries. Through its three complementary business activities, Veolia helps to develop access to resources, preserve available resources, and to replenish them. In 2018, the Veolia group supplied 95 million people with drinking water and 63 million people with wastewater service, produced nearly 56 million megawatt hours of energy and converted 49 million metric tons of waste into new materials and energy. Veolia Environnement (listed on Paris Euronext: VIE) recorded consolidated revenue of €25.91 billion in 2018 (USD 30.6 billion).
 
-Visit www.veolia.com to learn more`,
+Visit [veolia.com](https://www.veolia.com) to learn more.`,
     external_url: null,
     visible: true,
   },
@@ -620,9 +612,7 @@ Visit www.veolia.com to learn more`,
     author_slug: "adam-carte",
     published_at: "2018-12-06",
     excerpt: "Luminoso, the natural language company that provides AI-powered customer insights, today announced the closing of a $10 million Series B funding round led by DVI Equity Partners.…",
-    body_md: `DECEMBER 06, 2018
-
-Luminoso, the natural language company that provides AI-powered customer insights, today announced the closing of a $10 million Series B funding round led by DVI Equity Partners. Also joining the round are Liberty Global Ventures, DF Enterprises, Raptor Holdco, Acadia Woods Partners, and Accord Ventures, among others, many of whom participated in Luminoso’s previous rounds of funding totaling over $20 million. Luminoso will use the proceeds to expand and scale its team as its customer base continues to grow internationally.
+    body_md: `December 6, 2018 – Luminoso, the natural language company that provides AI-powered customer insights, today announced the closing of a $10 million Series B funding round led by DVI Equity Partners. Also joining the round are Liberty Global Ventures, DF Enterprises, Raptor Holdco, Acadia Woods Partners, and Accord Ventures, among others, many of whom participated in Luminoso’s previous rounds of funding totaling over $20 million. Luminoso will use the proceeds to expand and scale its team as its customer base continues to grow internationally.
 
 Luminoso's artificial intelligence and natural language technologies have fundamentally changed how its clients automate the processing of unstructured data. Luminoso’s clients now find insights in minutes, not months, by replacing the otherwise time-consuming process of manually reading open-ended feedback from customers and employees without requiring massive amounts of data or armies of human consultants.
 
@@ -636,17 +626,19 @@ Clients using Luminoso products have reported tangible advantages such as:
 - Processing Voice of the Employee surveys for over 500,000 employees across ten languages
 - Identifying critical customer-reported defects within minutes instead of days
 
-"Our investors' show of confidence reinforces how Luminoso's value proposition, realizing increased sales and operating savings in days instead of months, is a game changer for how organizations discover insights from feedback," said Adam Carte, CEO of Luminoso. "We're eager to work with DVI Equity Partners and our other investors to further grow our customer base as we expand our North American operations and penetrate further into the European, Japan, and Asia-Pacific regions."
+"Our investors' show of confidence reinforces how Luminoso's value proposition, realizing increased sales and operating savings in days instead of months, is a game changer for how organizations discover insights from feedback," said Adam Carte, CEO of Luminoso. "We're eager to work with DVI Equity Partners and our other investors to further grow our customer base as we expand our North American operations and expand further into the European, Japanese, and Asia-Pacific markets."
 
-Please direct questions to press(at)luminoso.com or 617-682-9056.
+Please direct questions to press@luminoso.com or 617-682-9056.
 
-About DVI Equity Partners
-DVI Equity Partners, LLC has a singular mission of investing in early stage, emerging technology companies specializing in disruptive technology with an emphasis on companies founded and led by women and minorities. The firm evaluates emerging technology companies that create business-to-business (B2B) value in areas including national security, enterprise software, artificial intelligence, and data storage and analysis. DVI shares expertise, resource and forms relationships with entrepreneurs to help them transform the way industries and the public sectors conduct business. Visit [http://www.dviequitypartners.com](http://www.dviequitypartners.com/) for additional information.
+### About DVI Equity Partners
 
-About Luminoso
+DVI Equity Partners, LLC has a singular mission of investing in early stage, emerging technology companies specializing in disruptive technology with an emphasis on companies founded and led by women and minorities. The firm evaluates emerging technology companies that create business-to-business (B2B) value in areas including national security, enterprise software, artificial intelligence, and data storage and analysis. DVI shares expertise and resources and forms relationships with entrepreneurs to help them transform the way industries and the public sector conduct business. Visit [dviequitypartners.com](https://www.dviequitypartners.com) for additional information.
+
+### About Luminoso
+
 Luminoso Technologies is a leading artificial intelligence (AI) and natural language understanding (NLU) company that enables companies to rapidly discover insights in their unstructured data. Luminoso’s award-winning software applies AI to accurately analyze text-based data, for any industry, without lengthy setup time or training. Luminoso can analyze unstructured data natively in 14 languages, including Chinese, Korean, Japanese, and Arabic. Companies use the insights that Luminoso’s solutions uncover to streamline their contact center processes, monitor brand perception, and optimize the customer experience. The company is privately held and headquartered in Cambridge, MA.
 
-For more information, visit [http://www.luminoso.com](http://www.luminoso.com/)`,
+For more information, visit [luminoso.com](https://www.luminoso.com).`,
     external_url: null,
     visible: true,
   },
@@ -659,7 +651,7 @@ For more information, visit [http://www.luminoso.com](http://www.luminoso.com/)`
     excerpt: "An affiliate of Novus Energy GmbH, a client of Fairlead Advisors, sold its CHP biomass plant in Herbrechtingen, Baden-Württemberg, to the local waste disposal company WRZ Hörger…",
     body_md: `An affiliate of Novus Energy GmbH, a client of Fairlead Advisors, sold its CHP biomass plant in Herbrechtingen, Baden-Württemberg, to the local waste disposal company WRZ Hörger from Sontheim, Germany. The transaction was closed on December 6, 2016. The parties agreed to keep the purchase price confidential.
 
-The sale of the plant is part of Novus Energy’s successful exit from the German bio energy market.`,
+The sale of the plant is part of Novus Energy’s successful exit from the German bioenergy market.`,
     external_url: null,
     visible: true,
   },
@@ -669,7 +661,7 @@ The sale of the plant is part of Novus Energy’s successful exit from the Germa
     title: "Ford Targets Fully Autonomous Vehicle for Ride Sharing in 2021; Invests in New Tech Companies, Doubles Silicon Valley Team",
     author_slug: "adam-carte",
     published_at: "2016-08-16",
-    excerpt: "PALO ALTO, Calif., Aug. 16, 2016 – Ford today announces its intent to have a high-volume, fully autonomous SAE level 4-capable vehicle in commercial operation in 2021 in a…",
+    excerpt: "Ford today announces its intent to have a high-volume, fully autonomous SAE level 4-capable vehicle in commercial operation in 2021 in a ride-hailing or ride-sharing service.",
     body_md: `**PALO ALTO, Calif., Aug. 16, 2016** – Ford today announces its intent to have a high-volume, fully autonomous SAE level 4-capable vehicle in commercial operation in 2021 in a ride-hailing or ride-sharing service.
 
 To get there, the company is investing in or collaborating with four startups to enhance its autonomous vehicle development, doubling its Silicon Valley team and more than doubling its Palo Alto campus.
@@ -678,7 +670,7 @@ To get there, the company is investing in or collaborating with four startups to
 
 Autonomous vehicles in 2021 are part of Ford Smart Mobility, the company’s plan to be a leader in autonomous vehicles, as well as in connectivity, mobility, the customer experience, and data and analytics.
 
-**Driving autonomous vehicle leadership**
+### Driving autonomous vehicle leadership
 
 Building on more than a decade of autonomous vehicle research and development, Ford’s first fully autonomous vehicle will be a [Society of Automotive Engineers-defined level 4-capable vehicle](http://www.sae.org/misc/pdfs/automated_driving.pdf). Plans are to design it to operate without a steering wheel, gas or brake pedal, for use in commercial mobility services such as ride sharing and ride hailing within geo-fenced areas and be available in high volumes.
 
@@ -690,12 +682,12 @@ Ford was the [first automaker to begin testing its vehicles at Mcity](https://me
 
 To deliver an autonomous vehicle in 2021, Ford is announcing four key investments and collaborations that are expanding its strong research in advanced algorithms, 3D mapping, LiDAR, and radar and camera sensors:
 
--** Velodyne:** Ford has invested in Velodyne, the Silicon Valley-based leader in light detection and ranging (LiDAR) sensors. The aim is to quickly mass-produce a more affordable automotive LiDAR sensor. Ford has a longstanding relationship with Velodyne, and was among the first to use LiDAR for both high-resolution mapping and autonomous driving beginning more than 10 years ago
--** SAIPS:** Ford has acquired the Israel-based computer vision and machine learning company to further strengthen its expertise in artificial intelligence and enhance computer vision. SAIPS has developed algorithmic solutions in image and video processing, deep learning, signal processing and classification. This expertise will help Ford autonomous vehicles learn and adapt to the surroundings of their environment
--** Nirenberg Neuroscience LLC:** Ford has an exclusive licensing agreement with Nirenberg Neuroscience, a machine vision company founded by neuroscientist Dr. Sheila Nirenberg, who cracked the neural code the eye uses to transmit visual information to the brain. This has led to a powerful machine vision platform for performing navigation, object recognition, facial recognition and other functions, with many potential applications. For example, it is already being applied by Dr. Nirenberg to develop a device for restoring sight to patients with degenerative diseases of the retina. Ford’s partnership with Nirenberg Neuroscience will help bring humanlike intelligence to the machine learning modules of its autonomous vehicle virtual driver system
--** Civil Maps:** Ford has invested in Berkeley, California-based Civil Maps to further develop high-resolution 3D mapping capabilities. Civil Maps has pioneered an innovative 3D mapping technique that is scalable and more efficient than existing processes. This provides Ford another way to develop high-resolution 3D maps of autonomous vehicle environments
+- **Velodyne:** Ford has invested in Velodyne, the Silicon Valley-based leader in light detection and ranging (LiDAR) sensors. The aim is to quickly mass-produce a more affordable automotive LiDAR sensor. Ford has a longstanding relationship with Velodyne, and was among the first to use LiDAR for both high-resolution mapping and autonomous driving beginning more than 10 years ago
+- **SAIPS:** Ford has acquired the Israel-based computer vision and machine learning company to further strengthen its expertise in artificial intelligence and enhance computer vision. SAIPS has developed algorithmic solutions in image and video processing, deep learning, signal processing and classification. This expertise will help Ford autonomous vehicles learn and adapt to the surroundings of their environment
+- **Nirenberg Neuroscience LLC:** Ford has an exclusive licensing agreement with Nirenberg Neuroscience, a machine vision company founded by neuroscientist Dr. Sheila Nirenberg, who cracked the neural code the eye uses to transmit visual information to the brain. This has led to a powerful machine vision platform for performing navigation, object recognition, facial recognition and other functions, with many potential applications. For example, it is already being applied by Dr. Nirenberg to develop a device for restoring sight to patients with degenerative diseases of the retina. Ford’s partnership with Nirenberg Neuroscience will help bring humanlike intelligence to the machine learning modules of its autonomous vehicle virtual driver system
+- **Civil Maps:** Ford has invested in Berkeley, California-based Civil Maps to further develop high-resolution 3D mapping capabilities. Civil Maps has pioneered an innovative 3D mapping technique that is scalable and more efficient than existing processes. This provides Ford another way to develop high-resolution 3D maps of autonomous vehicle environments
 
-**Silicon Valley expansion**
+### Silicon Valley expansion
 
 Ford also is expanding its Silicon Valley operations, creating a dedicated campus in Palo Alto.
 
@@ -709,7 +701,7 @@ Research and Innovation Center Palo Alto’s multi-disciplinary research and inn
 
 ### About Ford Motor Company
 
-*Ford Motor Company (NYSE: F) is a global company based in Dearborn, Michigan, that is committed to helping build a better world, where every person is free to move and pursue their dreams. The company’s Ford+ plan for growth and value creation combines existing strengths, new capabilities and always-on relationships with customers to enrich experiences for and deepen the loyalty of those customers. Ford develops and delivers innovative, must-have Ford trucks, sport utility vehicles, commercial vans and cars and Lincoln luxury vehicles, as well as connected services. Additionally, Ford is establishing leadership positions in mobility solutions, including self-driving technology, and provides financial services through Ford Motor Credit Company. Ford employs about 176,000 people worldwide. More information about the company, its products and Ford Credit is available at corporate.ford.com.*
+Ford Motor Company (NYSE: F) is a global company based in Dearborn, Michigan, that is committed to helping build a better world, where every person is free to move and pursue their dreams. The company’s Ford+ plan for growth and value creation combines existing strengths, new capabilities and always-on relationships with customers to enrich experiences for and deepen the loyalty of those customers. Ford develops and delivers innovative, must-have Ford trucks, sport utility vehicles, commercial vans and cars and Lincoln luxury vehicles, as well as connected services. Additionally, Ford is establishing leadership positions in mobility solutions, including self-driving technology, and provides financial services through Ford Motor Credit Company. Ford employs about 176,000 people worldwide. More information about the company, its products and Ford Credit is available at [corporate.ford.com](https://corporate.ford.com).
 
 ### Risk Factors
 
@@ -723,15 +715,21 @@ This news release and the related presentations contain forward-looking statemen
     title: "K.A.CARE speeds up work on ‘clean energy’ strategy",
     author_slug: "charlie-abbott",
     published_at: "2015-07-08",
-    excerpt: "RIYADH: The King Abdullah City for Atomic and Renewable Energy (K.A.CARE) is working closely with the Ministry of Transportation, the Saudi Electricity Company (SEC), the Saudi…",
-    body_md: `RIYADH: The King Abdullah City for Atomic and Renewable Energy (K.A.CARE) is working closely with the Ministry of Transportation, the Saudi Electricity Company (SEC), the Saudi Wildlife Authority (SWA) and the Director-General of Military Surveying to speed up work on the creation of a blueprint for the Kingdom’s renewable energy strategy.
+    excerpt: "The King Abdullah City for Atomic and Renewable Energy (K.A.CARE) is working closely with the Ministry of Transportation, the Saudi Electricity Company (SEC), the Saudi Wildlife…",
+    body_md: `RIYADH – The King Abdullah City for Atomic and Renewable Energy (K.A.CARE) is working closely with the Ministry of Transportation, the Saudi Electricity Company (SEC), the Saudi Wildlife Authority (SWA) and the Director-General of Military Surveying to speed up work on the creation of a blueprint for the Kingdom’s renewable energy strategy.
 
 Its vision to be achieved by 2032 aims to replace 50 percent of the dependence on traditional fossil fuels with eco-friendly atomic and renewable energy.
+
 The project, entitled “Atlas of the Sources of Renewable Energy in Saudi Arabia”, is set to be a landmark program implemented by K.A.CARE in coordination with government agencies and local and international experts.
+
 The move aims to attract local and foreign investments in the field of renewable energy by harnessing the potential that abounds in the Kingdom in the fields of solar, thermal and wind energy.
+
 The ambitious project seeks to create a profile for the future of clean energy in the Kingdom and will provide technical data and information regarding renewable energy sources in various regions of the Kingdom.
+
 “K.A.CARE works very closely with various government agencies such as the ministry of transportation, SEC, SWA and the directorate-general of military survey with the prime objective being to create atlas-generated information and data,” an official at the K.A.CARE media department said recently.
-The Atlas Team is currently working with key partners from the Kingdom and outside the country to provide additional information about airports, dams, water-wells, waste management and volcanic areas, the media department noted.
+
+The Atlas Team is currently working with key partners from the Kingdom and outside the country to provide additional information about airports, dams, water wells, waste management and volcanic areas, the media department noted.
+
 “Atlas is particularly important as it provides valuable assistance to the government agencies and decision-makers in drawing up their policies and implementing regulations which will be extremely helpful to them when implementing renewable energy projects throughout the Kingdom,” an official said.`,
     external_url: null,
     visible: true,
@@ -739,13 +737,19 @@ The Atlas Team is currently working with key partners from the Kingdom and outsi
   {
     id: "23",
     slug: "u-s-silica-to-acquire-regional-frac-sand-producer-cadre-services-inc-for-98-million",
-    title: "U.S. Silica to Acquire Regional Frac Sand Producer Cadre Services Inc. for $98 million",
+    title: "U.S. Silica to Acquire Regional Frac Sand Producer Cadre Services Inc. for $98 Million",
     author_slug: "adam-carte",
     published_at: "2014-07-16",
-    excerpt: "FREDERICK, Md., July 16, 2014– U.S. Silica Holdings, Inc. (NYSE: SLCA) today announced that it has signed a stock purchase agreement to acquire all of the outstanding shares of…",
-    body_md: `FREDERICK, Md., July 16, 2014– U.S. Silica Holdings, Inc. (NYSE: SLCA) today announced that it has signed a stock purchase agreement to acquire all of the outstanding shares of Cadre Services Inc., a leading regional sand mining Company based in Voca, Texas, for approximately $98 million in cash. Closing is expected by the end of the month.Cadre operates a single frac sand mine and plant, with recently expanded annual capacity of about 800,000 tons per year of Premium Hickory® sand. The fully-automated, state-of-the-art facility, which became operational in 2011, has more than 65 years of high-quality reserves. Because of Cadre’s regional location, they serve customers in the fast growing Permian Basin on both a contract and a spot basis, with about 40 percent of revenue derived from customers under take-or-pay contracts.Bryan Shinn, president and chief executive officer of U.S. Silica said, “This accretive acquisition aligns with our strategy to increase market share by expanding our footprint and product offerings in one of the fastest growing basins in the country. The addition of the Cadre team and their outstanding operational and logistics capabilities allows us to provide our customers with a high quality, regionally-produced product which effectively meets the demands of many Permian oil and gas wells.”The purchase price of $98 million, less the net present value of approximately $14 million in deferred tax assets, results in $84 million of net consideration. Adjusted LTM EBITDA of $11.1 million represents a purchase price multiple of 7.6 times. Projected 2015 Adjusted EBITDA of approximately $18 million after synergies and the benefit of a full year of sales from the March capacity expansion represents a purchase price multiple of 4.7 times. This would result in Adjusted EPS accretion of $0.11 to $0.13 per share in 2015.
+    excerpt: "U.S. Silica Holdings, Inc. (NYSE: SLCA) today announced that it has signed a stock purchase agreement to acquire all of the outstanding shares of Cadre Services Inc., a leading…",
+    body_md: `FREDERICK, Md., July 16, 2014 – U.S. Silica Holdings, Inc. (NYSE: SLCA) today announced that it has signed a stock purchase agreement to acquire all of the outstanding shares of Cadre Services Inc., a leading regional sand mining company based in Voca, Texas, for approximately $98 million in cash. Closing is expected by the end of the month.
 
-A conference call to discuss the strategic benefits of the transaction with investors will be held tomorrow, July 17 at 9:00 a.m. Eastern Time. Hosting the call will be Bryan Shinn, president and chief executive officer. Investors are invited to listen to a live webcast of the call by visiting the “Investor Resources” section of the Company’s website at [www.ussilica.com](http://www.ussilica.com). The call can also be accessed live over the telephone by dialing (855) 325‑2605 or (970) 315‑0758 for international callers. The conference passcode is 74171980. A presentation on the acquisition will be available tomorrow morning on the Company’s website.
+Cadre operates a single frac sand mine and plant, with recently expanded annual capacity of about 800,000 tons per year of Premium Hickory® sand. The fully automated, state-of-the-art facility, which became operational in 2011, has more than 65 years of high-quality reserves. Because of Cadre’s regional location, they serve customers in the fast-growing Permian Basin on both a contract and a spot basis, with about 40 percent of revenue derived from customers under take-or-pay contracts.
+
+Bryan Shinn, president and chief executive officer of U.S. Silica said, “This accretive acquisition aligns with our strategy to increase market share by expanding our footprint and product offerings in one of the fastest growing basins in the country. The addition of the Cadre team and their outstanding operational and logistics capabilities allows us to provide our customers with a high-quality, regionally produced product which effectively meets the demands of many Permian oil and gas wells.”
+
+The purchase price of $98 million, less the net present value of approximately $14 million in deferred tax assets, results in $84 million of net consideration. Adjusted LTM EBITDA of $11.1 million represents a purchase price multiple of 7.6 times. Projected 2015 Adjusted EBITDA of approximately $18 million after synergies and the benefit of a full year of sales from the March capacity expansion represents a purchase price multiple of 4.7 times. This would result in Adjusted EPS accretion of $0.11 to $0.13 per share in 2015.
+
+A conference call to discuss the strategic benefits of the transaction with investors will be held tomorrow, July 17 at 9:00 a.m. Eastern Time. Hosting the call will be Bryan Shinn, president and chief executive officer. Investors are invited to listen to a live webcast of the call by visiting the “Investor Resources” section of the Company’s website at [ussilica.com](https://www.ussilica.com). The call can also be accessed live over the telephone by dialing (855) 325-2605 or (970) 315-0758 for international callers. The conference passcode is 74171980. A presentation on the acquisition will be available tomorrow morning on the Company’s website.
 
 ### Forward-looking Statements
 
@@ -757,11 +761,11 @@ Adjusted EBITDA and Adjusted EPS are not measures of our financial performance o
 
 ### About U.S. Silica
 
-U.S. Silica Holdings, Inc., a member of the Russell 2000, is one of the largest domestic producers of commercial silica, a specialized mineral that is a critical input into the oil and gas proppants end market. The company also processes ground and unground silica sand for a variety of industrial and specialty products end markets such as glass, fiberglass, foundry molds, municipal filtration and recreational uses. During its 100-plus year history, U.S. Silica Holdings, Inc. has developed core competencies in mining, processing, logistics and materials science that enable it to produce and cost-effectively deliver over 250 products to customers across these end markets. U.S. Silica Holdings, Inc. is headquartered in Frederick, Md.
+U.S. Silica Holdings, Inc., a member of the Russell 2000, is one of the largest domestic producers of commercial silica, a specialized mineral that is a critical input into the oil and gas proppants end market. The company also processes ground and unground silica sand for a variety of industrial and specialty products end markets such as glass, fiberglass, foundry molds, municipal filtration and recreational uses. During its 100-plus-year history, U.S. Silica Holdings, Inc. has developed core competencies in mining, processing, logistics and materials science that enable it to produce and cost-effectively deliver over 250 products to customers across these end markets. U.S. Silica Holdings, Inc. is headquartered in Frederick, Md.
 
 ### About Cadre Services
 
-Headquartered in Houston Texas, Cadre Services is a major supplier of API/ISO-quality Premium Hickory® Sand to the oil and gas industry. Cadre produces four products: Cadre 16/30, Cadre 20/40, Cadre 30/50 and Cadre 40/70. With principal operations located in Voca, Texas, Cadre was recognized as the 2012 Outstanding Large Business in McCulloch County and was identified as one of the Houston Top 100 by the Houston Business Journal. For more information, visit [http://www.CadreProppants.com](http://www.CadreProppants.com).`,
+Headquartered in Houston, Texas, Cadre Services is a major supplier of API/ISO-quality Premium Hickory® Sand to the oil and gas industry. Cadre produces four products: Cadre 16/30, Cadre 20/40, Cadre 30/50 and Cadre 40/70. With principal operations located in Voca, Texas, Cadre was recognized as the 2012 Outstanding Large Business in McCulloch County and was identified as one of the Houston Top 100 by the Houston Business Journal. For more information, visit [cadreproppants.com](http://www.cadreproppants.com).`,
     external_url: null,
     visible: true,
   },
@@ -780,7 +784,7 @@ VitAg plans to use proceeds from the financing in part to construct a biosolids-
 
 TPG ART, a unit of Fort Worth, Texas-based firm TPG Capital, focuses on investments in companies that develop and deploy alternative and renewable technologies.
 
-[http://www.tpgart.com](http://www.tpgart.com/)`,
+For more information, visit [tpgart.com](http://www.tpgart.com).`,
     external_url: null,
     visible: true,
   },
@@ -790,18 +794,18 @@ TPG ART, a unit of Fort Worth, Texas-based firm TPG Capital, focuses on investme
     title: "KEMET Completes Acquisition of Niotan Incorporated",
     author_slug: "adam-carte",
     published_at: "2012-02-21",
-    excerpt: "GREENVILLE, S.C., Feb. 21, 2012 KEMET Corporation (NYSE: KEM), a leading manufacturer of tantalum, ceramic, aluminum, film, paper and electrolytic capacitors, announced today that…",
-    body_md: `GREENVILLE, S.C., Feb. 21, 2012 KEMET Corporation (NYSE: KEM), a leading manufacturer of tantalum, ceramic, aluminum, film, paper and electrolytic capacitors, announced today that it has completed its acquisition of all of the outstanding shares of Niotan Incorporated ("Niotan"), a leading manufacturer of tantalum powders, from an affiliate of Denham Capital Management LP.
+    excerpt: "KEMET Corporation (NYSE: KEM), a leading manufacturer of tantalum, ceramic, aluminum, film, paper and electrolytic capacitors, announced today that it has completed its…",
+    body_md: `GREENVILLE, S.C., Feb. 21, 2012 – KEMET Corporation (NYSE: KEM), a leading manufacturer of tantalum, ceramic, aluminum, film, paper and electrolytic capacitors, announced today that it has completed its acquisition of all of the outstanding shares of Niotan Incorporated ("Niotan"), a leading manufacturer of tantalum powders, from an affiliate of Denham Capital Management LP.
 
-As previously announced, KEMET paid an initial purchase price of $30 million at the closing of the transaction, and will make additional deferred payments of $45 million over a thirty month period after the closing. KEMET will also be required to make quarterly royalty payments for tantalum powder produced by Niotan after the closing of the transaction, in an aggregate amount equal to $10 million by December 31, 2014.
+As previously announced, KEMET paid an initial purchase price of $30 million at the closing of the transaction, and will make additional deferred payments of $45 million over a thirty-month period after the closing. KEMET will also be required to make quarterly royalty payments for tantalum powder produced by Niotan after the closing of the transaction, in an aggregate amount equal to $10 million by December 31, 2014.
 
-This new KEMET subsidiary, which will be named KEMET Blue Powder Corp., has its headquarters and principle operating location in Carson City, Nevada. KEMET Blue Powder Corp. is the largest western hemisphere production location for tantalum capacitor powder and has demonstrated world- class powder quality which has resulted in exceptionally high level qualification with the world's capacitor manufacturers.
+This new KEMET subsidiary, which will be named KEMET Blue Powder Corp., has its headquarters and principal operating location in Carson City, Nevada. KEMET Blue Powder Corp. is the largest western hemisphere production location for tantalum capacitor powder and has demonstrated world-class powder quality, which has resulted in exceptionally high-level qualification with the world's capacitor manufacturers.
 
-About KEMET
+### About KEMET
 
-KEMET's common stock is listed on the NYSE under the symbol "KEM." At the Investor Relations section of our web site at http://www.KEMET.com/IR, users may subscribe to KEMET news releases and find additional information about our Company. KEMET applies world class service and quality to deliver industry leading, high performance capacitance solutions to its customers around the world and offers the world's most complete line of surface mount and through-hole capacitor technologies across tantalum, ceramic, film, aluminum, electrolytic, and paper dielectrics. Additional information about KEMET can be found at http://www.kemet.com.
+KEMET's common stock is listed on the NYSE under the symbol "KEM." At the Investor Relations section of our website, [kemet.com/IR](http://www.kemet.com/IR), users may subscribe to KEMET news releases and find additional information about our Company. KEMET applies world class service and quality to deliver industry leading, high performance capacitance solutions to its customers around the world and offers the world's most complete line of surface mount and through-hole capacitor technologies across tantalum, ceramic, film, aluminum, electrolytic, and paper dielectrics. Additional information about KEMET can be found at [kemet.com](http://www.kemet.com).
 
-Cautionary Statement on Forward-Looking Statements
+### Cautionary Statement on Forward-Looking Statements
 
 Certain statements included herein contain forward-looking statements within the meaning of federal securities laws about KEMET Corporation's (the "Company") financial condition and results of operations that are based on management's current expectations, estimates and projections about the markets in which the Company operates, as well as management's beliefs and assumptions. Words such as "expects," "anticipates," "believes," "estimates," variations of such words and other similar expressions are intended to identify such forward-looking statements. These statements are not guarantees of future performance and involve certain risks, uncertainties and assumptions, which are difficult to predict. Therefore, actual outcomes and results may differ materially from what is expressed or forecasted in, or implied by, such forward-looking statements. Readers are cautioned not to place undue reliance on these forward-looking statements, which reflect management's judgment only as of the date hereof. The Company undertakes no obligation to update publicly any of these forward-looking statements to reflect new information, future events or otherwise.
 
@@ -816,13 +820,13 @@ Factors that may cause actual outcome and results to differ materially from thos
     author_slug: "charlie-abbott",
     published_at: "2011-05-12",
     excerpt: "MXenergy, one of the nation's leading suppliers of natural gas and electricity to homeowners and small businesses, announced today it has reached an agreement to be acquired by…",
-    body_md: `MXenergy, one of the nation's leading suppliers of natural gas and electricity to homeowners and small businesses, announced today it has reached an agreement to be acquired by Constellation Energy (NYSE: [CEG](https://www.prnewswire.com/news-releases/constellation-energy-purchases-mxenergy-121725878.html#financial-modal)). Constellation, a major Baltimore-based energy company with over 12,000 megawatts of electric generating capacity and a large wholesale marketing business, will purchase MXenergy in an all-cash transaction. The Board of Directors of MXenergy and key shareholders Denham Capital Management LP, Charterhouse Group LLC and Sempra Energy Trading LLC are fully supportive of the transaction.
+    body_md: `MXenergy, one of the nation's leading suppliers of natural gas and electricity to homeowners and small businesses, announced today it has reached an agreement to be acquired by Constellation Energy (NYSE: CEG). Constellation, a major Baltimore-based energy company with over 12,000 megawatts of electric generating capacity and a large wholesale marketing business, will purchase MXenergy in an all-cash transaction. The Board of Directors of MXenergy and key shareholders Denham Capital Management LP, Charterhouse Group LLC and Sempra Energy Trading LLC are fully supportive of the transaction.
 
 "I am excited and energized by the combination of these two great companies," said Jeffrey Mayer, President and CEO of MXenergy. "For over 12 years MXenergy has provided customers with competitive rates and superb customer service, and Constellation is determined to offer customers the same value propositions," he said.
 
 Subject to shareholder and regulatory approvals, Constellation will purchase 100% of the equity of MXenergy, which is currently owned by a number of large institutional investors and others. Denham and Charterhouse each provided substantial support to MXenergy in its early years.
 
-The total base purchase price of the transaction is $175 million. Shareholders can expect to receive between $3.00 and $3.28 per share in cash at closing, currently expected to occur early in the third calendar quarter. Additional payments of up to $.91 per share may be paid to shareholders upon settlement of customary escrow holdbacks, aggregating to total potential cash consideration of up to $4.21 per share. The final price per share will be subject to a number of factors, including final working capital balances and the amount escrowed contingency reserves ultimately released.
+The total base purchase price of the transaction is $175 million. Shareholders can expect to receive between $3.00 and $3.28 per share in cash at closing, currently expected to occur early in the third calendar quarter. Additional payments of up to $0.91 per share may be paid to shareholders upon settlement of customary escrow holdbacks, aggregating to total potential cash consideration of up to $4.21 per share. The final price per share will be subject to a number of factors, including final working capital balances and the amount escrowed contingency reserves ultimately released.
 
 In connection with the merger, MXenergy has agreed to pay in full all amounts owed on outstanding Floating Rate Notes due 2011 and will redeem any and all outstanding 13.25% Senior Subordinated Notes due 2014 at a redemption price of 106.625% plus accrued interest. In addition, MXenergy, Constellation and Sempra Energy Trading entered into a termination agreement under which MXenergy agreed, subject to the closing of the merger, to pay just over $16 million in exchange for its Class B and Class C shares in MXenergy as well as the termination of outstanding hedge agreements. Sempra Energy Trading has provided supplier finance to pay MXenergy since 2009 and voted in favor of the merger.
 
@@ -840,11 +844,11 @@ Constellation shares MXenergy's commitment to environmental stewardship and a cl
 
 BofA Merrill Lynch acted as financial adviser to MXenergy on the transaction as well as on the replacement and termination of the Sempra Energy Trading supply facility, and Duff & Phelps delivered a fairness opinion to the MXenergy Board of Directors.
 
-**About MXenergy**
+### About MXenergy
 
-MXenergy is one of the fastest growing retail natural gas and electricity suppliers in North America, serving approximately 500,000 customers in 41 utility territories in the United States and Canada. For over 11 years, the company has provided millions of customers with a choice in how they purchase energy to run their homes and businesses. Founded in 1999 to provide natural gas and electricity to consumers in deregulated energy markets, helps residential customers and small business owners control their energy bills by providing both fixed and variable rate plans. MXenergy is committed to best practices in environmental conservation, supporting local communities through various outreach programs and is a member of the Chicago Climate Exchange. For more information, please visit [www.MXenergy.com](http://www.mxenergy.com/).
+MXenergy is one of the fastest growing retail natural gas and electricity suppliers in North America, serving approximately 500,000 customers in 41 utility territories in the United States and Canada. For over 11 years, the company has provided millions of customers with a choice in how they purchase energy to run their homes and businesses. Founded in 1999 to provide natural gas and electricity to consumers in deregulated energy markets, MXenergy helps residential customers and small business owners control their energy bills by providing both fixed and variable rate plans. MXenergy is committed to best practices in environmental conservation, supporting local communities through various outreach programs and is a member of the Chicago Climate Exchange. For more information, please visit [mxenergy.com](https://www.mxenergy.com).
 
-**About Constellation Energy**
+### About Constellation Energy
 
 Constellation Energy is a leading competitive supplier of power, natural gas and energy products and services for homes and businesses across the continental United States. It owns a diversified fleet of generating units, totaling approximately 12,000 megawatts of generating capacity, and is a leading advocate for clean, environmentally sustainable energy sources, such as solar power and nuclear energy. The company delivers electricity and natural gas through the Baltimore Gas and Electric Company (BGE), its regulated utility in Central Maryland. A FORTUNE 500 company headquartered in Baltimore, Constellation Energy had revenues of $14.3 billion in 2010.`,
     external_url: "https://www.prnewswire.com/news-releases/constellation-energy-purchases-mxenergy-121725878.html",
@@ -856,8 +860,8 @@ Constellation Energy is a leading competitive supplier of power, natural gas and
     title: "Detroit Thermal Attracts $50 Million For Energy System",
     author_slug: "charlie-abbott",
     published_at: "2010-11-16",
-    excerpt: "A coalition of Detroit business, labor and government groups Tuesday announced a $50 million investment in Detroit they said would isure a long-term, cost-effective and…",
-    body_md: `A coalition of Detroit business, labor and government groups Tuesday announced a $50 million investment in Detroit they said would isure a long-term, cost-effective and eco-friendly supply of renewable energy from waste-derived fuel for Detroit's core business district.
+    excerpt: "A coalition of Detroit business, labor and government groups Tuesday announced a $50 million investment in Detroit they said would ensure a long-term, cost-effective and…",
+    body_md: `A coalition of Detroit business, labor and government groups Tuesday announced a $50 million investment in Detroit they said would ensure a long-term, cost-effective and eco-friendly supply of renewable energy from waste-derived fuel for Detroit's core business district.
 
 Those making the announcement were Detroit Renewable Energy LLC, the new parent company of Detroit Thermal LLC, along with the City of Detroit, the Greater Detroit Resource Recovery Authority, the International Union of Operating Engineers Local 324, Utility Workers Union of America, AFL-CIO Local 223, and DTE Energy.
 
@@ -875,7 +879,7 @@ A request is being made to the Detroit City Council for the development of an In
 
 DTE Energy will continue to purchase all of the electricity generated by Detroit Renewable Power from the EFW plant. The International Union of Operating Engineers Local 324 ratified a new three-year collective bargaining agreement with Detroit Renewable Power.
 
-"This new investment of $50 million, on top of the $35 million we already invested since buying the district energy system in 2003, assures a long-term, cost-effective and environmentally-friendly supply of renewable energy from municipal waste that would otherwise be trucked to landfills," Koppang said. "Detroit Thermal's customers can count on uninterrupted steam energy services and at the same time help improve the environment by lowering emissions and reducing their carbon footprint. We have a 21st century system and nearly $120 million in new customer commitments, and the interest in our service keeps growing. The future looks great to us."
+"This new investment of $50 million, on top of the $35 million we already invested since buying the district energy system in 2003, assures a long-term, cost-effective and environmentally friendly supply of renewable energy from municipal waste that would otherwise be trucked to landfills," Koppang said. "Detroit Thermal's customers can count on uninterrupted steam energy services and at the same time help improve the environment by lowering emissions and reducing their carbon footprint. We have a 21st century system and nearly $120 million in new customer commitments, and the interest in our service keeps growing. The future looks great to us."
 
 DRE purchased the EFW plant from Energy Investors Fund LLC of Needham, Mass. and Covanta Energy Corp. of Fairfield, N.J. The EFW plant will operate as a separate company and sell steam – its primary product – to Detroit Thermal, LLC and electricity to DTE Energy.
 
