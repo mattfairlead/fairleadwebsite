@@ -17,7 +17,7 @@ export default function Field(props: InputProps | TextareaProps) {
   const { label, hint, className, ...rest } = props;
   return (
     <label className={clsx("field-wrap flex flex-col gap-2", className)}>
-      <span className="flex items-baseline justify-between gap-4">
+      <span className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <span className="label text-white-50">{label}</span>
         {hint && <span className="body-sm text-white-40">{hint}</span>}
       </span>

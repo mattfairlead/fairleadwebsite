@@ -22,7 +22,9 @@ const ASK_ENABLED = process.env.NEXT_PUBLIC_ASK_ENABLED === "true";
  * Fixed transparent header, 4.5rem, three segments split by 1px white-20
  * vertical rules: [logo] | [nav] | [Talk to a partner]. Bottom hairline.
  * On load: bottom rule scaleX in, verticals scaleY in (§5.8.3). Over the
- * first ~120px of scroll it eases into a 12px backdrop blur.
+ * first ~120px of scroll it eases into a 12px backdrop blur. The five-link
+ * nav needs ~1000px to sit on one line, so the desktop bar starts at lg and
+ * tablets get the glass sheet.
  *
  * Craft layer: a glass pill slides between nav links under the cursor; the
  * current page carries a gold dot; a 1px gold scroll-progress rule rides the
@@ -85,14 +87,14 @@ export default function Header() {
     >
       <div className="container-page relative flex h-full items-stretch">
         {/* segment 1: logo */}
-        <div className="flex items-center pr-8" data-header-item>
+        <div className="flex shrink-0 items-center pr-8" data-header-item>
           <Logo />
         </div>
 
         {/* segment 2: nav */}
         <nav
           ref={navRef}
-          className="relative hidden flex-1 items-center gap-1 pl-6 md:flex"
+          className="relative hidden flex-1 items-center gap-1 pl-6 lg:flex"
           aria-label="Primary"
           onMouseLeave={() => setPill((p) => ({ ...p, on: false }))}
         >
@@ -124,7 +126,7 @@ export default function Header() {
         </nav>
 
         {/* segment 3: Ask trigger + CTA */}
-        <div className="relative ml-auto hidden items-center gap-6 pl-8 md:flex">
+        <div className="relative ml-auto hidden items-center gap-6 pl-8 lg:flex">
           <span data-dec="v" className="dec dec-header left-0 w-px" style={{ top: 1, height: "calc(100% - 2px)" }} />
           {ASK_ENABLED && (
             <button
@@ -145,7 +147,7 @@ export default function Header() {
         {/* mobile burger */}
         <button
           type="button"
-          className="relative z-50 ml-auto flex h-full w-10 flex-col items-end justify-center gap-1.5 md:hidden"
+          className="relative z-50 ml-auto flex h-full w-10 flex-col items-end justify-center gap-1.5 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -170,7 +172,7 @@ export default function Header() {
       <div
         id="mobile-menu"
         data-open={open}
-        className="mobile-menu fixed inset-x-0 top-[4.5rem] bottom-0 z-40 flex flex-col px-5 pt-10 md:hidden"
+        className="mobile-menu fixed inset-x-0 top-[4.5rem] bottom-0 z-40 flex flex-col overflow-y-auto px-5 pt-8 md:px-10 lg:hidden"
         aria-hidden={!open}
       >
         {NAV.map((item, i) => {
@@ -179,7 +181,7 @@ export default function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className={clsx("menu-item h3 flex items-baseline justify-between py-3", active ? "text-gold" : "text-white-100")}
+              className={clsx("menu-item h3 flex items-baseline justify-between py-4", active ? "text-gold" : "text-white-100")}
               style={{ "--i": i } as React.CSSProperties}
               tabIndex={open ? 0 : -1}
             >
@@ -188,7 +190,7 @@ export default function Header() {
             </Link>
           );
         })}
-        <div className="menu-item mt-8 flex flex-col gap-6" style={{ "--i": NAV.length } as React.CSSProperties}>
+        <div className="menu-item mt-10 flex flex-col gap-6" style={{ "--i": NAV.length } as React.CSSProperties}>
           <Link href="/contact" className="btn btn-primary button self-start" tabIndex={open ? 0 : -1}>
             Talk to a partner
           </Link>
@@ -196,7 +198,7 @@ export default function Header() {
             (617) 315-4822
           </a>
         </div>
-        <p className="menu-item label mt-auto pb-10 text-white-40" style={{ "--i": NAV.length + 1 } as React.CSSProperties}>
+        <p className="menu-item label mt-auto pb-10 pt-10 text-white-40" style={{ "--i": NAV.length + 1 } as React.CSSProperties}>
           Boston · Houston · Minneapolis · Annapolis
         </p>
       </div>

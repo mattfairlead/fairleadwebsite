@@ -24,8 +24,10 @@ const TEAM_POSTER = "/team/hero-poster.jpg";
 // the box spans the whole intro on a desktop, so its left ~64% feathers
 // out and the copy sits over footage that has all but melted into the
 // blue. Below ~1400px the leftmost column slides off the page — behind the
-// feather, where it was already invisible. Top and bottom fade under the
-// header and into the sections below.
+// feather, where it was already invisible. Below xl the box overhangs far
+// enough that the feather leaves the page too and the copy would sit on raw
+// footage, so the whole layer steps down (60% at lg, 40% below). Top and
+// bottom fade under the header and into the sections below.
 //
 // Every fade reaches full transparency a few percent short of the edge,
 // never at 100%. On scroll the page moves on fractional offsets and the
@@ -41,7 +43,7 @@ export default function TeamHeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-y-0 right-0 aspect-[1250/600] max-md:aspect-auto max-md:w-[92%] max-md:opacity-60"
+        className="absolute inset-y-0 right-0 aspect-[1250/600] max-md:aspect-auto max-md:w-[92%] max-lg:opacity-40 lg:max-xl:opacity-60"
         style={{
           WebkitMaskImage: MASK,
           maskImage: MASK,

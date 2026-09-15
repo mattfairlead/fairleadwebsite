@@ -43,18 +43,18 @@ export default function ContactPage() {
             <Mailmark className="block h-full w-full" />
           </span>
           <div className="grid md:grid-cols-[3fr_2fr]">
-            <div data-cell className="p-6 md:p-12">
+            <div data-cell className="p-6 md:p-8 lg:p-12">
               <Suspense fallback={null}>
                 <ContactForm />
               </Suspense>
             </div>
-            <div data-cell className="spot flex flex-col gap-10 p-6 md:p-12">
+            <div data-cell className="spot flex flex-col gap-10 p-6 md:p-8 lg:p-12">
               <div className="flex flex-col gap-2">
                 <span className="label text-white-50">Phone</span>
                 <a
                   href="tel:+16173154822"
-                  className="h3 text-white-100 transition-colors duration-200 hover:text-gold tabular"
-                  style={{ fontSize: "clamp(1.75rem, 1.2rem + 1.4vw, 2.5rem)" }}
+                  className="h3 whitespace-nowrap text-white-100 transition-colors duration-200 hover:text-gold tabular"
+                  style={{ fontSize: "clamp(1.5rem, 0.5rem + 1.6vw, 2.5rem)" }}
                 >
                   (617) 315-4822
                 </a>

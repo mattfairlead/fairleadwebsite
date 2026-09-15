@@ -85,20 +85,21 @@ export default function Hero() {
         overlayStrength={1}
         video={HERO_VIDEO || undefined}
       >
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-5 pb-36 text-center">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-5 pb-56 text-center sm:pb-36">
           <span data-hero-eyebrow className="label mb-8 flex items-center gap-3 text-white-50">
-            <span className="inline-block h-px w-6 bg-gold" aria-hidden="true" />
+            <span className="inline-block h-px w-6 bg-gold max-sm:hidden" aria-hidden="true" />
             Hands-on engagements + intelligence
-            <span className="inline-block h-px w-6 bg-gold" aria-hidden="true" />
+            <span className="inline-block h-px w-6 bg-gold max-sm:hidden" aria-hidden="true" />
           </span>
           {/* .h1 clamps to 12vw for short display words; this two-phrase
               headline needs the narrower clamp to hold two lines (caveman rule) */}
-          <h1 data-hero-h1 className="h1" style={{ fontSize: "clamp(3rem, 8.5vw, 8.75rem)", perspective: "800px" }}>
-            You can&rsquo;t steer
-            <br />
-            <span className="text-gold-glow">what you can&rsquo;t see.</span>
+          {/* each phrase is its own block so text-wrap: balance works per line
+              on a phone ("what you / can't see." rather than an orphaned "see.") */}
+          <h1 data-hero-h1 className="h1" style={{ fontSize: "clamp(2.75rem, 8.5vw, 8.75rem)", perspective: "800px" }}>
+            <span className="block">You can&rsquo;t steer</span>
+            <span className="text-gold-glow block">what you can&rsquo;t see.</span>
           </h1>
-          <div data-hero-sub className="mt-8 flex flex-col items-center gap-4">
+          <div data-hero-sub className="mt-6 flex flex-col items-center gap-4 sm:mt-8">
             <p className="body-xl max-w-3xl text-white-60">
               Management runs the company. You steer it. We make sure you can see it.
             </p>
@@ -107,7 +108,7 @@ export default function Hero() {
               restructuring, fundraising, and finance — with the tools we build inside the work.
             </p>
           </div>
-          <Link data-hero-cta href="/contact" className="btn btn-primary button mt-10">
+          <Link data-hero-cta href="/contact" className="btn btn-primary button mt-8 sm:mt-10">
             Talk to a partner
             {ARROW}
           </Link>

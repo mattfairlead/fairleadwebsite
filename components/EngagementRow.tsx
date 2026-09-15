@@ -27,11 +27,7 @@ export default function EngagementRow({ engagement }: { engagement: Engagement }
         <p className="body-md max-w-2xl text-white-60">{engagement.summary_md}</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {engagement.roles.map((r) => (
-            <span
-              key={r}
-              className="label rounded-[3px] px-2 py-1.5 text-white-50"
-              style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1)" }}
-            >
+            <span key={r} className="label tag">
               {r}
             </span>
           ))}

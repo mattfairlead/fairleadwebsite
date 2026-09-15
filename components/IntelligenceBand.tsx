@@ -45,7 +45,9 @@ export default function IntelligenceBand() {
         </p>
       </div>
 
-      <div className="relative mt-14 overflow-hidden" style={{ aspectRatio: "1440/863", minHeight: "26rem" }}>
+      {/* height on a phone, aspect from md up — an aspect box with a min-height
+          transfers that minimum to its width and overflows the viewport */}
+      <div className="relative mt-14 h-[30rem] overflow-hidden md:aspect-[1440/863] md:h-auto md:min-h-[26rem]">
         {/* TODO(media): replace with the sanitized Solaris Portfolio Map still, blurred at edges into blue-950 */}
         <div
           className="absolute inset-0"
@@ -79,7 +81,7 @@ export default function IntelligenceBand() {
           }}
         />
         {/* live status */}
-        <div className="absolute left-6 top-8 flex items-center gap-2 md:left-10" aria-hidden="true">
+        <div className="absolute left-5 top-6 flex items-center gap-2 md:left-10 md:top-8" aria-hidden="true">
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full rounded-full bg-gold opacity-60" style={{ animation: "ping 2.4s cubic-bezier(0,0,0.2,1) infinite" }} />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-gold" />

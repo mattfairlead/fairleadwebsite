@@ -72,8 +72,8 @@ export default function Footer() {
       <div className="container-page relative">
         <span className="dec dec-footer left-0 top-0 h-px w-full" />
 
-        <div className="grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr] md:gap-20">
-          <div className="flex flex-col gap-6">
+        <div className="grid gap-12 py-16 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr] md:gap-16 lg:gap-20">
+          <div className="flex flex-col gap-6 sm:col-span-2 md:col-span-1">
             <Logo />
             <p className="body-md max-w-xs text-white-50">
               Embedded operating leadership for PE-backed companies. Hands-on engagements since 2010,
@@ -123,7 +123,7 @@ export default function Footer() {
         <div className="relative flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-6">
           <span className="dec dec-footer left-0 top-0 h-px w-full" />
           <span className="body-sm text-white-40">© {new Date().getFullYear()} Fairlead Advisors</span>
-          <span className="label text-white-20">Operating inside portfolios since 2010</span>
+          <span className="label text-white-40">Operating inside portfolios since 2010</span>
           {/* TODO(§9): mailing address small print — keep or drop, pending decision */}
         </div>
       </div>

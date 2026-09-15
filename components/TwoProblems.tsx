@@ -33,7 +33,7 @@ export default function TwoProblems() {
       <HairlineFrame columns={2} className="mt-14">
         <div className="grid md:grid-cols-2">
           {CELLS.map((cell, i) => (
-            <div key={cell.title} data-cell className="spot flex min-h-[18rem] flex-col gap-4 p-6 md:p-10">
+            <div key={cell.title} data-cell className="spot flex flex-col gap-4 p-6 md:min-h-[18rem] md:p-10">
               <span className="ghost-num" aria-hidden="true">
                 0{i + 1}
               </span>

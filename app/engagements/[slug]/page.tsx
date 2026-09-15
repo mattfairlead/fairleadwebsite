@@ -44,19 +44,19 @@ export default async function EngagementPage({ params }: { params: Promise<{ slu
       <SectionReveal className="container-page pb-10">
         <HairlineFrame columns={3}>
           <div className="grid md:grid-cols-3">
-            <div data-cell className="spot flex flex-col gap-2 p-6 md:p-8">
+            <div data-cell className="spot flex flex-col gap-2 p-5 md:p-6 lg:p-8">
               <span className="label text-white-50">Roles</span>
               <span data-anim="title" className="body-md text-white-100">
                 {engagement.roles.join(" · ")}
               </span>
             </div>
-            <div data-cell className="spot flex flex-col gap-2 p-6 md:p-8">
+            <div data-cell className="spot flex flex-col gap-2 p-5 md:p-6 lg:p-8">
               <span className="label text-white-50">Outcome</span>
               <span data-anim="title" className="body-md text-white-100">
                 {engagement.outcome_tags.join(" · ")}
               </span>
             </div>
-            <div data-cell className="spot flex flex-col gap-2 p-6 md:p-8">
+            <div data-cell className="spot flex flex-col gap-2 p-5 md:p-6 lg:p-8">
               <span className="label text-white-50">Period</span>
               <span data-anim="title" className="body-md text-white-100 tabular">
                 {engagement.year_start}

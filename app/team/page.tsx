@@ -23,18 +23,18 @@ export const revalidate = 300;
 /**
  * Horizontal hairline under a grid cell. Rows grow when a bio opens, so the
  * rules track the cells instead of sitting at fixed offsets on the frame:
- * every row but the last on desktop, every cell but the last when the grid
- * collapses to one column on mobile.
+ * every row but the last, at every column count the grid steps through
+ * (`cols` maps a breakpoint to its column count; "" is the phone).
  */
-function CellRule({ index, count, columns }: { index: number; count: number; columns: number }) {
+function CellRule({ index, count, cols }: { index: number; count: number; cols: Record<string, number> }) {
   if (index >= count - 1) return null;
-  const lastRowStart = (Math.ceil(count / columns) - 1) * columns;
-  return (
-    <span
-      className={`dec bottom-0 left-0 h-px w-full${index >= lastRowStart ? " md:hidden" : ""}`}
-      aria-hidden="true"
-    />
-  );
+  const classes = Object.entries(cols).map(([bp, n]) => {
+    const lastRowStart = (Math.ceil(count / n) - 1) * n;
+    const shown = index < lastRowStart;
+    const prefix = bp ? `${bp}:` : "";
+    return `${prefix}${shown ? "block" : "hidden"}`;
+  });
+  return <span className={`dec bottom-0 left-0 h-px w-full ${classes.join(" ")}`} aria-hidden="true" />;
 }
 
 /**
@@ -55,11 +55,11 @@ export default async function TeamPage() {
       {partners.length > 0 && (
         <SectionReveal className="container-page pb-6 pt-44 max-md:pt-32">
           <SectionHead eyebrow="Partners" title={<>The partners.</>} titleClass="h3" />
-          <HairlineFrame columns={2} className="mt-10">
-            <div className="grid md:grid-cols-2">
+          <HairlineFrame columns={2} columnsFrom="lg" className="mt-10">
+            <div className="grid lg:grid-cols-2">
               {partners.map((member, i) => (
                 <div key={member.slug} className="relative">
-                  <CellRule index={i} count={partners.length} columns={2} />
+                  <CellRule index={i} count={partners.length} cols={{ "": 1, lg: 2 }} />
                   <TeamCell member={member} featured />
                 </div>
               ))}
@@ -72,11 +72,11 @@ export default async function TeamPage() {
       {rest.length > 0 && (
         <SectionReveal className={partners.length > 0 ? "section container-page" : "container-page pb-28 pt-44 max-md:pt-32"}>
           <SectionHead eyebrow="Team" title={<>The operators.</>} titleClass="h3" />
-          <HairlineFrame columns={4} className="mt-10">
-            <div className="grid sm:grid-cols-2 md:grid-cols-4">
+          <HairlineFrame columns={4} columnsFrom="lg" midColumns={2} midFrom="sm" className="mt-10">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4">
               {rest.map((member, i) => (
                 <div key={member.slug} className="relative">
-                  <CellRule index={i} count={rest.length} columns={4} />
+                  <CellRule index={i} count={rest.length} cols={{ "": 1, sm: 2, lg: 4 }} />
                   <TeamCell member={member} />
                 </div>
               ))}
@@ -100,7 +100,7 @@ export default async function TeamPage() {
               Fairlead team members are prepared to lead organizations, manage teams, make decisions, and act
               as individual contributors.
             </p>
-            <Link href="/careers" className="btn btn-secondary button self-start" data-anim="pop">
+            <Link href="/careers" className="btn btn-secondary button justify-self-start" data-anim="pop">
               Careers at Fairlead
             </Link>
           </div>

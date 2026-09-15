@@ -4,7 +4,7 @@ import clsx from "clsx";
 import IntelligenceHero from "@/components/IntelligenceHero";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
-import HairlineFrame from "@/components/HairlineFrame";
+import HairlineFrame, { RowRule } from "@/components/HairlineFrame";
 import Btn from "@/components/Btn";
 import { pageMetadata } from "@/lib/seo";
 
@@ -127,8 +127,8 @@ export default function IntelligencePage() {
         <HairlineFrame columns={2} className="mt-14">
           <ul className="grid md:grid-cols-2">
             {STRAPLINES.map((s, i) => (
-              <li key={s} data-cell className="spot flex items-start gap-5 px-6 py-6 md:px-8" data-anim="fade-up" data-anim-delay={String(i * 0.05)}>
-                <span className="label pt-1 text-gold/80 tabular">0{i + 1}</span>
+              <li key={s} data-cell className="spot flex items-start gap-4 px-5 py-5 md:gap-5 md:px-8 md:py-6" data-anim="fade-up" data-anim-delay={String(i * 0.05)}>
+                <span className="label pt-1.5 text-gold/80 tabular">0{i + 1}</span>
                 <span data-anim="title" className="body-md text-white-80">
                   {s}
                 </span>
@@ -144,14 +144,16 @@ export default function IntelligencePage() {
           eyebrow="The tools"
           title={<>Custom AI solutions that solve operational challenges.</>}
         />
-        <HairlineFrame columns={3} rows={["50%"]} className="mt-14">
-          <div className="grid md:grid-cols-3">
+        <HairlineFrame columns={3} columnsFrom="lg" midColumns={2} className="mt-14">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3">
             {TOOLS.map((tool, i) => (
-              <div key={tool.name} data-cell className="spot flex min-h-[15rem] flex-col gap-3 p-6 md:p-10">
+              <div key={tool.name} data-cell className="spot flex flex-col gap-3 p-6 md:min-h-[15rem] md:p-10">
+                {/* second-row rules: from cell 3 in the 2-up layout, from cell 4 in the 3-up */}
+                {i >= 3 ? <RowRule className="max-md:hidden" /> : i === 2 ? <RowRule className="max-md:hidden lg:hidden" /> : null}
                 {/* TODO(media): sanitized screenshot per tool */}
                 <span className="label flex items-center gap-2 text-white-40 tabular">
                   0{i + 1}
-                  {tool.flagship && <span className="rounded-[3px] bg-gold/15 px-1.5 py-0.5 text-gold">Flagship</span>}
+                  {tool.flagship && <span className="rounded-[3px] bg-gold/15 px-1.5 py-1 text-gold">Flagship</span>}
                 </span>
                 <h3 data-anim="title" className="h4 mt-2">
                   {tool.name}
@@ -175,20 +177,21 @@ export default function IntelligencePage() {
             each priced.
           </p>
         </div>
-        <HairlineFrame columns={4} className="mt-14">
-          <div className="grid md:grid-cols-4">
+        <HairlineFrame columns={4} columnsFrom="lg" midColumns={2} className="mt-14">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4">
             {OPTIONS.map((option, i) => (
               <div
                 key={option.head}
                 data-cell
-                className={clsx("spot relative flex min-h-[17rem] flex-col gap-3 p-6 md:p-8")}
+                className={clsx("spot relative flex flex-col gap-3 p-6 md:min-h-[17rem] md:p-7 xl:p-8")}
                 style={
                   option.recommended
                     ? { background: "linear-gradient(180deg, rgba(213,179,113,0.10) 0%, rgba(213,179,113,0.02) 100%)" }
                     : undefined
                 }
               >
-                {option.recommended && <span className="absolute inset-x-0 top-0 h-0.5 bg-gold" aria-hidden="true" />}
+                {i >= 2 && <RowRule className="max-md:hidden lg:hidden" />}
+                {option.recommended && <span className="absolute inset-x-0 top-0 z-[1] h-0.5 bg-gold" aria-hidden="true" />}
                 <span className={clsx("label tabular", option.recommended ? "text-gold" : "text-white-50")}>0{i + 1}</span>
                 <h3 data-anim="title" className="h4">
                   {option.head}
@@ -204,13 +207,14 @@ export default function IntelligencePage() {
             ))}
           </div>
         </HairlineFrame>
-        <dl className="mt-10 grid max-w-3xl gap-6 sm:grid-cols-3" data-anim="fade-up">
+        <dl className="mt-10 grid max-w-3xl gap-4 sm:grid-cols-3 sm:gap-6" data-anim="fade-up">
           {[
             ["~$360K", "net expected savings"],
             ["~$75K", "at risk"],
             ["60%", "success assumed"],
           ].map(([n, l]) => (
-            <div key={l} className="flex flex-col gap-1 border-l border-white-10 pl-4">
+            <div key={l} className="relative flex flex-col gap-1 pl-4">
+              <span className="absolute left-0 top-1 h-[calc(100%-0.25rem)] w-px bg-white-10" aria-hidden="true" />
               <dt className="h4 text-white-100 tabular">{n}</dt>
               <dd className="body-sm text-white-50">{l}</dd>
             </div>
@@ -229,7 +233,7 @@ export default function IntelligencePage() {
               ["Tools built for the engagement", "Against your actual pain, not a demo dataset."],
               ["Integrations you already run", "Accounting, orders, email — the systems that are there."],
             ].map(([head, body], i) => (
-              <div key={head} data-cell className="spot flex flex-col gap-3 p-6 md:p-10">
+              <div key={head} data-cell className="spot flex flex-col gap-3 p-6 md:p-7 lg:p-10">
                 <span className="label text-white-40 tabular">0{i + 1}</span>
                 <h3 data-anim="title" className="h4">
                   {head}

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
-import HairlineFrame from "@/components/HairlineFrame";
+import HairlineFrame, { RowRule } from "@/components/HairlineFrame";
 import { ARROW } from "@/components/Btn";
 
 /**
@@ -66,15 +66,16 @@ export default function Pillars() {
   return (
     <SectionReveal className="section container-page">
       <SectionHead eyebrow="How it runs" title={<>Operating discipline, on the sponsor&rsquo;s clock.</>} />
-      <HairlineFrame columns={4} className="mt-14">
-        <div className="grid md:grid-cols-4">
+      <HairlineFrame columns={4} columnsFrom="lg" midColumns={2} className="mt-14">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4">
           {PILLARS.map((pillar, i) => (
             <Link
               key={pillar.id}
               href={`/hands-on-engagements#${pillar.id}`}
               data-cell
-              className="spot group flex min-h-[20rem] flex-col gap-5 p-6 md:p-10"
+              className="spot group flex flex-col gap-5 p-6 md:min-h-[20rem] md:p-8 xl:p-10"
             >
+              {i >= 2 && <RowRule className="max-md:hidden lg:hidden" />}
               <span className="ghost-num" aria-hidden="true">
                 0{i + 1}
               </span>

@@ -29,13 +29,13 @@ export default function Advantage() {
             Every engagement deepens the operating intelligence behind our tools — captured, structured,
             source-cited.
           </p>
-          <ul className="mt-2 grid max-w-xl grid-cols-3 gap-6" data-anim="fade-up" data-anim-delay="0.25">
+          <ul className="mt-2 grid max-w-xl gap-3 sm:grid-cols-3 sm:gap-6" data-anim="fade-up" data-anim-delay="0.25">
             {[
               ["Captured", "inside the seat"],
               ["Structured", "one schema"],
               ["Cited", "to the source"],
             ].map(([head, sub]) => (
-              <li key={head} className="relative flex flex-col gap-1 pl-4">
+              <li key={head} className="relative flex items-baseline gap-2 pl-4 sm:flex-col sm:items-stretch sm:gap-1">
                 <span className="absolute left-0 top-1 h-[calc(100%-0.25rem)] w-px bg-gold/70" aria-hidden="true" />
                 <span className="body-md text-white-100">{head}</span>
                 <span className="body-sm text-white-40">{sub}</span>
@@ -45,9 +45,9 @@ export default function Advantage() {
         </div>
         <div className="group relative overflow-hidden" style={{ borderRadius: "3px" }}>
           <div data-anim="scale-in" className="transition-transform duration-[1200ms] group-hover:scale-[1.03]" style={{ transitionTimingFunction: "var(--ease-out-expo)" }}>
-            <ImageBand aspect="4/5" overlayStrength={0.7} />
+            <ImageBand aspect="auto" className="aspect-[4/3] md:aspect-[4/5]" overlayStrength={0.7} />
           </div>
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between p-8">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 md:p-8">
             <div className="flex flex-col">
               <span className="h1 text-white-100 tabular" style={{ fontSize: "clamp(4.5rem, 9vw, 7.5rem)" }}>
                 15

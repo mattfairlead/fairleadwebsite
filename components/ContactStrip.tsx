@@ -13,7 +13,7 @@ export default function ContactStrip() {
     <SectionReveal className="section container-page">
       <HairlineFrame verticalsAt={["58%"]}>
         <div className="grid md:grid-cols-[58fr_42fr]">
-          <div data-cell className="spot flex flex-col gap-5 p-6 md:p-12">
+          <div data-cell className="spot flex flex-col gap-5 p-6 md:p-8 lg:p-12">
             <span className="label text-gold">Talk to a partner</span>
             <h2 data-anim="title" className="h2" style={{ fontSize: "clamp(2.25rem, 1.6rem + 2vw, 3.25rem)" }}>
               Working through something in the portfolio?
@@ -27,13 +27,13 @@ export default function ContactStrip() {
               </Btn>
             </div>
           </div>
-          <div data-cell className="spot flex flex-col justify-center gap-8 p-6 md:p-12">
+          <div data-cell className="spot flex flex-col justify-center gap-8 p-6 md:p-8 lg:p-12">
             <div className="flex flex-col gap-2">
               <span className="label text-white-50">Phone</span>
               <a
                 href="tel:+16173154822"
-                className="h3 text-white-100 transition-colors duration-200 hover:text-gold tabular"
-                style={{ fontSize: "clamp(1.75rem, 1.2rem + 1.4vw, 2.5rem)" }}
+                className="h3 whitespace-nowrap text-white-100 transition-colors duration-200 hover:text-gold tabular"
+                style={{ fontSize: "clamp(1.5rem, 0.5rem + 1.6vw, 2.5rem)" }}
               >
                 (617) 315-4822
               </a>
