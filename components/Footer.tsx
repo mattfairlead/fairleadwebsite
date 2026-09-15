@@ -94,12 +94,6 @@ export default function Footer() {
                 {item.label}
               </Link>
             ))}
-            <a href="https://tools.fairleadadvisors.com" className={`${linkCls} mt-2 flex items-center gap-2`}>
-              Client portal
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-                <path d="M2 8l6-6M3 2h5v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </a>
           </nav>
 
           <div className="flex flex-col gap-3">
@@ -110,7 +104,7 @@ export default function Footer() {
               </span>
             ))}
             <a
-              href="https://www.linkedin.com/company/fairlead-advisors"
+              href="https://www.linkedin.com/company/fairlead-advisors-llc"
               rel="noopener noreferrer"
               target="_blank"
               className={`${linkCls} mt-2`}
