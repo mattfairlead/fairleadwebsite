@@ -43,7 +43,10 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
 const BULLET = /^[-*]\s+/;
 
 export function Markdown({ children, className = "" }: { children: string; className?: string }) {
+  // Hub text can arrive with Windows line endings (pasted through the SQL
+  // editor); without this a whole post renders as one paragraph.
   const blocks = children
+    .replace(/\r\n?/g, "\n")
     .split(/\n\n+/)
     .map((b) => b.trim())
     .filter(Boolean);
