@@ -401,19 +401,85 @@ export function trackSpotlight(root: HTMLElement = document.body) {
   };
 }
 
-/** Smooth anchor scroll — §5.8.7. Routes through ScrollSmoother when present. */
+/**
+ * Smooth anchor scroll — §5.8.7. Routes through ScrollSmoother when present.
+ * The offset honours the target's own `scroll-margin-top` when it sets one
+ * (the anchored cells use `scroll-mt-28`), and clears the header otherwise.
+ */
 export function scrollToHash(hash: string, headerHeight = 72) {
   registerGsap();
+  const target = document.querySelector<HTMLElement>(hash);
+  if (!target) return;
+  const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+  const offset = Math.max(margin, headerHeight + 20);
   const smoother = ScrollSmoother.get();
   if (smoother) {
-    smoother.scrollTo(hash, true, `top ${headerHeight + 20}px`);
+    smoother.scrollTo(target, true, `top ${offset}px`);
     return;
   }
   gsap.to(window, {
     duration: 0.8,
     ease: EASE_INOUT,
-    scrollTo: { y: hash, offsetY: headerHeight + 20 },
+    scrollTo: { y: target, offsetY: offset },
   });
+}
+
+/**
+ * Same-page anchor links must never use the browser's native jump while
+ * ScrollSmoother is running: the smoother pins `.page-wrapper` as a fixed,
+ * overflow-hidden box, and a native `#hash` navigation scrolls *that box's*
+ * own scrollTop to reveal the target instead of moving the window. The
+ * smoother never learns about it, so the content sits displaced inside the
+ * wrapper and scrolling back "up" cannot recover it — the page looks blank.
+ *
+ * One delegated click listener routes every in-page hash link through
+ * scrollToHash() and updates the URL itself. Plain clicks only: modifier
+ * keys, non-left buttons, downloads and new-tab targets keep their default.
+ */
+export function interceptHashLinks(root: HTMLElement = document.body) {
+  const onClick = (e: MouseEvent) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const link = (e.target as Element | null)?.closest<HTMLAnchorElement>("a[href]");
+    if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
+    let url: URL;
+    try {
+      url = new URL(link.href, location.href);
+    } catch {
+      return;
+    }
+    if (url.origin !== location.origin || url.pathname !== location.pathname || !url.hash || url.hash === "#") return;
+    let target: Element | null = null;
+    try {
+      target = document.querySelector(url.hash);
+    } catch {
+      return;
+    }
+    if (!target) return;
+    e.preventDefault();
+    if (url.hash !== location.hash) history.pushState(null, "", url.hash);
+    scrollToHash(url.hash);
+  };
+  root.addEventListener("click", onClick);
+  return () => root.removeEventListener("click", onClick);
+}
+
+/**
+ * Safety net for anything else that scrolls the pinned wrapper natively —
+ * keyboard focus landing below the fold, find-in-page, a hash on a hard
+ * load. The wrapper's stray offset is handed to the smoother and zeroed, so
+ * the page position stays the smoother's alone.
+ */
+export function guardWrapperScroll(wrapper: HTMLElement) {
+  const onScroll = () => {
+    const offset = wrapper.scrollTop;
+    if (!offset) return;
+    wrapper.scrollTop = 0;
+    const smoother = ScrollSmoother.get();
+    if (smoother) smoother.scrollTo(smoother.scrollTop() + offset, false);
+    else window.scrollBy(0, offset);
+  };
+  wrapper.addEventListener("scroll", onScroll, { passive: true });
+  return () => wrapper.removeEventListener("scroll", onScroll);
 }
 
 export { gsap, ScrollTrigger, ScrollSmoother };
