@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import NewsletterForm from "@/components/NewsletterForm";
 import Compassmark from "@/components/Compassmark";
+import Mailmark from "@/components/Mailmark";
 import { ARROW } from "@/components/Btn";
 import { getPerspectives, getTeam } from "@/lib/data";
 import { pageMetadata } from "@/lib/seo";
@@ -82,15 +82,14 @@ export default async function PerspectivesPage() {
       <SectionReveal className="section container-page">
         <div className="grid gap-10 md:grid-cols-2 md:items-center">
           <div className="flex flex-col gap-8">
-            <Image
-              src="/brand/PlanAsset%203.svg"
-              alt=""
-              width={622}
-              height={344}
-              aria-hidden="true"
+            <span
               data-anim="fade-up"
-              className="h-auto w-28 md:w-36"
-            />
+              aria-hidden="true"
+              className="block w-28 md:w-36"
+              style={{ aspectRatio: "300 / 186" }}
+            >
+              <Mailmark className="block h-full w-full" uid="perspectives-mailmark" />
+            </span>
             <SectionHead eyebrow="Newsletter" title={<>Get the next one.</>} titleClass="h3" />
           </div>
           <NewsletterForm />
