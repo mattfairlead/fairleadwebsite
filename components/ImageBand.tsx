@@ -57,7 +57,7 @@ export default function ImageBand({
         style={{
           background: src
             ? `url(${src}) center / cover no-repeat`
-            : "linear-gradient(180deg, #050E2E 0%, #0A1A4F 45%, #1A3D94 72%, #B59860 98%)",
+            : "linear-gradient(180deg, #091231 0%, #0A1A4F 45%, #1A3D94 72%, #B59860 98%)",
         }}
       />
       {/* motion layer — sits over the gradient, which doubles as its poster */}
