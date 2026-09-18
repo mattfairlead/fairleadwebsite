@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import PageIntro from "@/components/PageIntro";
 import TeamHeroBackdrop from "@/components/TeamHeroBackdrop";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import HairlineFrame, { RowRule } from "@/components/HairlineFrame";
-import Foldmark, { type FoldmarkKind } from "@/components/Foldmark";
 import GlassStrip from "@/components/GlassStrip";
 import ImageBand from "@/components/ImageBand";
 import FeeBlock from "@/components/FeeBlock";
@@ -147,29 +147,32 @@ const SCOPES = [
 ];
 
 // The four pillars, kept as anchors (the homepage Pillars cells deep-link to
-// them) but demoted from page spine to how an engagement is run.
-const PILLARS: { id: string; mark: FoldmarkKind; title: string; body: string }[] = [
+// them) but demoted from page spine to how an engagement is run. Icons share
+// one fixed h-12 w-12 box and object-contain, so the four brand SVGs — wildly
+// different aspect ratios — still read as a uniform row (same treatment as
+// the homepage's Pillars section).
+const PILLARS: { id: string; icon: { src: string; width: number; height: number }; title: string; body: string }[] = [
   {
     id: "embedded-leadership",
-    mark: "seat",
+    icon: { src: "/brand/Seat.svg", width: 357, height: 493 },
     title: "Embedded leadership",
     body: "Fractional and interim CEO, CFO, COO, Controller; board and operating partner roles. Sitting in the seat, not visiting it.",
   },
   {
     id: "overhead-discipline",
-    mark: "ledger",
+    icon: { src: "/brand/information2Asset%206.svg", width: 322, height: 440 },
     title: "Overhead discipline",
     body: "G&A reduction, vendor management, 13-week cash forecasting, covenant compliance: every month of it real return.",
   },
   {
     id: "real-time-visibility",
-    mark: "lens",
+    icon: { src: "/brand/glassesAsset%207.svg", width: 550, height: 297 },
     title: "Real-time visibility",
     body: "Sponsors see what's happening without depending on management, or Fairlead, to tell them.",
   },
   {
     id: "exit-ready",
-    mark: "plane",
+    icon: { src: "/brand/Plane2Asset%205.svg", width: 622, height: 344 },
     title: "Exit-ready",
     body: "The company is kept in a condition to be sold, so the process starts when the window opens rather than six weeks later.",
   },
@@ -264,7 +267,15 @@ export default function HandsOnEngagementsPage() {
                 <span className="ghost-num" aria-hidden="true">
                   0{i + 1}
                 </span>
-                <Foldmark kind={pillar.mark} className="h-12 w-12" />
+                <span className="flex h-12 w-12 items-center justify-center">
+                  <Image
+                    src={pillar.icon.src}
+                    alt=""
+                    width={pillar.icon.width}
+                    height={pillar.icon.height}
+                    className="h-full w-full object-contain"
+                  />
+                </span>
                 <h3 data-anim="title" className="h4 mt-1">
                   {pillar.title}
                 </h3>

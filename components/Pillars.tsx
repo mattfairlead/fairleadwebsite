@@ -1,40 +1,42 @@
+import Image from "next/image";
 import Link from "next/link";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import HairlineFrame, { RowRule } from "@/components/HairlineFrame";
-import Foldmark, { type FoldmarkKind } from "@/components/Foldmark";
 import { ARROW } from "@/components/Btn";
 
 /**
  * Home §4.1 row 5 — the four pillars in a 4-col hairline grid: .label
- * counter, folded-paper mark, .h4, .body-md. Counters are legitimate here —
- * it's the delivery sequence. Each cell links to its /hands-on-engagements
+ * counter, brand icon, .h4, .body-md. Counters are legitimate here — it's
+ * the delivery sequence. Each cell links to its /hands-on-engagements
  * anchor; the cell is a spotlight surface and the arrow at its foot signals
- * the link.
+ * the link. Icons share one fixed h-14 w-14 box and object-contain, so the
+ * four brand SVGs — wildly different aspect ratios — still read as a
+ * uniform row instead of four different-sized marks.
  */
 
-const PILLARS: { id: string; mark: FoldmarkKind; title: string; body: string }[] = [
+const PILLARS: { id: string; icon: { src: string; width: number; height: number }; title: string; body: string }[] = [
   {
     id: "embedded-leadership",
-    mark: "seat",
+    icon: { src: "/brand/Seat.svg", width: 357, height: 493 },
     title: "Embedded leadership",
     body: "Fractional and interim CEO, CFO, COO, Controller. You don't get one person: you get the team.",
   },
   {
     id: "overhead-discipline",
-    mark: "ledger",
+    icon: { src: "/brand/information2Asset%206.svg", width: 322, height: 440 },
     title: "Overhead discipline",
     body: "G&A reduction, vendor management, 13-week cash forecasting, covenant compliance.",
   },
   {
     id: "real-time-visibility",
-    mark: "lens",
+    icon: { src: "/brand/glassesAsset%207.svg", width: 550, height: 297 },
     title: "Real-time visibility",
     body: "Sponsors see what's happening without depending on management, or Fairlead, to tell them.",
   },
   {
     id: "exit-ready",
-    mark: "plane",
+    icon: { src: "/brand/Plane2Asset%205.svg", width: 622, height: 344 },
     title: "Exit-ready",
     body: "The same team that runs the company runs the process to sell it.",
   },
@@ -61,7 +63,13 @@ export default function Pillars() {
                 className="flex h-14 w-14 items-center justify-center transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:scale-110"
                 style={{ transitionTimingFunction: "var(--ease-spring)" }}
               >
-                <Foldmark kind={pillar.mark} className="h-14 w-14" />
+                <Image
+                  src={pillar.icon.src}
+                  alt=""
+                  width={pillar.icon.width}
+                  height={pillar.icon.height}
+                  className="h-full w-full object-contain"
+                />
               </span>
               <h3 data-anim="title" className="h4 mt-2">
                 {pillar.title}
