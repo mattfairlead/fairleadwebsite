@@ -42,10 +42,11 @@ const NAV = [
 const linkCls = "body-sm text-white-40 transition-colors duration-200 hover:text-white-100";
 
 /**
- * Footer — §5.5 last row. A blue-hour image band (21rem) over flat water,
- * a sailboat on the left, and a dot-matrix map of the lower 48 with the
- * four office cities as live dots, then a hairline-segmented footer. No personal
- * emails, no fax. Mailing address small-print only (TODO §9: keep or drop).
+ * Footer — §5.5 last row. A blue-hour image band (21rem) over flat water
+ * with a sailboat on the left, then a hairline-segmented footer whose
+ * column row carries a fourth column: a compact dot-matrix map of the
+ * lower 48 with the four office cities as live dots. No personal emails,
+ * no fax. Mailing address small-print only (TODO §9: keep or drop).
  */
 export default function Footer() {
   return (
@@ -56,13 +57,6 @@ export default function Footer() {
           className="absolute left-[6%] hidden w-32 text-blue-950 md:block lg:w-40"
           style={{ bottom: `calc(${WATERLINE} - 10px)` }}
         />
-        <div
-          className="absolute top-1/2 -translate-y-1/2 max-md:left-1/2 max-md:-translate-x-1/2 md:right-[5%]"
-          style={{ width: "min(29rem, 92vw)", aspectRatio: US_MAP_ASPECT }}
-        >
-          <UsMap cities={OFFICES} />
-          <LiveDots pins={CITY_PINS} showLabels />
-        </div>
         <div className="theme-page absolute bottom-8 left-6 flex items-center gap-2 md:left-10" aria-hidden="true">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
           <span className="label text-white-40">Four offices · one team</span>
@@ -72,7 +66,7 @@ export default function Footer() {
       <div className="container-page relative">
         <span className="dec dec-footer left-0 top-0 h-px w-full" />
 
-        <div className="grid gap-12 py-16 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr] md:gap-16 lg:gap-20">
+        <div className="grid gap-12 py-16 sm:grid-cols-2 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-12 lg:gap-16">
           <div className="flex flex-col gap-6 sm:col-span-2 md:col-span-1">
             <Logo />
             <p className="body-md max-w-xs text-white-50">
@@ -111,6 +105,14 @@ export default function Footer() {
             >
               LinkedIn
             </a>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:col-span-2 md:col-span-1">
+            <span className="label mb-1 text-white-50">Where we work</span>
+            <div className="relative w-full max-w-[13rem]" style={{ aspectRatio: US_MAP_ASPECT }}>
+              <UsMap cities={OFFICES} />
+              <LiveDots pins={CITY_PINS} />
+            </div>
           </div>
         </div>
 
