@@ -45,7 +45,7 @@ export default function GlassStrip({
               <div
                 key={cell.head}
                 data-cell
-                className="spot flex items-baseline justify-center gap-3 px-5 py-4 text-center sm:flex-col sm:items-center sm:gap-2 sm:p-6 md:p-10"
+                className="spot flex items-baseline gap-3 px-5 py-4 sm:flex-col sm:items-center sm:justify-center sm:gap-2 sm:p-6 sm:text-center md:p-10"
               >
                 {i > 0 && <RowRule className="sm:hidden" />}
                 <span
