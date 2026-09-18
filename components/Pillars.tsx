@@ -68,6 +68,7 @@ export default function Pillars() {
                   alt=""
                   width={pillar.icon.width}
                   height={pillar.icon.height}
+                  data-anim="visual"
                   className="h-full w-full object-contain"
                 />
               </span>
