@@ -1259,8 +1259,8 @@ html[data-theme="light"] .text-gold-glow {
   }
 }
 
-/* Footer sailboat — drifts slowly across the water; its birds keep a slow,
-   staggered wingbeat so the flock doesn't flap in lockstep. */
+/* Footer sailboat — drifts slowly across the water, coasting on ahead of
+   its gulls, which drift on their own much slower timeline. */
 .sailboat-drift {
   animation: sailboat-drift 100s ease-in-out infinite alternate;
   will-change: transform;
@@ -1271,6 +1271,18 @@ html[data-theme="light"] .text-gold-glow {
   }
   to {
     transform: translateX(68vw);
+  }
+}
+.sailboat-birds-drift {
+  animation: sailboat-birds-drift 340s linear infinite alternate;
+  will-change: transform;
+}
+@keyframes sailboat-birds-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(10vw);
   }
 }
 .sailboat-bird {
@@ -1295,6 +1307,7 @@ html[data-theme="light"] .text-gold-glow {
 }
 @media (prefers-reduced-motion: reduce) {
   .sailboat-drift,
+  .sailboat-birds-drift,
   .sailboat-bird {
     animation: none;
   }
