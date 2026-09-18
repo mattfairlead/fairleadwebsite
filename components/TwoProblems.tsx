@@ -1,3 +1,4 @@
+import Image from "next/image";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import HairlineFrame from "@/components/HairlineFrame";
@@ -5,9 +6,9 @@ import HairlineFrame from "@/components/HairlineFrame";
 /**
  * Home §4.1 row 2 — the deck's slide 2, verbatim structure: two problems,
  * two hairline-divided cells, no fills. The right cell's vertical rule is
- * the frame closing on "Information." Each cell carries an oversized ghost
- * numeral and the second problem — the one Fairlead is built for — is the
- * only one the eye lands on in gold.
+ * the frame closing on "Information." Each cell carries a brand graphic in
+ * place of the old ghost numeral, and the second problem — the one Fairlead
+ * is built for — is the only one the eye lands on in gold.
  */
 const CELLS = [
   {
@@ -16,6 +17,7 @@ const CELLS = [
     body: "The visible problem. Revenue, margin, cash: the numbers every sponsor manages and a crowded market of firms offers to fix.",
     foot: "Most of the market competes here.",
     accent: false,
+    icon: "/brand/PlanAsset%203.svg",
   },
   {
     label: "Problem two",
@@ -23,6 +25,7 @@ const CELLS = [
     body: "The harder problem. Knowing what is actually happening inside the company: the visibility LPs hold sponsors accountable for.",
     foot: "Most sponsors only solve one of the two.",
     accent: true,
+    icon: null,
   },
 ];
 
@@ -32,11 +35,11 @@ export default function TwoProblems() {
       <SectionHead eyebrow="Two problems" title={<>Every portfolio company has two problems.</>} />
       <HairlineFrame columns={2} className="mt-14">
         <div className="grid md:grid-cols-2">
-          {CELLS.map((cell, i) => (
+          {CELLS.map((cell) => (
             <div key={cell.title} data-cell className="spot flex flex-col gap-4 p-6 md:min-h-[18rem] md:p-10">
-              <span className="ghost-num" aria-hidden="true">
-                0{i + 1}
-              </span>
+              <div className="flex h-12 items-end md:h-14" aria-hidden="true">
+                {cell.icon && <Image src={cell.icon} alt="" width={622} height={344} className="h-full w-auto" />}
+              </div>
               <span className="label text-gold">{cell.label}</span>
               <h3 data-anim="title" className="h3">
                 {cell.title}
