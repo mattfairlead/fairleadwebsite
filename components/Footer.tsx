@@ -2,7 +2,6 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import ImageBand, { WATERLINE } from "@/components/ImageBand";
 import Sailboat from "@/components/Sailboat";
-import Lighthouse from "@/components/Lighthouse";
 import LiveDots, { type DotPin } from "@/components/LiveDots";
 import UsMap, { type MapCity } from "@/components/UsMap";
 import { US_MAP_ASPECT, US_MAP_VIEWBOX } from "@/content/us-map";
@@ -53,14 +52,10 @@ export default function Footer() {
   return (
     <footer>
       <ImageBand minHeight="21rem" overlayStrength={0.8} horizon="water" className="mt-20">
-        {/* the boat sits on the waterline; its hull dips into the water so the seam never shows */}
+        {/* the boat sits on the waterline and drifts slowly across it; its hull
+            dips into the water so the seam never shows */}
         <Sailboat
-          className="absolute left-[6%] hidden w-32 text-blue-950 md:block lg:w-40"
-          style={{ bottom: `calc(${WATERLINE} - 10px)` }}
-        />
-        {/* the lighthouse stands on the opposite shore, same waterline, same padding */}
-        <Lighthouse
-          className="absolute right-[6%] hidden w-20 text-blue-950 md:block lg:w-24"
+          className="sailboat-drift absolute left-[6%] hidden w-32 text-blue-950 md:block lg:w-40"
           style={{ bottom: `calc(${WATERLINE} - 10px)` }}
         />
         <div className="theme-page absolute bottom-8 left-6 flex items-center gap-2 md:left-10" aria-hidden="true">

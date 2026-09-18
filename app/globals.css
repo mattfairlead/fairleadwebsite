@@ -1259,6 +1259,47 @@ html[data-theme="light"] .text-gold-glow {
   }
 }
 
+/* Footer sailboat — drifts slowly across the water; its birds keep a slow,
+   staggered wingbeat so the flock doesn't flap in lockstep. */
+.sailboat-drift {
+  animation: sailboat-drift 100s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes sailboat-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(68vw);
+  }
+}
+.sailboat-bird {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: sailboat-bird-flap 3.6s ease-in-out infinite;
+}
+.sailboat-bird:nth-of-type(2) {
+  animation-delay: 0.5s;
+}
+.sailboat-bird:nth-of-type(3) {
+  animation-delay: 1s;
+}
+@keyframes sailboat-bird-flap {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.6);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sailboat-drift,
+  .sailboat-bird {
+    animation: none;
+  }
+}
+
 /* ==========================================================================
    Engagement register — the locked rows and the reveal sheet.
    The redaction is bars, not blurred text: the row's HTML holds nothing to
