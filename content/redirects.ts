@@ -53,12 +53,24 @@ export const redirects = [
     destination: "/engagements/dion-leadership",
     permanent: true,
   },
-  // The Dion announcement is also seeded as its own Perspectives post (same
-  // body as the case study). Send that URL to the case study too, rather
-  // than let the site show the same story twice at two different addresses.
+  // These three announcements are also seeded as their own Perspectives
+  // posts (same body as the case study). Send those URLs to the case
+  // studies too, rather than let the site show the same story twice at two
+  // different addresses.
   {
     source: "/perspectives/fairlead-supports-dion-leaderships-acquisition-by-gallagher",
     destination: "/engagements/dion-leadership",
+    permanent: true,
+  },
+  {
+    source: "/perspectives/case-study-survival-sprint-a-startup-manufacturers-race-to-fundraise",
+    destination: "/engagements/survival-sprint",
+    permanent: true,
+  },
+  {
+    source:
+      "/perspectives/fairlead-advises-breakthrough-computer-vision-company-nirenberg-neuroscience-on-its-2022-acquisition-by-a-u-s-based-tech-giant",
+    destination: "/engagements/nirenberg-neuroscience",
     permanent: true,
   },
 
