@@ -115,9 +115,8 @@ export default function Footer() {
               </a>
             </div>
 
-            <div className="flex flex-col gap-3 sm:col-span-2 md:col-span-1">
-              <span className="label mb-1 text-white-50">Where we work</span>
-              <div className="relative w-full max-w-[13rem]" style={{ aspectRatio: US_MAP_ASPECT }}>
+            <div className="flex sm:col-span-2 md:col-span-1 md:items-center">
+              <div className="relative w-full" style={{ aspectRatio: US_MAP_ASPECT }}>
                 <UsMap cities={OFFICES} />
                 <LiveDots pins={CITY_PINS} />
               </div>
