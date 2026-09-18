@@ -37,7 +37,7 @@ export default function TwoProblems() {
       <HairlineFrame columns={2} className="mt-14">
         <div className="grid md:grid-cols-2">
           {CELLS.map((cell) => (
-            <div key={cell.title} data-cell className="spot flex gap-8 p-6 md:min-h-[18rem] md:p-10">
+            <div key={cell.title} data-cell className="spot flex gap-8 p-6 md:min-h-[18rem] md:justify-center md:p-10">
               <div className="flex max-w-md flex-col gap-4">
                 <div className="flex h-12 items-end md:hidden" aria-hidden="true">
                   {cell.icon && (
