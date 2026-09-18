@@ -53,6 +53,14 @@ export const redirects = [
     destination: "/engagements/dion-leadership",
     permanent: true,
   },
+  // The Dion announcement is also seeded as its own Perspectives post (same
+  // body as the case study). Send that URL to the case study too, rather
+  // than let the site show the same story twice at two different addresses.
+  {
+    source: "/perspectives/fairlead-supports-dion-leaderships-acquisition-by-gallagher",
+    destination: "/engagements/dion-leadership",
+    permanent: true,
+  },
 
   // Catch-all: every other historical dated post lives on under Perspectives
   // at its original WordPress slug.
