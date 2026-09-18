@@ -26,22 +26,11 @@ export default function ContactPage() {
         eyebrow="Contact"
         title={<>Talk to a partner.</>}
         lead={<>Tell us what you&rsquo;re working through. A partner reads every submission.</>}
+        aside={<Mailmark className="block w-40 max-lg:mx-auto md:w-52 lg:w-64" />}
       />
 
       <SectionReveal className="container-page pb-24 max-lg:pt-8">
         <HairlineFrame verticalsAt={["60%"]}>
-          {/* Docked right, resting on the frame's top hairline. `bottom-full`
-              rather than a transform, so the reveal is free to animate one; the
-              box carries the size and the aspect so the mark never has to be
-              measured from its own intrinsic dimensions. */}
-          <span
-            data-anim="fade-up"
-            aria-hidden="true"
-            className="absolute bottom-full right-0 mb-3 block"
-            style={{ width: "clamp(5.5rem, 8vw, 8.5rem)", aspectRatio: "300 / 186" }}
-          >
-            <Mailmark className="block h-full w-full" />
-          </span>
           <div className="grid md:grid-cols-[3fr_2fr]">
             <div data-cell className="p-6 md:p-8 lg:p-12">
               <Suspense fallback={null}>
