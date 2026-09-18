@@ -18,7 +18,7 @@ const CELLS = [
     body: "The visible problem. Revenue, margin, cash: the numbers every sponsor manages and a crowded market of firms offers to fix.",
     foot: "Most of the market competes here.",
     accent: false,
-    icon: "/brand/PlanAsset%203.svg",
+    icon: { src: "/brand/PlanAsset%203.svg", width: 622, height: 344 },
   },
   {
     label: "Problem two",
@@ -26,7 +26,7 @@ const CELLS = [
     body: "The harder problem. Knowing what is actually happening inside the company: the visibility LPs hold sponsors accountable for.",
     foot: "Most sponsors only solve one of the two.",
     accent: true,
-    icon: null,
+    icon: { src: "/brand/InformationAsset%204.svg", width: 322, height: 440 },
   },
 ];
 
@@ -40,7 +40,9 @@ export default function TwoProblems() {
             <div key={cell.title} data-cell className="spot flex gap-8 p-6 md:min-h-[18rem] md:p-10">
               <div className="flex flex-1 flex-col gap-4">
                 <div className="flex h-12 items-end md:hidden" aria-hidden="true">
-                  {cell.icon && <Image src={cell.icon} alt="" width={622} height={344} className="h-full w-auto" />}
+                  {cell.icon && (
+                    <Image src={cell.icon.src} alt="" width={cell.icon.width} height={cell.icon.height} className="h-full w-auto" />
+                  )}
                 </div>
                 <span className="label text-gold">{cell.label}</span>
                 <h3 data-anim="title" className="h3">
@@ -56,12 +58,12 @@ export default function TwoProblems() {
               </div>
               {cell.icon && (
                 <Image
-                  src={cell.icon}
+                  src={cell.icon.src}
                   alt=""
-                  width={622}
-                  height={344}
+                  width={cell.icon.width}
+                  height={cell.icon.height}
                   aria-hidden="true"
-                  className="hidden h-auto w-24 shrink-0 self-center md:block lg:w-28 xl:w-32"
+                  className="hidden h-14 w-auto shrink-0 self-center md:block lg:h-16 xl:h-20"
                 />
               )}
             </div>
