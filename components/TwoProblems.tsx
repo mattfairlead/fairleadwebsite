@@ -63,6 +63,7 @@ export default function TwoProblems() {
                   width={cell.icon.width}
                   height={cell.icon.height}
                   aria-hidden="true"
+                  data-anim="visual"
                   className={`hidden w-auto shrink-0 self-center md:block ${cell.icon.size}`}
                 />
               )}
