@@ -36,10 +36,10 @@ export default function CareersPage() {
         }
         aside={
           <Image
-            src="/brand/housefairlead.png"
+            src="/brand/HomeAsset%202.svg"
             alt=""
-            width={1406}
-            height={855}
+            width={682}
+            height={567}
             sizes="(min-width: 1024px) 448px, (min-width: 768px) 384px, 288px"
             className="h-auto w-72 max-lg:mx-auto md:w-96 lg:w-[28rem]"
           />
