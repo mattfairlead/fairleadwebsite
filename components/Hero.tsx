@@ -84,6 +84,7 @@ export default function Hero() {
         parallax
         overlayStrength={1}
         video={HERO_VIDEO || undefined}
+        videoMobileOk
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center px-5 pb-56 text-center sm:pb-36">
           <span data-hero-eyebrow className="label mb-8 flex items-center gap-3 text-white-50">

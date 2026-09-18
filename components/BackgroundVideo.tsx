@@ -11,8 +11,11 @@ import { prefersReducedMotion } from "@/lib/motion";
  * only ever improves on the stand-in. The <video> is expensive (the bands are
  * tens of megabytes), so it is the last thing the page asks for:
  *
- *   - never on a phone, under data-saver, on 2g/3g, or with reduced motion —
- *     those visitors get the poster and never download a byte of footage;
+ *   - never under data-saver, on 2g/3g, or with reduced motion — those
+ *     visitors get the poster and never download a byte of footage;
+ *   - never on a phone either, unless the caller passes `mobileOk` (the
+ *     homepage hero does — its video has no poster fallback, so skipping it
+ *     on mobile left that hero blank rather than showing a still);
  *   - mounted only once the band is within 200px of the viewport AND the
  *     window `load` event has fired, so it never competes with fonts, images
  *     or the JS the first paint needs;
@@ -32,12 +35,12 @@ import { prefersReducedMotion } from "@/lib/motion";
 
 type NetInfo = { saveData?: boolean; effectiveType?: string };
 
-function videoAllowed(): boolean {
+function videoAllowed(mobileOk: boolean): boolean {
   if (prefersReducedMotion()) return false;
   const conn = (navigator as Navigator & { connection?: NetInfo }).connection;
   if (conn?.saveData) return false;
   if (conn?.effectiveType && /2g|3g/.test(conn.effectiveType)) return false;
-  return window.matchMedia("(min-width: 768px)").matches;
+  return mobileOk || window.matchMedia("(min-width: 768px)").matches;
 }
 
 function afterLoad(cb: () => void): () => void {
@@ -55,12 +58,14 @@ export default function BackgroundVideo({
   speed,
   inset = "-10% 0",
   className = "",
+  mobileOk = false,
 }: {
   src: string;
   poster?: string;
   speed?: string;
   inset?: string;
   className?: string;
+  mobileOk?: boolean;
 }) {
   const boxRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -72,7 +77,7 @@ export default function BackgroundVideo({
   // band to approach and the page to finish loading before mounting it.
   useEffect(() => {
     const box = boxRef.current;
-    if (!box || !videoAllowed()) return;
+    if (!box || !videoAllowed(mobileOk)) return;
     let cancelLoad = () => {};
     const io = new IntersectionObserver(
       ([entry]) => {

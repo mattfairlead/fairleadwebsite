@@ -24,6 +24,7 @@ export default function ImageBand({
   src,
   video,
   videoPoster,
+  videoMobileOk = false,
   aspect = "1440/922",
   mobileAspect = "375/812",
   minHeight,
@@ -36,6 +37,8 @@ export default function ImageBand({
   src?: string;
   video?: string;
   videoPoster?: string;
+  /** Let the video load and play on mobile too, instead of the poster/gradient stand-in. */
+  videoMobileOk?: boolean;
   aspect?: string;
   mobileAspect?: string;
   minHeight?: string;
@@ -61,7 +64,9 @@ export default function ImageBand({
         }}
       />
       {/* motion layer — sits over the gradient, which doubles as its poster */}
-      {video && <BackgroundVideo src={video} poster={videoPoster} speed={parallax ? "0.85" : undefined} />}
+      {video && (
+        <BackgroundVideo src={video} poster={videoPoster} speed={parallax ? "0.85" : undefined} mobileOk={videoMobileOk} />
+      )}
       {/* blue-hour wash so footage reads as graded brand imagery, not stock */}
       {video && (
         <div
