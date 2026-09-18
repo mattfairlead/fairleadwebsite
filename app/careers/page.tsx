@@ -40,8 +40,8 @@ export default function CareersPage() {
             alt=""
             width={682}
             height={567}
-            sizes="(min-width: 1024px) 448px, (min-width: 768px) 384px, 288px"
-            className="h-auto w-72 max-lg:mx-auto md:w-96 lg:w-[28rem]"
+            sizes="(min-width: 1024px) 320px, (min-width: 768px) 256px, 192px"
+            className="h-auto w-48 max-lg:mx-auto md:w-64 lg:w-80"
           />
         }
       />
