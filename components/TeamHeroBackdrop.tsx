@@ -18,16 +18,18 @@ import BackgroundVideo from "@/components/BackgroundVideo";
 const TEAM_VIDEO = process.env.NEXT_PUBLIC_TEAM_HERO_VIDEO_URL || "/api/media/team-hero";
 const TEAM_POSTER = "/team/hero-poster.jpg";
 
-// The box runs the full height of the intro and hangs off the right edge.
-// It is sized to the footage's own aspect ratio (1250×600 — a 5×4 grid of
-// faces) so nothing is cropped and every face is in frame; at that ratio
-// the box spans the whole intro on a desktop, so its left ~64% feathers
-// out and the copy sits over footage that has all but melted into the
-// blue. Below ~1400px the leftmost column slides off the page — behind the
-// feather, where it was already invisible. Below xl the box overhangs far
-// enough that the feather leaves the page too and the copy would sit on raw
-// footage, so the whole layer steps down (60% at lg, 40% below). Top and
-// bottom fade under the header and into the sections below.
+// The box runs the full height of the intro and is docked to the right
+// edge at a fixed share of the viewport (not derived from the footage's own
+// 1250×600 aspect ratio, which used to blow the box out to nearly the full
+// width of the page and wash the copy on the left). object-cover in
+// BackgroundVideo crops the grid of faces to whatever box shape results, so
+// docking it narrower never distorts or empty-letterboxes the footage.
+// Top, bottom and its left edge still fade into the page ground, but now
+// over a box that actually stays clear of the intro's left-column copy.
+// Below lg the intro drops to one column — the aside stacks under the
+// lead paragraph instead of sitting beside the footage — so the dock still
+// runs under that copy; dimmed there so the text stays legible until the
+// two-column layout gives it a real lane of its own.
 //
 // Every fade reaches full transparency a few percent short of the edge,
 // never at 100%. On scroll the page moves on fractional offsets and the
@@ -35,7 +37,7 @@ const TEAM_POSTER = "/team/hero-poster.jpg";
 // line of footage along the seam; keeping the edge rows transparent means
 // there is nothing to reveal.
 const MASK = [
-  "linear-gradient(90deg, rgba(0,0,0,0) 10%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 64%, #000 78%)",
+  "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 22%, #000 44%)",
   "linear-gradient(180deg, rgba(0,0,0,0) 3%, rgba(0,0,0,0.85) 26%, #000 55%, rgba(0,0,0,0.6) 82%, rgba(0,0,0,0) 96%)",
 ].join(", ");
 
@@ -43,7 +45,7 @@ export default function TeamHeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-y-0 right-0 aspect-[1250/600] max-md:aspect-auto max-md:w-[92%] max-lg:opacity-40 lg:max-xl:opacity-60"
+        className="absolute inset-y-0 right-0 w-[92%] max-lg:opacity-40 md:w-[62%] lg:w-[46%] xl:w-[38%]"
         style={{
           WebkitMaskImage: MASK,
           maskImage: MASK,
