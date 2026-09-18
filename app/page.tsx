@@ -8,7 +8,6 @@ import Pillars from "@/components/Pillars";
 import IntelligenceBand from "@/components/IntelligenceBand";
 import EngagementCards from "@/components/EngagementCards";
 import FeeBlock from "@/components/FeeBlock";
-import ContactStrip from "@/components/ContactStrip";
 import { pageMetadata, SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
@@ -33,7 +32,6 @@ export default function HomePage() {
       <Advantage />
       <IntelligenceBand />
       <FeeBlock />
-      <ContactStrip />
     </>
   );
 }
