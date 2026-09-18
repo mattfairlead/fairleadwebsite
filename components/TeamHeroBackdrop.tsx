@@ -37,15 +37,15 @@ const TEAM_POSTER = "/team/hero-poster.jpg";
 // line of footage along the seam; keeping the edge rows transparent means
 // there is nothing to reveal.
 const MASK = [
-  "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 22%, #000 44%)",
-  "linear-gradient(180deg, rgba(0,0,0,0) 3%, rgba(0,0,0,0.85) 26%, #000 55%, rgba(0,0,0,0.6) 82%, rgba(0,0,0,0) 96%)",
+  "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 14%, #000 30%)",
+  "linear-gradient(180deg, rgba(0,0,0,0) 2%, rgba(0,0,0,0.75) 18%, #000 40%, rgba(0,0,0,0.7) 88%, rgba(0,0,0,0) 97%)",
 ].join(", ");
 
 export default function TeamHeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-y-0 right-0 w-[92%] max-lg:opacity-40 md:w-[62%] lg:w-[46%] xl:w-[38%]"
+        className="absolute inset-y-0 right-0 w-[92%] max-lg:opacity-50 md:w-[68%] lg:w-[54%] xl:w-[46%]"
         style={{
           WebkitMaskImage: MASK,
           maskImage: MASK,
