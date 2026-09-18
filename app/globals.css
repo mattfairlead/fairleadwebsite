@@ -286,7 +286,12 @@ body {
    Layout grammar — §5.3, with 1.5× the breathing room.
    ========================================================================== */
 
+/* Capped and centered — past 90rem the padding alone stops scaling with the
+   viewport, so wide monitors were stretching every grid, section and line
+   of text edge to edge instead of gaining real margin. */
 .container-page {
+  max-width: 90rem;
+  margin-inline: auto;
   padding-inline: 2.5rem;
 }
 @media (max-width: 767px) {
