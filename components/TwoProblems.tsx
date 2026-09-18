@@ -14,19 +14,19 @@ import HairlineFrame from "@/components/HairlineFrame";
 const CELLS = [
   {
     label: "Problem one",
-    title: "Performance",
+    title: "Information",
     body: "The visible problem. Revenue, margin, cash: the numbers every sponsor manages and a crowded market of firms offers to fix.",
     foot: "Most of the market competes here.",
     accent: false,
-    icon: { src: "/brand/Plane2Asset%205.svg", width: 622, height: 344, size: "h-14 lg:h-16 xl:h-20" },
+    icon: { src: "/brand/information2Asset%206.svg", width: 322, height: 440, size: "h-20 lg:h-24 xl:h-28" },
   },
   {
     label: "Problem two",
-    title: "Information",
+    title: "Performance",
     body: "The harder problem. Knowing what is actually happening inside the company: the visibility LPs hold sponsors accountable for.",
     foot: "Most sponsors only solve one of the two.",
     accent: true,
-    icon: { src: "/brand/information2Asset%206.svg", width: 322, height: 440, size: "h-20 lg:h-24 xl:h-28" },
+    icon: { src: "/brand/Plane2Asset%205.svg", width: 622, height: 344, size: "h-14 lg:h-16 xl:h-20" },
   },
 ];
 
