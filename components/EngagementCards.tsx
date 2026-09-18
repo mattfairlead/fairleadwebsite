@@ -32,7 +32,7 @@ export default async function EngagementCards() {
       </div>
       <div className="mt-10">
         <Btn href="/engagements" variant="secondary" arrow dataAnim="pop">
-          The full register
+          See all results
         </Btn>
       </div>
     </SectionReveal>
