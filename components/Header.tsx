@@ -156,11 +156,11 @@ export default function Header() {
             style={{ transform: open ? "translateY(-3.5px) rotate(-45deg)" : "none", transitionTimingFunction: "var(--ease-spring)" }}
           />
         </button>
-
-        {/* bottom hairline + scroll progress */}
-        <span data-dec="bottom" className="dec dec-header bottom-0 left-0 h-px w-full" />
-        <span className="scroll-progress" aria-hidden="true" />
       </div>
+
+      {/* bottom hairline + scroll progress — full-bleed, outside the capped container */}
+      <span data-dec="bottom" className="dec dec-header bottom-0 left-0 h-px w-full" />
+      <span className="scroll-progress" aria-hidden="true" />
 
       {/* mobile menu — glass sheet */}
       <div

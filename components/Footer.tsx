@@ -63,64 +63,69 @@ export default function Footer() {
         </div>
       </ImageBand>
 
-      <div className="container-page relative">
+      <div className="relative">
         <span className="dec dec-footer left-0 top-0 h-px w-full" />
+        <div className="container-page">
+          <div className="grid gap-12 py-16 sm:grid-cols-2 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-12 lg:gap-16">
+            <div className="flex flex-col gap-6 sm:col-span-2 md:col-span-1">
+              <Logo />
+              <p className="body-md max-w-xs text-white-50">
+                Embedded operating leadership for PE-backed companies. Hands-on engagements since 2010,
+                with the operating intelligence to steer by.
+              </p>
+              <a
+                href="tel:+16173154822"
+                className="body-lg self-start text-white-100 transition-colors duration-200 hover:text-gold tabular"
+              >
+                (617) 315-4822
+              </a>
+            </div>
 
-        <div className="grid gap-12 py-16 sm:grid-cols-2 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-12 lg:gap-16">
-          <div className="flex flex-col gap-6 sm:col-span-2 md:col-span-1">
-            <Logo />
-            <p className="body-md max-w-xs text-white-50">
-              Embedded operating leadership for PE-backed companies. Hands-on engagements since 2010,
-              with the operating intelligence to steer by.
-            </p>
-            <a
-              href="tel:+16173154822"
-              className="body-lg self-start text-white-100 transition-colors duration-200 hover:text-gold tabular"
-            >
-              (617) 315-4822
-            </a>
-          </div>
+            <nav className="flex flex-col gap-3" aria-label="Footer">
+              <span className="label mb-1 text-white-50">Site</span>
+              {NAV.map((item) => (
+                <Link key={item.href} href={item.href} className={linkCls}>
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
 
-          <nav className="flex flex-col gap-3" aria-label="Footer">
-            <span className="label mb-1 text-white-50">Site</span>
-            {NAV.map((item) => (
-              <Link key={item.href} href={item.href} className={linkCls}>
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+            <div className="flex flex-col gap-3">
+              <span className="label mb-1 text-white-50">Offices</span>
+              {CITIES.map((city) => (
+                <span key={city} className="body-sm text-white-40">
+                  {city}
+                </span>
+              ))}
+              <a
+                href="https://www.linkedin.com/company/fairlead-advisors-llc"
+                rel="noopener noreferrer"
+                target="_blank"
+                className={`${linkCls} mt-2`}
+              >
+                LinkedIn
+              </a>
+            </div>
 
-          <div className="flex flex-col gap-3">
-            <span className="label mb-1 text-white-50">Offices</span>
-            {CITIES.map((city) => (
-              <span key={city} className="body-sm text-white-40">
-                {city}
-              </span>
-            ))}
-            <a
-              href="https://www.linkedin.com/company/fairlead-advisors-llc"
-              rel="noopener noreferrer"
-              target="_blank"
-              className={`${linkCls} mt-2`}
-            >
-              LinkedIn
-            </a>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:col-span-2 md:col-span-1">
-            <span className="label mb-1 text-white-50">Where we work</span>
-            <div className="relative w-full max-w-[13rem]" style={{ aspectRatio: US_MAP_ASPECT }}>
-              <UsMap cities={OFFICES} />
-              <LiveDots pins={CITY_PINS} />
+            <div className="flex flex-col gap-3 sm:col-span-2 md:col-span-1">
+              <span className="label mb-1 text-white-50">Where we work</span>
+              <div className="relative w-full max-w-[13rem]" style={{ aspectRatio: US_MAP_ASPECT }}>
+                <UsMap cities={OFFICES} />
+                <LiveDots pins={CITY_PINS} />
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="relative flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-6">
-          <span className="dec dec-footer left-0 top-0 h-px w-full" />
-          <span className="body-sm text-white-40">© {new Date().getFullYear()} Fairlead Advisors</span>
-          <span className="label text-white-40">Operating inside portfolios since 2010</span>
-          {/* TODO(§9): mailing address small print — keep or drop, pending decision */}
+      <div className="relative">
+        <span className="dec dec-footer left-0 top-0 h-px w-full" />
+        <div className="container-page">
+          <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-6">
+            <span className="body-sm text-white-40">© {new Date().getFullYear()} Fairlead Advisors</span>
+            <span className="label text-white-40">Operating inside portfolios since 2010</span>
+            {/* TODO(§9): mailing address small print — keep or drop, pending decision */}
+          </div>
         </div>
       </div>
     </footer>
