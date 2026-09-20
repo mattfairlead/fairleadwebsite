@@ -31,6 +31,11 @@ import { prefersReducedMotion } from "@/lib/motion";
  * It overscans 10% top and bottom by default so parallax never shows an
  * edge; pass `inset="0"` when the box is sized to the footage and every
  * pixel of the frame should stay visible.
+ *
+ * object-cover always fills the box; when the box's own aspect ratio
+ * doesn't match the footage, pass `objectPosition` to choose which side
+ * absorbs the crop (e.g. "right center" keeps the right edge intact and
+ * trims from the left) instead of the default centered crop.
  */
 
 type NetInfo = { saveData?: boolean; effectiveType?: string };
@@ -59,6 +64,7 @@ export default function BackgroundVideo({
   inset = "-10% 0",
   className = "",
   mobileOk = false,
+  objectPosition,
 }: {
   src: string;
   poster?: string;
@@ -66,6 +72,7 @@ export default function BackgroundVideo({
   inset?: string;
   className?: string;
   mobileOk?: boolean;
+  objectPosition?: string;
 }) {
   const boxRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -127,7 +134,7 @@ export default function BackgroundVideo({
           src={poster}
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ filter: "saturate(0.85) contrast(1.05) brightness(0.85)" }}
+          style={{ filter: "saturate(0.85) contrast(1.05) brightness(0.85)", objectPosition }}
           draggable={false}
         />
       )}
@@ -145,7 +152,7 @@ export default function BackgroundVideo({
           onCanPlay={() => setVisible(true)}
           className="relative h-full w-full object-cover transition-opacity duration-1000 ease-out"
           // graded toward the §5.1 blue-hour palette rather than raw footage
-          style={{ opacity: visible ? 1 : 0, filter: "saturate(0.85) contrast(1.05) brightness(0.85)" }}
+          style={{ opacity: visible ? 1 : 0, filter: "saturate(0.85) contrast(1.05) brightness(0.85)", objectPosition }}
         />
       )}
     </div>
