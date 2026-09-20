@@ -171,7 +171,7 @@ like `text-gold` and `group-hover:text-gold-soft` win where the markup says.
   APIs, Supabase schema + seed content. **Launchable pending content
   resolutions below.**
 - **Phase 2:** Ask Fairlead command bar (trigger + `/api/ask` stubbed behind
-  `NEXT_PUBLIC_ASK_ENABLED=false`), Cottonwood `pin-steps` interactive
+  `NEXT_PUBLIC_ASK_ENABLED=false`), case-study `pin-steps` interactive
   reveal, Solaris demo reel embed, marketing-hub write path.
 - **Phase 3:** newsletter automation, per-audience landing variants. (The
   full engagement import is superseded by the live register above.)
@@ -183,6 +183,7 @@ photography (blue-hour infrastructure stills replace the gradient stand-ins
 in `components/ImageBand.tsx`), the Dion Leadership testimonial still
 (`public/engagements/dion-leadership-steve.jpg` — the graded monogram stands in
 until it lands), the confirmed 16-sector list, the full team
-roster + bios, GRP's tax-equity figure, Cottonwood/Dominion naming clearance,
-the `info@` distribution list (then set `CONTACT_TO`), and the transaction
-archive import.
+roster + bios, GRP's tax-equity figure, the `info@` distribution list (then
+set `CONTACT_TO`), and the transaction archive import. Case-study client
+naming is resolved: never name the client or the utility counterparty on
+the public site (see `FAIRLEAD_WEBSITE_REDESIGN_PLAN.md` §9).

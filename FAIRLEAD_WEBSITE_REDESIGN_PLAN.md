@@ -49,7 +49,7 @@ Crawled 9/1/26. Problems, in priority order:
 2. **No competitor solves both halves.** Big 4 (partial team, no visibility), restructuring firms (senior people, no live data), solo fractional CFOs (one person, no platform), AI/data vendors (no operator access). Fairlead: both, integrated, at portfolio scale.
 3. **AI gets better with high-quality data. Fairlead has 15 years of it, from inside the companies.** 60+ embedded engagements · 16 sectors · since 2010. Every engagement compounds the operating intelligence.
 4. **Operating discipline, on the sponsor's clock.** Embedded leadership · Overhead discipline · Real-time visibility · Exit-ready.
-5. **Custom AI solutions that solve operational challenges.** Cottonwood Solar / Solaris case study: $720K Dominion claim → four-option decision memo → ~$360K expected savings.
+5. **Custom AI solutions that solve operational challenges.** Solaris case study (a utility-scale solar platform): $720K claim from the utility → four-option decision memo → ~$360K expected savings.
 6. **Proof.** Cordia (KKR, $1.9B spinoff) · Cadre Proppants (3× EBITDA, 18 months) · GRP Holdco (Ares, $82.5M tax equity).
 7. **Designed for how PE actually works.** Compensation tied to sponsor success; current fees a fraction of Big-4 / IB rates.
 
@@ -77,7 +77,7 @@ Crawled 9/1/26. Problems, in priority order:
 ```
 /                       Home — the argument, end to end (≈ the deck as a scroll)
 /platform               How the embedded operating platform works (4 pillars + engagement model + fees)
-/intelligence           Solaris & custom tools — demo video, tool gallery, Cottonwood case study, tools portal link
+/intelligence           Solaris & custom tools — demo video, tool gallery, case study, tools portal link
 /engagements            Filterable proof: 60+ engagements by sector / role / sponsor / outcome (Supabase)
 /engagements/[slug]     Individual case study pages (start with 6–8)
 /team                   Partners featured; full team as expandable cards (Supabase)
@@ -121,12 +121,11 @@ Structure mirrors the deck. Each block is a full-width section; the page reads a
 | 1 | **Hero — "Visibility"** | Full-bleed two-layer parallax photo (§5.5). H1: *You can't run / What you can't see.* Sub: *The embedded operating platform for PE-backed companies. Executive intelligence + artificial intelligence, working inside your portfolio.* CTA: **Talk to a partner** (pill). Glass stat strip at the bottom edge. | `Hero` + `StatsStrip` (§5.5, §5.7) |
 | 2 | **Two problems** | Performance vs Information — two hairline-divided cells (§5.5), content exactly as slide 2 | `TwoProblems` |
 | 3 | **No competitor solves both halves** | Comparison table (Big 4 / Restructuring / Solo CFO / AI platforms / Fairlead). Row highlight on hover. | `CompetitorMatrix` |
-| 4 | **The compounding asset** | 2-col: headline + gold-soft italic subhead + paragraph *Every engagement deepens the operating intelligence behind our tools — captured, structured, source-cited.* / graded photo. (The 60+ · 16 · 2010 figures moved to the hero stat strip.) | `Advantage` |
+| 4 | **The compounding asset** | 2-col: headline + gold-soft italic subhead + paragraph *Every engagement deepens the operating intelligence behind our tools — captured, structured, source-cited.* / graded photo. (The 60+ · 16 · 2010 figures moved to the hero stat strip.) Folds in a one-line case-study teaser (the row-6 intelligence band, merged here) linking to the full case study on `/intelligence#case-study`. | `Advantage` |
 | 5 | **Operating discipline, on the sponsor's clock** | 4-col hairline grid: `.label` counter, line icon, `.h4`, `.body-md`. Embedded leadership · Overhead discipline · Real-time visibility · Exit-ready. Each links to `/platform#pillar` | `Pillars` |
-| 6 | **Intelligence band** | Full-bleed Solaris Portfolio Map still with glass strip (Cottonwood four options, `pin-steps`); demo reel embedded on `/intelligence`, not here. CTA → `/intelligence` | `IntelligenceBand` |
-| 7 | **Selected engagements** | Cordia · Cadre · GRP cards → `/engagements` | `EngagementCards` (pulls `featured=true` from Supabase) |
-| 8 | **Designed for how PE actually works** | Fee alignment paragraph verbatim from slide 8 | `FeeBlock` |
-| 9 | **Contact strip** | Phone · four cities · form CTA | `ContactStrip` |
+| 6 | **Selected engagements** | Cordia · Cadre · GRP cards → `/engagements` | `EngagementCards` (pulls `featured=true` from Supabase) |
+| 7 | **Designed for how PE actually works** | Fee alignment paragraph verbatim from slide 8 | `FeeBlock` |
+| 8 | **Contact strip** | Phone · four cities · form CTA | `ContactStrip` |
 
 ### 4.2 Platform `/platform`
 - Intro: *Sitting in the seat, not visiting it.* The engagement model in one paragraph: you don't get one person, you get the team; scales up or down.
@@ -158,7 +157,7 @@ The page that proves the "AI" half without shouting. Title: **Custom AI solution
    - **AP Triage & Scheduling** — vendor priority buckets, auto-scheduled payments under a weekly cap
    - **Vendor Sentiment Tracker** — flags tone escalation in vendor email to prioritize AR/AP
    - **Sherpa** — the assistant that surfaced an undercharged largest customer (anonymized anecdote)
-4. **Case study: Cottonwood Solar** — the interactive decision memo (§5.4). Exactly the slide-6 content: the question, what Solaris produced, four options, EV math (~$360K net expected savings; ~$75K at risk; 60% success assumed — fix "addumed" typo).
+4. **Case study: utility-scale solar platform** — the interactive decision memo (§5.4). Exactly the slide-6 content: the question, what Solaris produced, four options, EV math (~$360K net expected savings; ~$75K at risk; 60% success assumed — fix "addumed" typo). Client not named anywhere on the public site.
 5. **How we work with your team on AI** — three lines: team upskilling · tools built for the engagement · integrations to your existing systems. Board-pressure framing: *bottom-up tooling, top-down strategy.*
 6. **Client portal** — `tools.fairleadadvisors.com` link, 2FA noted.
 7. CTA: *Want a deeper demo of Solaris — or a custom solution built for you?*
@@ -297,7 +296,7 @@ Hover: `transition: all .2s` on buttons/cards; `.4s` on burger/menu. Prefers-red
 | Competitor matrix | `.featured-item` — hairline-divided rows, 2-col text/visual | Hairline rows: Big 4 / Restructuring / Solo CFO / AI platforms / Fairlead. Fairlead row gets `--blue-900` fill and gold checks — the only filled row. `slide-in` per row, `STAGGER_EL`. |
 | Compounding asset | `.about` — 2-col, copy + image, with two small stat cells | Left: `.h2` *AI gets better with high-quality data.* + gold-soft italic `.h3` *Fairlead has 15 years of it, from inside the companies.* Right: graded photo, `scale-in`. |
 | Pillars | `.how-works` — 4-col, small icon + `.label` count + `.h4` + `.body-md` | Four pillars with the deck's line icons. Counters are legitimate here (it's the delivery sequence). |
-| Intelligence band | `.combine` — full-bleed illustration with glass step-strip at bottom | Full-bleed sanitized Solaris Portfolio Map screenshot, blurred at edges into blue-950; glass strip with the four Cottonwood options (Accept / Withdraw / Counter / Escalate) that reveal on `pin-steps`. |
+| Intelligence band | `.combine` — full-bleed illustration with glass step-strip at bottom | Full-bleed sanitized Solaris Portfolio Map screenshot, blurred at edges into blue-950; glass strip with the four case-study options (Accept / Withdraw / Counter / Escalate) that reveal on `pin-steps`. |
 | Engagements | `.featured-item` list | Hairline rows: sponsor label, `.h3` company, `.body-sm` metric, `.body-md --white-60` summary, pill **See the engagement**. |
 | Team teaser | `.practitioners` — 2×2 hairline photo grid with name overlay bottom-left | Partners 2×2, photo with bottom gradient, name `.body-lg`, title `.body-sm --white-50`. |
 | Contact / footer | `.footer` — full-width image band `21rem` tall with `#091b2066` layer, then hairline-segmented footer | Blue-hour image band with `--blue-950` at 40% layer; footer with logo | links | four cities | `(617) 315-4822`, all separated by `--white-20` rules. |
@@ -370,7 +369,7 @@ Why this reads as "resourced": the frame is still closing while content is alrea
 1. Section headline lines mask-slide up (`.8`, `power3.out`, stagger `.08`); sub-titles follow at `+.15s` each; the strip's top and bottom horizontals draw (`.1s` apart).
 2. `+.6s` — the strip's description paragraph runs `read` (lines slide up, then chars brighten left→right at `.008` stagger); the vertical dividers between cells drop in at `+.4s`, `.1s` apart.
 3. `+.6s` — each cell's head and body lines slide up, cells staggered `.2s`, head then body `+.1s`.
-Use for: the hero stats strip (60+ / 16 / 2010), the Cottonwood four-option strip on the Intelligence band, and the four-step engagement process on `/platform`.
+Use for: the hero stats strip (60+ / 16 / 2010), the four-option case-study strip on the Intelligence page, and the four-step engagement process on `/platform`.
 
 **5.8.5 Hairline-row lists (the `.featured-item` pattern).** Engagements, competitor matrix, team list. The list's outer horizontals draw first (`.1s` apart), then row dividers drop, then each row runs its own `top 90%` trigger: title lines up (`.7`, stagger `.08`), metric fade-up `+.1`, properties fade-up stagger `.08`, pill button `pop`s last, image `x:-40 → 0`. Rows never animate together — each earns its own reveal as it enters.
 
@@ -410,7 +409,7 @@ None of the motion above lands if any of these are wrong. Treat as acceptance cr
 **Not** a bottom-right bubble. A **command bar** (`⌘K` / nav trigger) that behaves like an operator's assistant:
 
 - Answers questions about Fairlead using *only* site content + the engagement summary + Perspectives (RAG over a small, curated corpus; Supabase pgvector or a flat JSON index — corpus is tiny).
-- **Takes actions in the UI:** "show me energy turnarounds" → navigates to `/engagements?sector=energy&outcome=turnaround`; "who leads district energy work" → opens Charlie/Jason cards; "send me the Cottonwood memo" → opens the case study; "I want to talk to someone" → opens contact form pre-filled.
+- **Takes actions in the UI:** "show me energy turnarounds" → navigates to `/engagements?sector=energy&outcome=turnaround`; "who leads district energy work" → opens Charlie/Jason cards; "send me the case study" → opens the case study; "I want to talk to someone" → opens contact form pre-filled.
 - Powered by the Anthropic API (server route in Next.js; key in Vercel env, never client-side). System prompt: Fairlead voice, refuses off-topic, never invents engagements or numbers, never quotes client data, offers the contact form when unsure.
 - Suggested prompts shown on open: *"What does embedded mean in practice?"* · *"Show engagements with KKR-scale sponsors"* · *"How is Solaris different from a dashboard?"*
 - Visual: inline panel that slides from the nav, navy, gold caret, response renders with the same components as the site (engagement cards, team cards), not raw text bubbles. **This is the "in-chat rendering quality" point from the demo outline applied to the website itself.**
@@ -450,7 +449,7 @@ Row-level security: public read where `visible = true`; write via service role f
 /app
   /(site)/page.tsx, /platform, /intelligence, /engagements/[slug], /team, /perspectives/[slug], /contact, /careers
   /api/contact/route.ts  /api/ask/route.ts  /api/revalidate/route.ts
-/components  Hero, StatsStrip, HairlineGrid, CompetitorMatrix, Pillars, IntelligenceBand, DemoReel, EngagementRow, TeamCell, CottonwoodMemo, AskFairlead, Header, Footer, GlassStrip, Btn
+/components  Hero, StatsStrip, HairlineGrid, CompetitorMatrix, Pillars, Advantage, DemoReel, EngagementRow, TeamCell, CaseStudyMemo, AskFairlead, Header, Footer, GlassStrip, Btn
 /lib/motion.ts  GSAP registration, constants (§5.4), data-anim resolver, reduced-motion guard
 /content     ask-corpus/ (generated), straplines.ts, redirects.ts
 /lib         supabase.ts, sendgrid.ts, anthropic.ts, seo.ts
@@ -469,14 +468,14 @@ next.config.ts (redirects from §3), tailwind.config.ts, .env.example
 ### Phase 1 — Launchable site (target: 3 weeks)
 1. Repo scaffold, tokens, type, Nav/Footer, redirects, SEO plumbing
 2. Home (all nine sections; GSAP wiring via `data-anim` from the start — the reference's fluidity is the product, not a polish pass)
-3. Platform, Intelligence (video placeholder if reel isn't cut yet; Cottonwood memo static), Contact (SendGrid live)
+3. Platform, Intelligence (video placeholder if reel isn't cut yet; case-study memo static), Contact (SendGrid live)
 4. Supabase schema + seed: 4 partners, 16 team, 9 featured engagements, 1 perspective, 27 transactions
 5. Team, Engagements (filters), Perspectives
 6. QA: redirects, forms, mobile, a11y, Lighthouse; partner review; DNS cutover
 
 ### Phase 2 — Intelligence layer (weeks 4–6)
 - Ask Fairlead command bar (feature flag → on)
-- Cottonwood interactive reveal (`pin-steps`)
+- Case-study interactive reveal (`pin-steps`)
 - Solaris demo reel embedded once Ryan's footage is cut
 - Marketing hub write path (team self-edit bios) → `/api/revalidate`
 
@@ -497,7 +496,7 @@ next.config.ts (redirects from §3), tailwind.config.ts, .env.example
 | Sector count | 16 (deck) | Need the actual list of 16 for the filter. |
 | GRP Holdco metric | $82.5M tax equity | Matt flagged uncertainty in May; Adam to confirm. |
 | Cordia | $1.9B carve-out; McKinsey collaboration named | Confirm McKinsey mention is cleared. |
-| Cottonwood | Dominion named; "Solaris" named | Confirm client is OK being named on the public site; else "a utility-scale solar platform" / "the utility." |
+| Case-study naming | Client not cleared to be named on the public site | **Resolved:** never name the client or the utility counterparty anywhere on the site. Use "a utility-scale solar platform" / "the utility." "Solaris" (our own tool) is fine to name. |
 | Historical stat block | 45 valuations / 21 plans / 30 companies / 17 transactions / "$1..35B" | Update or retire. Recommend retire in favor of the 60+/16/2010 trio. |
 | Team roster | 20 on site | Confirm additions (Joe Winters, Kristen, Adam Vosker are on; Chrystelle off), titles, and who's a Partner vs Senior Advisor. |
 | Cost-savings framing | Not on site | Adam owes a call on any explicit $ framing. Default: imply, don't state. |
@@ -514,7 +513,7 @@ next.config.ts (redirects from §3), tailwind.config.ts, .env.example
 - **Experience over optimism.** Past tense wins. "Tripled run-rate EBITDA in 18 months" beats "we help companies grow."
 - **AI appears as a noun in body copy, never as a headline modifier.** Say what the tool did.
 - **Sentence case everywhere** except the logo and the deck-locked headline treatments.
-- Every CTA says what happens: *Talk to a partner* · *Request the engagement summary* · *See the Cottonwood memo* — not *Learn more*.
+- Every CTA says what happens: *Talk to a partner* · *Request the engagement summary* · *See the case study* — not *Learn more*.
 
 ---
 

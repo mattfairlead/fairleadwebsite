@@ -13,7 +13,7 @@ export interface GlassCell {
  * Glass strip — §5.8.4. backdrop-blur + saturate panel, no fill beyond a
  * faint gradient, no border — only hairlines; anchored to the bottom edge of
  * a full-bleed image section. Used for the hero stats (60+ / 16 / 2010), the
- * Cottonwood options on the Intelligence band, and the engagement process on
+ * case-study options on the Intelligence page, and the engagement process on
  * /hands-on-engagements.
  *
  * Two layouts. A stat strip (cells with `countTo`) is three columns from sm
