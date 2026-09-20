@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import PageIntro from "@/components/PageIntro";
 import SectionReveal from "@/components/SectionReveal";
 import SectionHead from "@/components/SectionHead";
 import NewsletterForm from "@/components/NewsletterForm";
-import Compassmark from "@/components/Compassmark";
 import Mailmark from "@/components/Mailmark";
 import { ARROW } from "@/components/Btn";
 import { getPerspectives, getTeam } from "@/lib/data";
@@ -45,7 +45,16 @@ export default async function PerspectivesPage() {
         eyebrow="Perspectives"
         title={<>The firm&rsquo;s point of view.</>}
         lead={<>Written from inside engagements. One per quarter, worth the wait.</>}
-        aside={<Compassmark className="block w-52 max-lg:mx-auto md:w-60 lg:w-72" />}
+        aside={
+          <Image
+            src="/brand/HomeAsset%202.svg"
+            alt=""
+            width={682}
+            height={567}
+            sizes="(min-width: 1024px) 288px, (min-width: 768px) 240px, 208px"
+            className="h-auto w-52 max-lg:mx-auto md:w-60 lg:w-72"
+          />
+        }
       />
 
       <SectionReveal className="container-page pb-10">
