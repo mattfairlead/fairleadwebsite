@@ -57,9 +57,9 @@ const TOOLS = [
   },
 ];
 
-// Cottonwood four options — slide 6. TODO(§9): confirm Cottonwood/Dominion
-// naming is cleared for the public site; fallback copy is "a utility-scale
-// solar platform" / "the utility."
+// Four options — slide 6. Client naming is not cleared for the public
+// site, so the deal is described generically: "a utility-scale solar
+// platform" contesting a claim from "the utility." Do not name the client.
 const OPTIONS = [
   { head: "Accept", body: "Pay the $720K claim as presented.", ev: "−$720K", recommended: false },
   { head: "Withdraw", body: "Exit the queue; forfeit position and sunk costs.", ev: "Position lost", recommended: false },
@@ -167,14 +167,14 @@ export default function IntelligencePage() {
         </HairlineFrame>
       </SectionReveal>
 
-      {/* Cottonwood case study — static in Phase 1; pin-steps reveal in Phase 2 */}
-      <SectionReveal className="section container-page scroll-mt-24" id="cottonwood">
+      {/* Case study — static in Phase 1; pin-steps reveal in Phase 2 */}
+      <SectionReveal className="section container-page scroll-mt-24" id="case-study">
         <div className="grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-end">
-          <SectionHead eyebrow="Case study · Cottonwood Solar" title={<>A $720K claim, answered in four options.</>} />
+          <SectionHead eyebrow="Case study · Utility-scale solar platform" title={<>A $720K claim, answered in four options.</>} />
           <p className="body-lg max-w-xl text-white-60 md:pb-2" data-anim="fade-up">
-            Dominion presented a $720K interconnection claim. Solaris synthesized the contract record, the
-            correspondence, and the precedent, then returned a decision memo the same week: four options,
-            each priced.
+            The utility presented a $720K interconnection claim. Solaris synthesized the contract record,
+            the correspondence, and the precedent, then returned a decision memo the same week: four
+            options, each priced.
           </p>
         </div>
         <HairlineFrame columns={4} columnsFrom="lg" midColumns={2} className="mt-14">

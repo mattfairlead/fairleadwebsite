@@ -5,7 +5,6 @@ import Scopes from "@/components/Scopes";
 import CompetitorMatrix from "@/components/CompetitorMatrix";
 import Advantage from "@/components/Advantage";
 import Pillars from "@/components/Pillars";
-import IntelligenceBand from "@/components/IntelligenceBand";
 import EngagementCards from "@/components/EngagementCards";
 import FeeBlock from "@/components/FeeBlock";
 import { pageMetadata, SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
@@ -18,7 +17,8 @@ export const metadata: Metadata = pageMetadata(
 
 /**
  * Home — the argument, end to end. The hands-on work states itself first;
- * the intelligence band follows as how that work gets done.
+ * the compounding-asset section folds in a short intelligence teaser,
+ * linking out to the full case study on /intelligence.
  */
 export default function HomePage() {
   return (
@@ -30,7 +30,6 @@ export default function HomePage() {
       <CompetitorMatrix />
       <EngagementCards />
       <Advantage />
-      <IntelligenceBand />
       <FeeBlock />
     </>
   );

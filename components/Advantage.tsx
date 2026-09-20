@@ -1,12 +1,16 @@
+import Link from "next/link";
 import SectionReveal from "@/components/SectionReveal";
 import ImageBand from "@/components/ImageBand";
 import DataBox from "@/components/DataBox";
 
 /**
- * Home §4.1 row 4 — the compounding asset. 2-col, 55/45: the open box with
- * data streaming out of it (DataBox) over the eyebrow, headline + gold-soft
- * italic subhead + paragraph / graded photo (scale-in) carrying the one
- * number that matters — fifteen years — as a display numeral.
+ * Home §4.1 row 4 — the compounding asset, merged with the intelligence
+ * teaser that used to run as its own section. 2-col, 55/45: the open box
+ * with data streaming out of it (DataBox) over the eyebrow, headline +
+ * gold-soft italic subhead + paragraph + proof list + a one-line case-study
+ * teaser linking to the full version on /intelligence / graded photo
+ * (scale-in) carrying the one number that matters — fifteen years — as a
+ * display numeral.
  */
 export default function Advantage() {
   return (
@@ -42,6 +46,14 @@ export default function Advantage() {
               </li>
             ))}
           </ul>
+          <p className="body-md max-w-xl text-white-50" data-anim="fade-up" data-anim-delay="0.35">
+            When a $720K utility claim landed on a portfolio company&rsquo;s desk, Solaris returned a
+            four-option decision memo, every number traced to its source, with ~$360K in expected savings
+            on the table.{" "}
+            <Link href="/intelligence#case-study" className="link-underline text-white-100">
+              Learn more
+            </Link>
+          </p>
         </div>
         <div className="group relative overflow-hidden" style={{ borderRadius: "3px" }}>
           <div data-anim="scale-in" className="transition-transform duration-[1200ms] group-hover:scale-[1.03]" style={{ transitionTimingFunction: "var(--ease-out-expo)" }}>
