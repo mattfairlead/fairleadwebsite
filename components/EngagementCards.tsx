@@ -21,7 +21,7 @@ export default async function EngagementCards() {
       <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <SectionHead eyebrow="Results" title={<>Selected engagements.</>} />
         <p className="body-md max-w-sm text-white-50" data-anim="fade-up">
-          Three of sixty-plus. Metric first, in the operator&rsquo;s vocabulary.
+          Three of eighty-plus. Metric first, in the operator&rsquo;s vocabulary.
         </p>
       </div>
       <div className="relative mt-14">

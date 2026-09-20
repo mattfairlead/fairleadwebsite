@@ -11,7 +11,10 @@ import HairlineFrame from "@/components/HairlineFrame";
  * cursor.
  */
 
-const COLUMNS = ["Senior operators", "Live visibility"];
+const COLUMNS: { full: string; short: string }[] = [
+  { full: "Senior operators", short: "Operators" },
+  { full: "Live visibility", short: "Visibility" },
+];
 
 const ROWS: { who: string; note: string; has: [boolean, boolean]; fairlead?: boolean }[] = [
   { who: "Big 4", note: "Partial team on site; no live visibility between reports.", has: [false, false] },
@@ -62,12 +65,13 @@ export default function CompetitorMatrix() {
       <SectionHead eyebrow="The field" title={<>No competitor solves both halves.</>} eyebrowClass="text-gold" />
       <HairlineFrame className="mt-14">
         {/* column heads */}
-        <div className="grid grid-cols-[1fr_4rem_4rem] items-center gap-4 px-4 py-4 md:grid-cols-[11rem_1fr_7rem_7rem] md:px-6 lg:grid-cols-[14rem_1fr_9rem_9rem]">
+        <div className="grid grid-cols-[1fr_4.75rem_4.75rem] items-center gap-4 px-4 py-4 md:grid-cols-[11rem_1fr_7rem_7rem] md:px-6 lg:grid-cols-[14rem_1fr_9rem_9rem]">
           <span className="label text-white-50">Who</span>
           <span className="label hidden text-white-50 md:block" />
           {COLUMNS.map((c) => (
-            <span key={c} className="label text-center text-white-50">
-              {c}
+            <span key={c.full} className="label text-center text-white-50">
+              <span className="md:hidden">{c.short}</span>
+              <span className="hidden md:inline">{c.full}</span>
             </span>
           ))}
         </div>
@@ -77,7 +81,7 @@ export default function CompetitorMatrix() {
             {row.fairlead && <span className="absolute inset-y-0 left-0 w-0.5 bg-gold" aria-hidden="true" />}
             <div
               className={clsx(
-                "grid grid-cols-[1fr_4rem_4rem] items-center gap-4 px-4 py-6 md:grid-cols-[11rem_1fr_7rem_7rem] md:px-6 lg:grid-cols-[14rem_1fr_9rem_9rem]",
+                "grid grid-cols-[1fr_4.75rem_4.75rem] items-center gap-4 px-4 py-6 md:grid-cols-[11rem_1fr_7rem_7rem] md:px-6 lg:grid-cols-[14rem_1fr_9rem_9rem]",
                 row.fairlead ? "" : "spot"
               )}
               style={

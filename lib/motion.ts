@@ -10,6 +10,9 @@ let registered = false;
 export function registerGsap() {
   if (registered || typeof window === "undefined") return;
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother, ScrollToPlugin, SplitText);
+  // Sections without a hairline frame hand sectionReveal() empty arrays;
+  // GSAP would log "target not found" for each — hundreds per page.
+  gsap.config({ nullTargetWarn: false });
   registered = true;
 }
 
@@ -141,6 +144,8 @@ export function animateCounts(root: ParentNode = document) {
     if (el.dataset.animWired) return;
     el.dataset.animWired = "1";
     const to = Number(el.getAttribute("data-count-to") ?? 0);
+    // Optional floor — a year counts up from a nearby year, not from zero.
+    const from = Number(el.getAttribute("data-count-from") ?? 0);
     const suffix = el.getAttribute("data-count-suffix") ?? "";
     const target = el.querySelector<HTMLElement>("[data-count-value]");
     const write = (v: number) => {
@@ -151,12 +156,16 @@ export function animateCounts(root: ParentNode = document) {
       write(to);
       return;
     }
-    const obj = { val: 0 };
+    const obj = { val: from };
+    // "top bottom", not the section TRIGGER: the hero strip sits at ~88% of a
+    // 900px desktop viewport, so the standard start point left the stats
+    // reading "0+ / 0 / 1990" until the first scroll event under
+    // ScrollSmoother. Any strip visible on load now counts immediately.
     gsap.to(obj, {
       val: to,
       duration: 2,
       ease: "power2.out",
-      scrollTrigger: { trigger: el, start: TRIGGER, once: ONCE },
+      scrollTrigger: { trigger: el, start: "top bottom", once: ONCE },
       onUpdate: () => write(Math.round(obj.val)),
     });
   });
@@ -218,10 +227,14 @@ export function sectionReveal(section: HTMLElement) {
     tl.to(h2El, { opacity: 1, y: 0, duration: 0.6, ease: EASE_OUT }, 0);
   }
 
-  gsap.set(hLines, { width: "0%" });
-  gsap.set(vLines, { height: "0%" });
-  tl.to(hLines, { width: "100%", duration: 0.8, ease: EASE_INOUT, stagger: 0.1 }, e);
-  tl.to(vLines, { height: "calc(100% - 2px)", duration: 0.8, ease: EASE_INOUT, stagger: 0.1 }, e + 0.48);
+  if (hLines.length) {
+    gsap.set(hLines, { width: "0%" });
+    tl.to(hLines, { width: "100%", duration: 0.8, ease: EASE_INOUT, stagger: 0.1 }, e);
+  }
+  if (vLines.length) {
+    gsap.set(vLines, { height: "0%" });
+    tl.to(vLines, { height: "calc(100% - 2px)", duration: 0.8, ease: EASE_INOUT, stagger: 0.1 }, e + 0.48);
+  }
 
   cells.forEach((cell, i) => {
     const title = cell.querySelector<HTMLElement>('[data-anim="title"]');

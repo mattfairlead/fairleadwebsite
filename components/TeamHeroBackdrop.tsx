@@ -69,7 +69,7 @@ export default function TeamHeroBackdrop() {
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
         className={[
-          "absolute right-0 aspect-[25/12] max-lg:opacity-50",
+          "absolute right-0 aspect-[25/12] max-lg:opacity-40",
           "max-md:top-1/2 max-md:w-[140%] max-md:-translate-y-1/2",
           "md:inset-y-0 md:w-auto",
           // own compositor layer: the mask is rasterised once with the box

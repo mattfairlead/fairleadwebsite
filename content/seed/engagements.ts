@@ -4,12 +4,11 @@ import type { Engagement } from "@/lib/types";
  * Featured engagements — the nine from §4.4, drafted in the §10 voice.
  * Past tense, operator's vocabulary, metric first.
  *
- * TODO(§9) before launch:
- *  - GRP Holdco $82.5M tax equity figure — Adam to confirm.
- *  - Cordia: McKinsey collaboration mention deliberately omitted until cleared.
- *  - Full 60+ engagement import from Matt's March 2026 Engagement Summary CSV
- *    (scripts/import-engagements.ts is the entry point).
- *  - Anonymization pass on non-featured rows.
+ * Sources: the GRP figure is the public March 2023 press release (the
+ * perspectives archive carries it in full); the Cordia interim-CEO role is
+ * per Adam Carte (firm profile, Sept 2026); the McKinsey collaboration on
+ * Cordia is deliberately omitted until cleared. The rest of the register is
+ * read live from the engagement hub (lib/data.ts → loadRegister).
  */
 export const engagements: Engagement[] = [
   {
@@ -19,13 +18,13 @@ export const engagements: Engagement[] = [
     sponsor_display: "KKR",
     sponsor_type: "Infra",
     sector: "district-energy",
-    roles: ["Interim CFO", "Operating Partner", "M&A"],
+    roles: ["Interim CEO", "Operating Partner", "M&A"],
     outcome_tags: ["Spin-off"],
     headline_metric: "$1.9B carve-out, stood up as a standalone platform",
     summary_md:
-      "Fairlead embedded through the $1.9B carve-out of a district energy platform, building the finance function, the reporting, and the operating cadence a standalone company needs from day one.",
+      "Fairlead embedded through the $1.9B carve-out of a district energy platform, with Adam Carte as interim CEO: the finance function, the reporting, and the operating cadence a standalone company needs from day one.",
     body_md:
-      "When KKR carved Cordia out at $1.9B, the platform needed a complete finance and operating function, not advice on one. Fairlead sat in the seats: standing up accounting, treasury, reporting, and the board cadence while the business kept running.\n\nTODO: expand with cleared detail from the deck case study.",
+      "When KKR carved Cordia out at $1.9B, the platform needed a complete leadership and finance function, not advice on one. Fairlead sat in the seats. Adam Carte served as interim CEO through the carve-out, and the team behind him stood up accounting, treasury, reporting, and the board cadence while the business kept running.\n\nThe work was the standard carve-out list, done from inside: separating from the seller's systems and contracts, building the sponsor's reporting from the ground up, and putting an operating rhythm in place that the permanent management team could inherit. The same people who ran the close ran the board meeting.",
     year_start: 2020,
     year_end: null,
     featured: true,
@@ -45,7 +44,7 @@ export const engagements: Engagement[] = [
     summary_md:
       "Tripled run-rate EBITDA in 18 months: embedded finance leadership through the turnaround and into the exit.",
     body_md:
-      "Cadre needed the seat filled, fast, in a market that had turned. Fairlead ran the finance function through the downturn: cash discipline weekly, cost structure rebuilt, and the business repositioned so the recovery dropped to the bottom line.\n\nTODO: expand with cleared detail from the deck case study.",
+      "Cadre needed the seat filled, fast, in a market that had turned. Fairlead ran the finance function through the downturn: cash discipline weekly, cost structure rebuilt, and the business repositioned so the recovery dropped to the bottom line.\n\nRun-rate EBITDA tripled in eighteen months. The same team stayed in the seat through the turnaround and into the exit, so the numbers a buyer diligenced were the numbers the company had been run on.",
     year_start: 2016,
     year_end: 2018,
     featured: true,
@@ -61,11 +60,11 @@ export const engagements: Engagement[] = [
     sector: "renewables",
     roles: ["Interim CFO", "M&A"],
     outcome_tags: ["Financing", "Tax equity"],
-    headline_metric: "$82.5M tax equity raised", // TODO(§9): Adam to confirm figure
+    headline_metric: "$82.5M tax equity raised",
     summary_md:
-      "Ran the tax equity process for an Ares-backed renewables platform: $82.5M raised with the same team that ran the monthly close.",
+      "Ran the tax equity process for a 116 MW biomass platform with Ares-led project debt: $82.5M raised with the same team that ran the monthly close.",
     body_md:
-      "The same people who closed the books ran the raise. Fairlead prepared the model, the diligence room, and the lender process for GRP's tax equity financing: $82.5M committed.\n\nTODO: expand with cleared detail; confirm figure with Adam.",
+      "The same people who closed the books ran the raise. Fairlead manages GRP Holdco, the owner of two operating biomass projects in Georgia (116 MW under 30-year power purchase agreements), and prepared the model, the diligence room, and the investor process for its tax equity financing: $82.5M committed, monetizing production tax credits through 2029.\n\nThe structure had to work for a project-debt consortium led by an Ares Management infrastructure debt fund, the tax equity investor, and the company at the same time. It closed in March 2023.",
     year_start: 2022,
     year_end: null,
     featured: true,
@@ -81,10 +80,11 @@ export const engagements: Engagement[] = [
     sector: "life-sciences",
     roles: ["M&A"],
     outcome_tags: ["Sale"],
-    headline_metric: "Advised through sale",
+    headline_metric: "Seed stage to acquisition by a U.S. tech giant",
     summary_md:
-      "Advised Nirenberg Neuroscience through its sale process: preparation, diligence, and close.",
-    body_md: "TODO: adapt the 2023 case study post into the case study format.",
+      "Fractional commercial, financial, and back-office leadership from the seed round to the 2022 acquisition by a U.S.-based tech giant.",
+    body_md:
+      "Nirenberg Neuroscience, a New York computer-vision company built on Dr. Sheila Nirenberg's work decoding the neural code of human vision, engaged Fairlead at its seed round and kept the team in place until a U.S.-based tech giant acquired the company in early 2022.\n\nFairlead provided strategic planning, executive management, and accounting: the fractional commercial, financial, and back-office function of a company that deliberately kept its cost structure to a minimum. That discipline bought the founder time. Pilot applications proved the software on a wide range of problems, a license agreement with Ford Motor Company followed for its autonomous-vehicle program, and a chip partnership made the technology available to any company with a computer-vision problem.\n\nThat partnership led to the acquisition. The company spent its capital on the science; Fairlead carried the rest.",
     year_start: 2023,
     year_end: 2023,
     featured: true,
@@ -120,10 +120,11 @@ export const engagements: Engagement[] = [
     sector: "manufacturing",
     roles: ["Interim CFO", "Restructuring"],
     outcome_tags: ["Turnaround", "Financing"],
-    headline_metric: "Runway extended through the sprint to financing",
+    headline_metric: "Sold at a premium to invested capital, three weeks before the cash ran out",
     summary_md:
-      "The survival sprint: cash controlled weekly, overhead cut to the operating core, and the company carried to its next financing.",
-    body_md: "TODO: adapt the 2023 “Survival Sprint” case study post.",
+      "Three years of financials restated, plant efficiency proven in a model, and a competitive auction run inside a twelve-month cash runway.",
+    body_md:
+      "A venture-stage manufacturer had built a commercial-scale plant with a genuinely better production process and could not show whether it was profitable. Raw materials were bought six months ahead, the accounting had never kept up, and the company had less than a year of cash from its investor.\n\nFairlead's mandate was a financing or a sale before the money ran out. The accounting team restated three years of financial statements after uncovering significant errors. In parallel, with no time to implement an ERP, the analysis team rebuilt the production process in a model alongside the VP of Operations, which both validated the founder's efficiency thesis and gave operations the data to improve it during the process.\n\nWith proof of the plant's performance, the company drew customer and competitor interest. After a competitive auction, its largest customer bought the company at a premium to invested capital, three weeks before the cash ran out, with three years of audited financials delivered at close.",
     year_start: 2023,
     year_end: 2023,
     featured: true,
@@ -142,7 +143,7 @@ export const engagements: Engagement[] = [
     headline_metric: "Embedded finance leadership through restructuring",
     summary_md:
       "Embedded with Ambri through its restructuring: finance leadership, creditor process, and the path to continued operations.",
-    body_md: null, // TODO: confirm what can be said publicly before adding a detail page
+    body_md: null, // no detail page until the partners confirm what can be said publicly
     year_start: 2023,
     year_end: null,
     featured: true,
@@ -155,13 +156,14 @@ export const engagements: Engagement[] = [
     company_display: "Greenleaf",
     sponsor_display: "PE-backed",
     sponsor_type: "PE",
-    sector: "industrial-processing",
-    roles: ["Interim CFO"],
-    outcome_tags: ["Turnaround"],
-    headline_metric: "TODO: confirm headline metric",
-    summary_md: "TODO: draft summary pending engagement detail from the March 2026 summary.",
-    body_md: null,
-    year_start: 2021,
+    sector: "renewables",
+    roles: ["Interim CEO", "Operating Partner", "M&A"],
+    outcome_tags: ["Turnaround", "Sale"],
+    headline_metric: "Grown into one of the largest biomass platforms in the U.S.",
+    summary_md:
+      "Ran and grew Greenleaf Power into one of the largest biomass power platforms in the country: acquisitions, operations, and the divestiture of plants in California, Connecticut, and Quebec.",
+    body_md: null, // no detail page until the partners clear one
+    year_start: 2011,
     year_end: null,
     featured: true,
     anonymized: false,

@@ -80,7 +80,7 @@ export default function IntelligencePage() {
               hands-on engagements
             </Link>
             , not a separate business. Every tool here was built inside an engagement to solve one
-            company&rsquo;s problem, used daily, in production, for more than six months, past the pilot
+            company&rsquo;s problem, used daily, in production, for more than a year, past the pilot
             phase most firms are stuck in, and then reused across the portfolio.
           </>
         }

@@ -12,7 +12,7 @@ import Image from "next/image";
 export default function Logo({ className = "h-7" }: { className?: string }) {
   return (
     <Link href="/" className="inline-flex items-center" aria-label="Fairlead Advisors home">
-      <Image src="/brand/logo-white.svg" alt="Fairlead Advisors" width={167} height={43} className={`on-dark w-auto ${className}`} priority />
+      <Image src="/brand/logo-white.svg" alt="Fairlead Advisors" width={167} height={43} className={`on-dark w-auto ${className}`} />
       <Image src="/brand/logo-navy.svg" alt="" aria-hidden="true" width={167} height={43} className={`on-light w-auto ${className}`} />
     </Link>
   );
