@@ -115,11 +115,11 @@ export default function Hero() {
           </Link>
         </div>
 
-        {/* Hero stats strip — the 60+ / 16 / 2010 trio lives here, §5.5 */}
+        {/* Hero stats strip — the 80+ / 16 / 2010 trio lives here, §5.5 */}
         <GlassStrip
           clear
           cells={[
-            { countTo: 60, countSuffix: "+", head: "embedded engagements" },
+            { countTo: 80, countSuffix: "+", head: "embedded engagements" },
             { countTo: 16, head: "sectors" },
             { countTo: 2010, head: "operating inside portfolios since" },
           ]}
