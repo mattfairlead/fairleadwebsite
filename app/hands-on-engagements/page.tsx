@@ -208,11 +208,14 @@ export default function HandsOnEngagementsPage() {
           {SCOPES.map((scope, i) => (
             <div key={scope.id} id={scope.id} data-cell className="spot relative scroll-mt-28">
               {i > 0 && <span className="dec left-0 top-0 h-px w-full" />}
-              <div className="grid gap-6 p-6 md:grid-cols-[10rem_1fr] md:gap-14 md:p-12">
-                <span className="h3 text-white-20 tabular" style={{ letterSpacing: "-0.06em" }}>
-                  0{i + 1}
+              <div className="grid gap-6 p-6 md:grid-cols-[3rem_1fr] md:gap-10 md:p-12">
+                <span
+                  className="flex h-11 w-11 items-center justify-center self-start rounded-full text-base font-semibold text-blue-950"
+                  style={{ background: "var(--color-gold)" }}
+                >
+                  {i + 1}
                 </span>
-                <div className="flex max-w-3xl flex-col gap-5">
+                <div className="flex max-w-4xl flex-col gap-5">
                   <h2 data-anim="title" className="h3">
                     {scope.title}
                   </h2>
