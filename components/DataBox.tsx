@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import clsx from "clsx";
-import { prefersReducedMotion } from "@/lib/motion";
+import { prefersReducedMotion, registerGsap, ScrollTrigger } from "@/lib/motion";
 
 /**
  * DataBox — the compounding asset, drawn. An open isometric box (gold
@@ -18,6 +18,10 @@ import { prefersReducedMotion } from "@/lib/motion";
  * is split into a back layer (floor, inner walls, back rim) under the
  * canvas and a front layer (outer walls, front rim) over it.
  *
+ * The flow is scroll-driven, not perpetual: the simulation clock only
+ * advances while the page is actually scrolling, scaled by
+ * ScrollTrigger.getVelocity() so a fast flick pushes more data out than a
+ * slow drift, and it settles to a still frame shortly after the user stops.
  * The canvas runs only while on screen and stops on `prefers-reduced-motion`
  * (a single settled frame is painted instead). Additive blending on the
  * page's navy ground is what makes the light read as light.
@@ -266,34 +270,75 @@ export default function DataBox({ className }: { className?: string }) {
       return () => ro.disconnect();
     }
 
+    registerGsap();
+    // A trigger-less ScrollTrigger, created solely to read page scroll
+    // velocity each frame — it tracks the default scroller (the page) and
+    // needs no `trigger` element of its own.
+    const velocityTracker = ScrollTrigger.create({});
+
+    // How long after the last scroll event before the flow settles.
+    const SCROLL_IDLE_MS = 140;
+    // Scroll speed (px/s) that reads as "full speed" inside the box.
+    const VELOCITY_NORM = 900;
+    // Floor/ceiling on the resulting sim-speed multiplier, so a slow drag
+    // still visibly moves data and a fast flick doesn't blow the plume apart.
+    const ENERGY_MIN = 0.3;
+    const ENERGY_MAX = 1.8;
+
     let raf = 0;
     let last = 0;
     let visible = false;
+    let scrolling = false;
+    let idleTimer = 0;
+
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    };
     const loop = (now: number) => {
-      if (!visible) return;
+      if (!visible || !scrolling) {
+        raf = 0;
+        return;
+      }
       const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
       last = now;
-      draw(dt);
+      const v = Math.abs(velocityTracker.getVelocity());
+      const energy = Math.min(ENERGY_MAX, Math.max(ENERGY_MIN, v / VELOCITY_NORM));
+      draw(dt * energy);
       raf = requestAnimationFrame(loop);
     };
     const start = () => {
-      if (raf) return;
+      if (raf || !visible || !scrolling) return;
       last = 0;
       raf = requestAnimationFrame(loop);
     };
-    const stop = () => {
-      cancelAnimationFrame(raf);
-      raf = 0;
+
+    const onScroll = () => {
+      if (!visible) return;
+      scrolling = true;
+      start();
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(() => {
+        scrolling = false;
+        stop();
+      }, SCROLL_IDLE_MS);
     };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     const io = new IntersectionObserver(([e]) => {
       visible = e.isIntersecting && document.visibilityState === "visible";
-      if (visible) start();
-      else stop();
+      if (visible) {
+        if (scrolling) start();
+        else draw(0); // a settled frame so it isn't blank before the first scroll
+      } else {
+        stop();
+      }
     }, { rootMargin: "80px" });
     io.observe(stage);
     const onVis = () => {
       if (document.visibilityState !== "visible") {
         visible = false;
+        scrolling = false;
         stop();
       }
     };
@@ -303,7 +348,10 @@ export default function DataBox({ className }: { className?: string }) {
       stop();
       io.disconnect();
       ro.disconnect();
+      velocityTracker.kill();
+      window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVis);
+      window.clearTimeout(idleTimer);
     };
   }, []);
 
