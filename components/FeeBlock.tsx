@@ -1,6 +1,8 @@
 import Image from "next/image";
+import Link from "next/link";
 import SectionReveal from "@/components/SectionReveal";
 import HairlineFrame from "@/components/HairlineFrame";
+import { ARROW } from "@/components/Btn";
 
 /**
  * Home §4.1 row 8 — fee alignment, from deck slide 8.
@@ -52,6 +54,15 @@ export default function FeeBlock() {
                 </span>
               ))}
             </div>
+            <Link
+              href="/contact"
+              className="btn btn-primary button mt-4"
+              data-anim="fade-up"
+              data-anim-delay="0.25"
+            >
+              Talk to a partner
+              {ARROW}
+            </Link>
           </div>
         </div>
       </HairlineFrame>
