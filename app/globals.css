@@ -1263,7 +1263,7 @@ html[data-theme="light"] .text-gold-glow {
 /* Footer sailboat — drifts slowly across the water, coasting on ahead of
    its gulls, which drift on their own much slower timeline. */
 .sailboat-drift {
-  animation: sailboat-drift 100s ease-in-out infinite alternate;
+  animation: sailboat-drift 150s linear infinite;
   will-change: transform;
 }
 @keyframes sailboat-drift {
@@ -1271,7 +1271,7 @@ html[data-theme="light"] .text-gold-glow {
     transform: translateX(0);
   }
   to {
-    transform: translateX(68vw);
+    transform: translateX(100vw);
   }
 }
 .sailboat-birds-drift {

@@ -4,9 +4,11 @@
  * the roundel), lifted verbatim and set on a hull, so the boat and the mark
  * share one shape. Decorative only.
  *
- * `sailboat-drift` (globals.css) carries the boat slowly back and forth
- * across the water. The gulls that used to ride along with it now drift on
- * their own, much slower (SailboatBirds), so the boat coasts on ahead of them.
+ * `sailboat-drift` (globals.css) carries the boat slowly across the water,
+ * one direction only: it sails off the right edge (clipped by the band's
+ * overflow-hidden) and loops back to its start, rather than reversing
+ * course. The gulls that used to ride along with it now drift on their own,
+ * much slower (SailboatBirds), so the boat coasts on ahead of them.
  */
 export default function Sailboat({ className = "", style }: { className?: string; style?: React.CSSProperties }) {
   return (
