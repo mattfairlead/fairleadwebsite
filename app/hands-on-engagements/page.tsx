@@ -201,21 +201,6 @@ export default function HandsOnEngagementsPage() {
             down as the situation moves.
           </>
         }
-        aside={
-          <nav aria-label="On this page" className="flex flex-col gap-2">
-            <span className="label mb-1 text-white-40">Five scopes</span>
-            {SCOPES.map((s, i) => (
-              <a
-                key={s.id}
-                href={`#${s.id}`}
-                className="body-sm flex items-center gap-3 text-white-50 transition-colors duration-200 hover:text-gold"
-              >
-                <span className="label tabular">0{i + 1}</span>
-                {s.title}
-              </a>
-            ))}
-          </nav>
-        }
       />
 
       <SectionReveal className="container-page">
