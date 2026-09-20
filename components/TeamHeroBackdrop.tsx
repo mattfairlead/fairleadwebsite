@@ -18,18 +18,29 @@ import BackgroundVideo from "@/components/BackgroundVideo";
 const TEAM_VIDEO = process.env.NEXT_PUBLIC_TEAM_HERO_VIDEO_URL || "/api/media/team-hero";
 const TEAM_POSTER = "/team/hero-poster.jpg";
 
-// The box is sized from the footage's own 1250×600 aspect ratio rather than
-// stretched to fill the intro's width AND height: forcing both meant
-// object-cover had to cover whichever dimension the box distorted more, and
-// on a taller intro (a wrapped lead paragraph, a shorter viewport) that was
-// height — cropping a full row of faces off the top and bottom. Pinning the
-// box to the intro's height and deriving its width from the aspect ratio
-// (via the `aspectRatio` style below, with no explicit width) means
-// object-cover never has to crop either axis: the whole grid of faces is
-// always visible, at whatever width that height implies. The box still
-// docks to the right edge (no `left`, just `right: 0`), so on a narrower
-// viewport it simply runs past the left edge rather than shrinking and
-// cropping again.
+// The box is always sized from the footage's own 1250×600 aspect ratio, via
+// the `aspect-[25/12]` class below, rather than stretched to fill the
+// intro's width AND height — forcing both meant object-cover had to cover
+// whichever dimension the box distorted more, cropping a full row of faces
+// off whichever edges lost out. Which dimension is left to derive from the
+// other flips at md:
+//
+//   - From md up, the box is pinned to the intro's height (`md:inset-y-0`)
+//     and its width is left to the aspect ratio, so object-cover never has
+//     to crop either axis: the whole grid of faces is always visible, at
+//     whatever width that height implies. It still docks to the right edge
+//     (no `left`, just `right: 0`), so on a narrower viewport it simply
+//     runs past the left edge rather than shrinking and cropping again.
+//
+//   - Below md the intro carries no min-height, so its height comes purely
+//     from stacked, wrapped copy — on a phone that's short enough that
+//     deriving width from height the same way would run the box 2.5–3x the
+//     screen width, leaving only its last sliver of faces inside the
+//     viewport. So below md it runs the other way: a fixed share of the
+//     viewport width instead (`max-md:w-[140%]`, vertically centered with
+//     `top-1/2 -translate-y-1/2` since it no longer spans the full height),
+//     and height follows from that width — still zero crop, just a
+//     shorter, wider-in-view band that puts more of the roster on screen.
 //
 // The mask is what keeps this from washing out the copy: it fades from
 // fully transparent at the box's own left edge up to fully revealed by
@@ -48,7 +59,6 @@ const TEAM_POSTER = "/team/hero-poster.jpg";
 // mask can rasterise a pixel short of the box, which would flash a 1px
 // line of footage along the seam; keeping the edge rows transparent means
 // there is nothing to reveal.
-const VIDEO_ASPECT = "1250 / 600";
 const MASK = [
   "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 16%, rgba(0,0,0,0.85) 30%, #000 42%)",
   "linear-gradient(180deg, rgba(0,0,0,0) 2%, rgba(0,0,0,0.85) 12%, #000 24%, #000 92%, rgba(0,0,0,0.85) 97%, rgba(0,0,0,0) 100%)",
@@ -58,9 +68,15 @@ export default function TeamHeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-y-0 right-0 max-lg:opacity-50"
+        className={[
+          "absolute right-0 aspect-[25/12] max-lg:opacity-50",
+          "max-md:top-1/2 max-md:w-[140%] max-md:-translate-y-1/2",
+          "md:inset-y-0 md:w-auto",
+          // own compositor layer: the mask is rasterised once with the box
+          // and travels with it, instead of being re-cut every scroll frame
+          "transform-gpu will-change-transform",
+        ].join(" ")}
         style={{
-          aspectRatio: VIDEO_ASPECT,
           WebkitMaskImage: MASK,
           maskImage: MASK,
           WebkitMaskComposite: "source-in",
@@ -69,13 +85,9 @@ export default function TeamHeroBackdrop() {
           maskRepeat: "no-repeat",
           WebkitMaskSize: "100% 100%",
           maskSize: "100% 100%",
-          // own compositor layer: the mask is rasterised once with the box
-          // and travels with it, instead of being re-cut every scroll frame
-          transform: "translateZ(0)",
-          willChange: "transform",
         }}
       >
-        <BackgroundVideo src={TEAM_VIDEO} poster={TEAM_POSTER} inset="0" />
+        <BackgroundVideo src={TEAM_VIDEO} poster={TEAM_POSTER} inset="0" mobileOk objectPosition="right center" />
         {/* blue-hour vignette — deepest where the copy sits, all but gone past it */}
         <div
           className="absolute inset-0"
