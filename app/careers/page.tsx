@@ -36,10 +36,10 @@ export default function CareersPage() {
         }
         aside={
           <Image
-            src="/brand/HomeAsset%202.svg"
+            src="/brand/BriefcaseAsset%208.svg"
             alt=""
             width={682}
-            height={567}
+            height={572}
             sizes="(min-width: 1024px) 320px, (min-width: 768px) 256px, 192px"
             className="h-auto w-48 max-lg:mx-auto md:w-64 lg:w-80"
           />
