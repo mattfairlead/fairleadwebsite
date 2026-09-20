@@ -9,7 +9,6 @@ import HairlineFrame, { RowRule } from "@/components/HairlineFrame";
 import GlassStrip from "@/components/GlassStrip";
 import ImageBand from "@/components/ImageBand";
 import FeeBlock from "@/components/FeeBlock";
-import Btn from "@/components/Btn";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
@@ -304,19 +303,6 @@ export default function HandsOnEngagementsPage() {
       </SectionReveal>
 
       <FeeBlock />
-
-      <SectionReveal className="container-page flex flex-col items-start gap-6 pb-16">
-        <p className="body-lg max-w-2xl text-white-60" data-anim="fade-up">
-          How we keep all of this visible:{" "}
-          <Link href="/intelligence" className="link-underline text-white-100">
-            Intelligence
-          </Link>
-          .
-        </p>
-        <Btn href="/contact" arrow dataAnim="pop">
-          Talk to a partner
-        </Btn>
-      </SectionReveal>
     </>
   );
 }
