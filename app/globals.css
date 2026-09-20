@@ -320,6 +320,16 @@ body {
   min-height: max(50rem, min(100svh, 58rem)) !important;
 }
 
+/* Same floor, sized down for an inner-page band: a 50rem floor is barely
+   more than the homepage's own landing hero, so on a phone (where 100svh
+   IS the floor) the intelligence hero filled the entire screen before a
+   visitor could see there was more page below it. This still guarantees
+   enough height to clear the header on a short/landscape viewport, but
+   caps out well short of a full mobile screen otherwise. */
+.intelligence-hero-band {
+  min-height: max(28rem, min(82svh, 48rem)) !important;
+}
+
 /* Hairline primitive — never a border, always its own 1px layer. §5.8.1 */
 .dec {
   position: absolute;
