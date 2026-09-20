@@ -17,6 +17,12 @@ import SectionReveal from "@/components/SectionReveal";
  * (see that route for why). Set NEXT_PUBLIC_INTELLIGENCE_HERO_VIDEO_URL once
  * the file moves to Blob/Supabase Storage (§9 media plan) — no code change
  * needed. Empty string disables the video and leaves the poster.
+ *
+ * `videoMobileOk` lets the clip load and play on phones too — BackgroundVideo
+ * skips it there otherwise. And unlike the homepage hero, this is an inner
+ * page: `.intelligence-hero-band` (globals.css) caps its height well short
+ * of a full mobile screen instead of reusing `.hero-band`'s landing-page
+ * floor, so a visitor can still see there's more page below it.
  */
 const INTELLIGENCE_VIDEO =
   process.env.NEXT_PUBLIC_INTELLIGENCE_HERO_VIDEO_URL ?? "/api/media/intelligence-hero";
@@ -35,13 +41,14 @@ export default function IntelligenceHero({
     <SectionReveal className="relative">
       <ImageBand
         aspect="1440/922"
-        minHeight="min(100svh, 52rem)"
-        className="hero-band"
+        minHeight="min(82svh, 48rem)"
+        className="intelligence-hero-band"
         parallax
         overlayStrength={1}
         src={INTELLIGENCE_POSTER}
         video={INTELLIGENCE_VIDEO || undefined}
         videoPoster={INTELLIGENCE_POSTER}
+        videoMobileOk
       >
         {/* legibility scrim — deepest under the copy, clear on the right */}
         <div
