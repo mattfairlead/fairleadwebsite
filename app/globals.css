@@ -290,6 +290,7 @@ body {
    viewport, so wide monitors were stretching every grid, section and line
    of text edge to edge instead of gaining real margin. */
 .container-page {
+  width: 100%;
   max-width: 90rem;
   margin-inline: auto;
   padding-inline: 2.5rem;
