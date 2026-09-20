@@ -18,20 +18,24 @@ import BackgroundVideo from "@/components/BackgroundVideo";
 const TEAM_VIDEO = process.env.NEXT_PUBLIC_TEAM_HERO_VIDEO_URL || "/api/media/team-hero";
 const TEAM_POSTER = "/team/hero-poster.jpg";
 
-// The box now runs the full width and height of the intro rather than being
-// docked to a narrow share of it: at the old 46–68% widths, object-cover in
-// BackgroundVideo had to crop the footage's own 1250×600 grid down to its
-// centre few columns, so most of the roster — and the whole right edge —
-// never appeared, and what did show stopped mid-tile at the viewport edge.
-// Full width lets object-cover cover on the box's WIDTH instead of its
-// height, so nearly the entire frame of faces is visible with only a
-// sliver cropped top and bottom.
+// The box is sized from the footage's own 1250×600 aspect ratio rather than
+// stretched to fill the intro's width AND height: forcing both meant
+// object-cover had to cover whichever dimension the box distorted more, and
+// on a taller intro (a wrapped lead paragraph, a shorter viewport) that was
+// height — cropping a full row of faces off the top and bottom. Pinning the
+// box to the intro's height and deriving its width from the aspect ratio
+// (via the `aspectRatio` style below, with no explicit width) means
+// object-cover never has to crop either axis: the whole grid of faces is
+// always visible, at whatever width that height implies. The box still
+// docks to the right edge (no `left`, just `right: 0`), so on a narrower
+// viewport it simply runs past the left edge rather than shrinking and
+// cropping again.
 //
-// The mask below is what keeps this from washing out the copy: it fades
-// from fully transparent at the left edge up to fully revealed by ~42% of
-// the viewport, so the video still dissolves into the page ground behind
-// the eyebrow and headline, but climbs fast enough that the faces read
-// through well before the copy block ends rather than staying hidden
+// The mask is what keeps this from washing out the copy: it fades from
+// fully transparent at the box's own left edge up to fully revealed by
+// ~42% of its width, so the video still dissolves into the page ground
+// behind the eyebrow and headline, but climbs fast enough that the faces
+// read through well before the copy block ends rather than staying hidden
 // under it. The wash on top is a light vignette, not a heavy paint, so
 // once revealed the faces stay vivid instead of graded flat.
 //
@@ -44,17 +48,19 @@ const TEAM_POSTER = "/team/hero-poster.jpg";
 // mask can rasterise a pixel short of the box, which would flash a 1px
 // line of footage along the seam; keeping the edge rows transparent means
 // there is nothing to reveal.
+const VIDEO_ASPECT = "1250 / 600";
 const MASK = [
   "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 16%, rgba(0,0,0,0.85) 30%, #000 42%)",
-  "linear-gradient(180deg, rgba(0,0,0,0) 2%, rgba(0,0,0,0.75) 18%, #000 40%, rgba(0,0,0,0.7) 88%, rgba(0,0,0,0) 97%)",
+  "linear-gradient(180deg, rgba(0,0,0,0) 2%, rgba(0,0,0,0.85) 12%, #000 24%, #000 92%, rgba(0,0,0,0.85) 97%, rgba(0,0,0,0) 100%)",
 ].join(", ");
 
 export default function TeamHeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-0 max-lg:opacity-50"
+        className="absolute inset-y-0 right-0 max-lg:opacity-50"
         style={{
+          aspectRatio: VIDEO_ASPECT,
           WebkitMaskImage: MASK,
           maskImage: MASK,
           WebkitMaskComposite: "source-in",
