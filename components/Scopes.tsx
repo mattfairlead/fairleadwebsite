@@ -51,8 +51,11 @@ export default function Scopes() {
               href={`/hands-on-engagements#${scope.id}`}
               className="spot group grid items-center gap-4 px-2 py-8 md:grid-cols-[6rem_1fr_auto] md:gap-10 md:px-5"
             >
-              <span className="h3 text-white-20 tabular" style={{ letterSpacing: "-0.06em" }}>
-                0{i + 1}
+              <span
+                className="flex h-11 w-11 items-center justify-center self-start rounded-full text-base font-semibold text-blue-950"
+                style={{ background: "var(--color-gold)" }}
+              >
+                {i + 1}
               </span>
               <span className="flex flex-col gap-2">
                 <h3 className="h4 transition-colors duration-300 group-hover:text-gold-soft">{scope.title}</h3>
