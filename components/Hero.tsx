@@ -121,7 +121,7 @@ export default function Hero() {
           cells={[
             { countTo: 80, countSuffix: "+", head: "embedded engagements" },
             { countTo: 16, head: "sectors" },
-            { countTo: 2010, head: "operating inside portfolios since" },
+            { countTo: 2010, countFrom: 1990, head: "operating inside portfolios since" },
           ]}
         />
       </ImageBand>

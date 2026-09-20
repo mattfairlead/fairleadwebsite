@@ -40,10 +40,12 @@ const NAV = [
   { href: "/careers", label: "Careers" },
 ];
 
-const linkCls = "body-sm text-white-40 transition-colors duration-200 hover:text-white-100";
+// py/-my: a 28px hit area on a phone without changing the 12px rhythm between rows
+const linkCls = "body-sm -my-1 py-1 text-white-40 transition-colors duration-200 hover:text-white-100";
 
 /**
- * Footer — §5.5 last row. A blue-hour image band (21rem) over flat water
+ * Footer — §5.5 last row. A blue-hour image band (21rem on desktop, 14rem
+ * on a phone, where the full height read as an empty gap) over flat water
  * with a sailboat on the left, then a hairline-segmented footer whose
  * column row carries a fourth column: a compact dot-matrix map of the
  * lower 48 with the four office cities as live dots. No personal emails,
@@ -52,7 +54,7 @@ const linkCls = "body-sm text-white-40 transition-colors duration-200 hover:text
 export default function Footer() {
   return (
     <footer>
-      <ImageBand minHeight="21rem" overlayStrength={0.8} horizon="water" className="mt-20">
+      <ImageBand minHeight="clamp(14rem, 40vw, 21rem)" overlayStrength={0.8} horizon="water" className="mt-20">
         {/* the boat sits on the waterline and drifts slowly across it; its hull
             dips into the water so the seam never shows */}
         <Sailboat

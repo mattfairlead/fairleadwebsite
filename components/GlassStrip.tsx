@@ -4,6 +4,8 @@ import HairlineFrame, { RowRule } from "@/components/HairlineFrame";
 export interface GlassCell {
   /** numeric stat — rendered with the `count` tween (tabular-nums) */
   countTo?: number;
+  /** where the count starts (default 0) — a year should roll up from a nearby year */
+  countFrom?: number;
   countSuffix?: string;
   head: string;
   body?: string;
@@ -12,7 +14,7 @@ export interface GlassCell {
 /**
  * Glass strip — §5.8.4. backdrop-blur + saturate panel, no fill beyond a
  * faint gradient, no border — only hairlines; anchored to the bottom edge of
- * a full-bleed image section. Used for the hero stats (60+ / 16 / 2010), the
+ * a full-bleed image section. Used for the hero stats (80+ / 16 / 2010), the
  * case-study options on the Intelligence page, and the engagement process on
  * /hands-on-engagements.
  *
@@ -52,6 +54,7 @@ export default function GlassStrip({
                   className="h3 tabular text-white-100"
                   data-anim="count"
                   data-count-to={cell.countTo}
+                  data-count-from={cell.countFrom}
                   data-count-suffix={cell.countSuffix ?? ""}
                 >
                   <span data-count-value>{cell.countTo}</span>

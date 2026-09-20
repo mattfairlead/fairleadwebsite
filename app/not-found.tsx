@@ -10,7 +10,7 @@ import Btn from "@/components/Btn";
  */
 export default function NotFound() {
   return (
-    <div className="container-page pb-24 pt-48">
+    <div className="container-page pb-24 pt-32 md:pt-48">
       <HairlineFrame>
         <div className="relative flex flex-col items-center gap-8 overflow-hidden px-6 py-20 text-center md:py-28">
           <Compassmark className="relative -mb-2 w-36 md:w-44" uid="lost-compass" />

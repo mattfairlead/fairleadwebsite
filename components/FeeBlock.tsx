@@ -6,9 +6,9 @@ import { ARROW } from "@/components/Btn";
 
 /**
  * Home §4.1 row 8 — fee alignment, from deck slide 8.
- * TODO(copy): replace body with the verbatim slide-8 paragraph once the
- * deck text is dropped in; this draft carries the locked message ("we earn
- * alongside the sponsor, not in front of them") in the §10 voice.
+ * Carries the deck's slide-8 message ("we earn alongside the sponsor, not in
+ * front of them") in the §10 voice; the three chips only restate what the
+ * paragraph already says, per the "imply, don't claim" guardrail.
  *
  * The eyebrow is the origami-boat mark (public/brand/paperboat.png) rather
  * than a text label — the same folded-paper motif as Brandboat/Mailmark, in
@@ -47,7 +47,7 @@ export default function FeeBlock() {
               front of them, and current fees run a fraction of Big 4 and investment-bank rates.
             </p>
             <div className="mt-4 flex flex-wrap justify-center gap-x-10 gap-y-4" data-anim="fade-up" data-anim-delay="0.15">
-              {["Success-linked", "No retainer creep", "A fraction of Big 4"].map((t) => (
+              {["Success-linked", "Scales with the situation", "A fraction of Big 4"].map((t) => (
                 <span key={t} className="body-sm flex items-center gap-2 text-white-50">
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" aria-hidden="true" />
                   {t}

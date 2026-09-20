@@ -91,7 +91,7 @@ export default function BackgroundVideo({
       io.disconnect();
       cancelLoad();
     };
-  }, []);
+  }, [mobileOk]);
 
   // Play only while on screen and the tab is visible.
   useEffect(() => {

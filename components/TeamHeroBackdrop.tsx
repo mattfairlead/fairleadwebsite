@@ -58,7 +58,7 @@ export default function TeamHeroBackdrop() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       <div
-        className="absolute inset-y-0 right-0 max-lg:opacity-50"
+        className="absolute inset-y-0 right-0 max-lg:opacity-40"
         style={{
           aspectRatio: VIDEO_ASPECT,
           WebkitMaskImage: MASK,
