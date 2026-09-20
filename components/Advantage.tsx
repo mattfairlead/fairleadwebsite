@@ -1,25 +1,21 @@
 import Link from "next/link";
 import SectionReveal from "@/components/SectionReveal";
-import ImageBand from "@/components/ImageBand";
 import DataBox from "@/components/DataBox";
 
 /**
  * Home §4.1 row 4 — the compounding asset, merged with the intelligence
- * teaser that used to run as its own section. 2-col, 55/45: the open box
- * with data streaming out of it (DataBox) over the eyebrow, headline +
+ * teaser that used to run as its own section. 2-col, 55/45: headline +
  * gold-soft italic subhead + paragraph + proof list + a one-line case-study
- * teaser linking to the full version on /intelligence / graded photo
- * (scale-in) carrying the one number that matters — fifteen years — as a
- * display numeral.
+ * teaser on the left; DataBox — the open box with data streaming out of it —
+ * docked to the right, with the one number that matters — fifteen years —
+ * captioned underneath. DataBox reads scroll velocity itself, so the flow
+ * only moves while the page is actually scrolling.
  */
 export default function Advantage() {
   return (
     <SectionReveal className="section container-page">
       <div className="grid items-center gap-12 md:grid-cols-[1.15fr_1fr] md:gap-20">
         <div className="flex flex-col gap-6">
-          <div data-anim="zoom-in" className="-mb-2 w-[18rem] max-w-full" style={{ transformOrigin: "50% 85%" }}>
-            <DataBox />
-          </div>
           <span data-anim="eyebrow" className="label text-white-50">
             The compounding asset
           </span>
@@ -55,21 +51,20 @@ export default function Advantage() {
             </Link>
           </p>
         </div>
-        <div className="group relative overflow-hidden" style={{ borderRadius: "3px" }}>
-          <div data-anim="scale-in" className="transition-transform duration-[1200ms] group-hover:scale-[1.03]" style={{ transitionTimingFunction: "var(--ease-out-expo)" }}>
-            <ImageBand aspect="auto" className="aspect-[4/3] md:aspect-[4/5]" overlayStrength={0.7} />
+        <div className="flex flex-col items-center gap-8 md:items-end">
+          <div data-anim="zoom-in" className="w-full max-w-sm" style={{ transformOrigin: "50% 85%" }}>
+            <DataBox />
           </div>
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 md:p-8">
+          <div className="relative flex w-full max-w-sm items-end justify-between pt-5" data-anim="fade-up" data-anim-delay="0.2">
+            <span className="absolute inset-x-0 top-0 h-px bg-white-10" aria-hidden="true" />
             <div className="flex flex-col">
-              <span className="h1 text-white-100 tabular" style={{ fontSize: "clamp(4.5rem, 9vw, 7.5rem)" }}>
+              <span className="h1 text-white-100 tabular" style={{ fontSize: "clamp(3.25rem, 6vw, 5rem)" }}>
                 15
               </span>
               <span className="label -mt-1 text-gold">years inside the companies</span>
             </div>
             <span className="label text-white-40">since 2010</span>
           </div>
-          <span className="pointer-events-none absolute left-0 top-0 h-px w-16 bg-gold/70" aria-hidden="true" />
-          <span className="pointer-events-none absolute left-0 top-0 h-16 w-px bg-gold/70" aria-hidden="true" />
         </div>
       </div>
     </SectionReveal>
