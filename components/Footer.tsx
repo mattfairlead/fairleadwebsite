@@ -56,7 +56,7 @@ export default function Footer() {
         {/* the boat sits on the waterline and drifts slowly across it; its hull
             dips into the water so the seam never shows */}
         <Sailboat
-          className="sailboat-drift absolute left-[6%] hidden w-32 text-blue-950 md:block lg:w-40"
+          className="sailboat-drift absolute left-[6%] block w-24 text-blue-950 sm:w-32 lg:w-40"
           style={{ bottom: `calc(${WATERLINE} - 10px)` }}
         />
         {/* the gulls drift on their own, much slower timeline, so the boat
