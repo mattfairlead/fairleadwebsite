@@ -32,8 +32,10 @@ export default function TeamCell({ member, featured = false }: { member: TeamMem
         aria-controls={hasBio ? panelId : undefined}
         disabled={!hasBio}
         className={clsx(
-          "group flex text-left disabled:cursor-default",
-          featured ? "flex-col gap-6 sm:flex-row sm:items-center sm:gap-8" : "flex-col items-center gap-5 text-center"
+          "group flex disabled:cursor-default",
+          featured
+            ? "flex-col gap-6 text-left sm:flex-row sm:items-center sm:gap-8"
+            : "flex-col items-center gap-5 text-center"
         )}
       >
         <div data-anim="visual" className="shrink-0">
