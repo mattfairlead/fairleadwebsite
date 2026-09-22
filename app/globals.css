@@ -67,9 +67,18 @@ body {
 }
 
 /* ==========================================================================
-   Ambient ground — the flat blue-950 gets two very slow light sources and a
-   4% film grain. Perceived as depth, not as decoration; the eye notices its
+   Ambient ground — the flat blue-950 gets two soft light sources and a 4%
+   film grain. Perceived as depth, not as decoration; the eye notices its
    absence before its presence.
+
+   The light sources hold still. They used to drift on a 36s transform loop,
+   and that loop was the single most expensive thing on the site: a
+   viewport-and-a-half layer moving every frame under a full-screen
+   mix-blend-mode grain and every backdrop-filter panel in view, so the
+   compositor re-blended and re-blurred the whole screen at the display's
+   refresh rate on every page, forever — even with the page at rest. Measured
+   at roughly a full CPU core in software rendering, and it is what made the
+   site heat up laptops. A static ground costs nothing between frames.
    ========================================================================== */
 
 .ambient {
@@ -87,8 +96,6 @@ body {
     radial-gradient(55% 45% at 12% -5%, rgba(var(--blue-700-rgb), 0.34) 0%, rgba(var(--blue-700-rgb), 0) 60%),
     radial-gradient(40% 40% at 88% 108%, rgba(var(--gold-rgb), 0.075) 0%, rgba(var(--gold-rgb), 0) 60%),
     radial-gradient(45% 40% at 78% 18%, rgba(15, 42, 110, 0.32) 0%, rgba(15, 42, 110, 0) 60%);
-  animation: ambient-drift 36s ease-in-out infinite alternate;
-  will-change: transform;
 }
 .ambient::after {
   content: "";
@@ -99,23 +106,10 @@ body {
   background-size: 240px 240px;
   mix-blend-mode: overlay;
 }
-@keyframes ambient-drift {
-  from {
-    transform: translate3d(-2%, -1.5%, 0) scale(1);
-  }
-  to {
-    transform: translate3d(2%, 2%, 0) scale(1.06);
-  }
-}
-/* Touch screens: the drift and the overlay blend each force a full-screen
-   recomposite every frame, which a phone GPU pays for in scroll jank and
-   battery. The light sources stay; they just hold still, and the grain sits
-   on top as plain alpha. */
+/* Touch screens: the overlay blend forces a full-screen recomposite on
+   every scroll frame, which a phone GPU pays for in scroll jank and battery.
+   There the grain sits on top as plain alpha instead. */
 @media (hover: none), (max-width: 767px) {
-  .ambient::before {
-    animation: none;
-    will-change: auto;
-  }
   .ambient::after {
     mix-blend-mode: normal;
     opacity: 0.035;
@@ -1246,13 +1240,24 @@ html[data-theme="light"] .text-gold-glow {
     transition-duration: 0.15s !important;
     scroll-behavior: auto !important;
   }
-  .ambient::before {
-    animation: none !important;
-  }
   .scroll-progress {
     animation: none !important;
     opacity: 0;
   }
+}
+
+/* Footer loops only run while the footer is on screen. The route's dash
+   offset and the gulls' wingbeat are SVG-child animations, which Chrome runs
+   on the main thread — a layout and a repaint of the map every frame — and a
+   CSS animation keeps ticking while its element is scrolled off screen, on
+   every page. LoopGate (components/LoopGate.tsx) writes data-loops from an
+   IntersectionObserver; with no JS the attribute is never set and the loops
+   simply run. */
+[data-loops="paused"] .us-map-route,
+[data-loops="paused"] .sailboat-drift,
+[data-loops="paused"] .sailboat-birds-drift,
+[data-loops="paused"] .sailboat-bird {
+  animation-play-state: paused;
 }
 
 /* Footer map — the dashed route between offices drifts, slowly. §5.8.6 */

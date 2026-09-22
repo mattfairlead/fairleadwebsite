@@ -4,6 +4,7 @@ import ImageBand, { WATERLINE } from "@/components/ImageBand";
 import Sailboat from "@/components/Sailboat";
 import SailboatBirds from "@/components/SailboatBirds";
 import LiveDots, { type DotPin } from "@/components/LiveDots";
+import LoopGate from "@/components/LoopGate";
 import UsMap, { type MapCity } from "@/components/UsMap";
 import { US_MAP_ASPECT, US_MAP_VIEWBOX } from "@/content/us-map";
 
@@ -56,89 +57,92 @@ const linkCls = "body-sm -my-1 py-1 text-white-40 transition-colors duration-200
 export default function Footer() {
   return (
     <footer>
-      <ImageBand minHeight="clamp(14rem, 40vw, 21rem)" overlayStrength={0.8} horizon="water" className="mt-20">
-        {/* the boat sits on the waterline and drifts slowly across it; its hull
-            dips into the water so the seam never shows */}
-        <Sailboat
-          className="sailboat-drift absolute left-[6%] block w-24 text-blue-950 sm:w-32 lg:w-40"
-          style={{ bottom: `calc(${WATERLINE} - 10px)` }}
-        />
-        {/* the gulls drift on their own, much slower timeline, so the boat
-            visibly coasts on ahead of them */}
-        <SailboatBirds
-          className="sailboat-birds-drift absolute left-[4%] hidden w-12 text-blue-950 md:block lg:w-14"
-          style={{ bottom: `calc(${WATERLINE} - 10px + 4.5rem)` }}
-        />
-        <div className="theme-page absolute bottom-8 left-6 flex items-center gap-2 md:left-10" aria-hidden="true">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
-          <span className="label text-white-40">Four cities · one team</span>
-        </div>
-      </ImageBand>
+      {/* the boat, gulls and map route loop only while the footer is on screen */}
+      <LoopGate>
+        <ImageBand minHeight="clamp(14rem, 40vw, 21rem)" overlayStrength={0.8} horizon="water" className="mt-20">
+          {/* the boat sits on the waterline and drifts slowly across it; its hull
+              dips into the water so the seam never shows */}
+          <Sailboat
+            className="sailboat-drift absolute left-[6%] block w-24 text-blue-950 sm:w-32 lg:w-40"
+            style={{ bottom: `calc(${WATERLINE} - 10px)` }}
+          />
+          {/* the gulls drift on their own, much slower timeline, so the boat
+              visibly coasts on ahead of them */}
+          <SailboatBirds
+            className="sailboat-birds-drift absolute left-[4%] hidden w-12 text-blue-950 md:block lg:w-14"
+            style={{ bottom: `calc(${WATERLINE} - 10px + 4.5rem)` }}
+          />
+          <div className="theme-page absolute bottom-8 left-6 flex items-center gap-2 md:left-10" aria-hidden="true">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
+            <span className="label text-white-40">Four cities · one team</span>
+          </div>
+        </ImageBand>
 
-      <div className="relative">
-        <span className="dec dec-footer left-0 top-0 h-px w-full" />
-        <div className="container-page">
-          <div className="grid gap-12 py-16 sm:grid-cols-2 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-12 lg:gap-16">
-            <div className="flex flex-col gap-6 sm:col-span-2 md:col-span-1">
-              <Logo />
-              <p className="body-md max-w-xs text-white-50">
-                Embedded operating leadership for PE-backed companies. Hands-on engagements since 2010,
-                with the operating intelligence to steer by.
-              </p>
-              <a
-                href="tel:+16173154822"
-                className="body-lg self-start text-white-100 transition-colors duration-200 hover:text-gold tabular"
-              >
-                (617) 315-4822
-              </a>
-            </div>
+        <div className="relative">
+          <span className="dec dec-footer left-0 top-0 h-px w-full" />
+          <div className="container-page">
+            <div className="grid gap-12 py-16 sm:grid-cols-2 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-12 lg:gap-16">
+              <div className="flex flex-col gap-6 sm:col-span-2 md:col-span-1">
+                <Logo />
+                <p className="body-md max-w-xs text-white-50">
+                  Embedded operating leadership for PE-backed companies. Hands-on engagements since 2010,
+                  with the operating intelligence to steer by.
+                </p>
+                <a
+                  href="tel:+16173154822"
+                  className="body-lg self-start text-white-100 transition-colors duration-200 hover:text-gold tabular"
+                >
+                  (617) 315-4822
+                </a>
+              </div>
 
-            <nav className="flex flex-col gap-3" aria-label="Footer">
-              <span className="label mb-1 text-white-50">Site</span>
-              {NAV.map((item) => (
-                <Link key={item.href} href={item.href} className={linkCls}>
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+              <nav className="flex flex-col gap-3" aria-label="Footer">
+                <span className="label mb-1 text-white-50">Site</span>
+                {NAV.map((item) => (
+                  <Link key={item.href} href={item.href} className={linkCls}>
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
 
-            <div className="flex flex-col gap-3">
-              <span className="label mb-1 text-white-50">Where we work</span>
-              {CITIES.map((city) => (
-                <span key={city} className="body-sm text-white-40">
-                  {city}
-                </span>
-              ))}
-              <a
-                href="https://www.linkedin.com/company/fairlead-advisors-llc"
-                rel="noopener noreferrer"
-                target="_blank"
-                className={`${linkCls} mt-2`}
-              >
-                LinkedIn
-              </a>
-            </div>
+              <div className="flex flex-col gap-3">
+                <span className="label mb-1 text-white-50">Where we work</span>
+                {CITIES.map((city) => (
+                  <span key={city} className="body-sm text-white-40">
+                    {city}
+                  </span>
+                ))}
+                <a
+                  href="https://www.linkedin.com/company/fairlead-advisors-llc"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  className={`${linkCls} mt-2`}
+                >
+                  LinkedIn
+                </a>
+              </div>
 
-            <div className="flex sm:col-span-2 md:col-span-1 md:items-center">
-              <div className="relative w-full" style={{ aspectRatio: US_MAP_ASPECT }}>
-                <UsMap cities={OFFICES} />
-                <LiveDots pins={CITY_PINS} />
+              <div className="flex sm:col-span-2 md:col-span-1 md:items-center">
+                <div className="relative w-full" style={{ aspectRatio: US_MAP_ASPECT }}>
+                  <UsMap cities={OFFICES} />
+                  <LiveDots pins={CITY_PINS} />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="relative">
-        <span className="dec dec-footer left-0 top-0 h-px w-full" />
-        <div className="container-page">
-          <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-6">
-            <span className="body-sm text-white-40">© {new Date().getFullYear()} Fairlead Advisors</span>
-            <span className="label text-white-40">Operating inside portfolios since 2010</span>
-            {/* TODO(§9): mailing address small print — keep or drop, pending decision */}
+        <div className="relative">
+          <span className="dec dec-footer left-0 top-0 h-px w-full" />
+          <div className="container-page">
+            <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-6">
+              <span className="body-sm text-white-40">© {new Date().getFullYear()} Fairlead Advisors</span>
+              <span className="label text-white-40">Operating inside portfolios since 2010</span>
+              {/* TODO(§9): mailing address small print — keep or drop, pending decision */}
+            </div>
           </div>
         </div>
-      </div>
+      </LoopGate>
     </footer>
   );
 }

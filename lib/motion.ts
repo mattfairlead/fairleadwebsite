@@ -256,6 +256,12 @@ export function sectionReveal(section: HTMLElement) {
  * Live-dot pulse — §5.8.6. Shuffled entrance, then a perpetual desync'd
  * yoyo so dots never sync. Used on the Intelligence portfolio map and the
  * footer city markers — the one place the site breathes on its own.
+ *
+ * The perpetual tweens only run while `root` is on screen. Each one writes
+ * a transform every frame, and a frame with any change in it is a full
+ * compositor pass; with the map scrolled past, that was a full pass per
+ * frame for dots nobody could see. A ScrollTrigger spanning the layer
+ * pauses them off screen and resumes them on the way back in.
  */
 export function pulseDots(root: HTMLElement) {
   registerGsap();
@@ -275,6 +281,20 @@ export function pulseDots(root: HTMLElement) {
   gsap.set(glows, { scale: 0, opacity: 0, filter: "blur(2px)" });
   gsap.set(rings, { scale: 0.4, opacity: 0 });
 
+  const loops: gsap.core.Tween[] = [];
+  const gate = ScrollTrigger.create({
+    trigger: root,
+    start: "top bottom",
+    end: "bottom top",
+    onToggle: (self) => loops.forEach((t) => (self.isActive ? t.resume() : t.pause())),
+  });
+  // A loop starts on its own only if the layer is still in view when its
+  // entrance finishes; the gate resumes it otherwise.
+  const loop = (tween: gsap.core.Tween) => {
+    loops.push(tween);
+    if (!gate.isActive) tween.pause();
+  };
+
   order.forEach((idx, i) => {
     const dot = dots[idx];
     const glow = glows[idx];
@@ -286,39 +306,45 @@ export function pulseDots(root: HTMLElement) {
     tl.to(dot, { scale: 1, duration: 0.6, ease: "elastic.out(1, 0.5)" });
     if (glow) tl.to(glow, { scale: 0.6, opacity: 0.15, filter: "blur(2px)", duration: 0.6, ease: "elastic.out(1, 0.5)" }, "<");
     tl.call(() => {
-      gsap.to(dot, {
-        scale: 1.2,
-        duration: 1 + Math.random() * 0.8,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: Math.random() * 2,
-      });
-      if (glow) {
-        gsap.to(glow, {
-          scale: 1.4,
-          opacity: 0.1,
+      loop(
+        gsap.to(dot, {
+          scale: 1.2,
           duration: 1 + Math.random() * 0.8,
           ease: "sine.inOut",
           yoyo: true,
           repeat: -1,
           delay: Math.random() * 2,
-        });
+        })
+      );
+      if (glow) {
+        loop(
+          gsap.to(glow, {
+            scale: 1.4,
+            opacity: 0.1,
+            duration: 1 + Math.random() * 0.8,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            delay: Math.random() * 2,
+          })
+        );
       }
       if (ring) {
         // a slow sonar ring — every few seconds, never in sync
-        gsap.fromTo(
-          ring,
-          { scale: 0.4, opacity: 0.5 },
-          {
-            scale: 2.6,
-            opacity: 0,
-            duration: 2.4,
-            ease: "power2.out",
-            repeat: -1,
-            repeatDelay: 2 + Math.random() * 4,
-            delay: Math.random() * 4,
-          }
+        loop(
+          gsap.fromTo(
+            ring,
+            { scale: 0.4, opacity: 0.5 },
+            {
+              scale: 2.6,
+              opacity: 0,
+              duration: 2.4,
+              ease: "power2.out",
+              repeat: -1,
+              repeatDelay: 2 + Math.random() * 4,
+              delay: Math.random() * 4,
+            }
+          )
         );
       }
     });
