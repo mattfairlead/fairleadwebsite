@@ -148,10 +148,15 @@ verticals at `e+.48`, cells at `e+.24+.3i`). Buttons are pills with spring
 physics (hover lifts + gold glow, click compresses); inputs are underlines
 whose gold rule draws in from the left on focus; hairline cells are
 `.spot` surfaces that light under the cursor. The page sits on an ambient
-layer (`.ambient`: two slow light sources + 4% film grain). Every reveal is
-`once: true`; the generic `data-anim` reveals are wired per route by
-`app/template.tsx`, so navigations animate in too. Only the live dots, the
-ambient drift, the hero scroll cue, and the submit spinner loop. Reduced
+layer (`.ambient`: two still light sources + 4% film grain — the light
+sources do not drift; a full-screen layer moving under the grain blend and
+the glass panels re-composited the whole screen every frame, on every page,
+and pegged a CPU core at rest). Every reveal is `once: true`; the generic
+`data-anim` reveals are wired per route by `app/template.tsx`, so
+navigations animate in too. Only the live dots, the footer's boat, gulls and
+map route, the hero scroll cue, and the submit spinner loop — and the footer
+loops and live dots pause while scrolled out of view (`LoopGate`,
+`pulseDots()`), so nothing ticks for a viewport that cannot see it. Reduced
 motion kills ScrollSmoother, skips every hidden initial state, and renders
 the resolved layout.
 
