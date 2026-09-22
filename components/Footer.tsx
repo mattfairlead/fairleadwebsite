@@ -106,7 +106,6 @@ export default function Footer() {
               </nav>
 
               <div className="flex flex-col gap-3">
-                <span className="label mb-1 text-white-50">Where we work</span>
                 {CITIES.map((city) => (
                   <span key={city} className="body-sm text-white-40">
                     {city}

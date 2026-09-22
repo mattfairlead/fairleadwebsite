@@ -49,7 +49,6 @@ export default function ContactPage() {
                 </a>
               </div>
               <div className="flex flex-col gap-3">
-                <span className="label text-white-50">Where we work</span>
                 <ul data-anim="subtitle" className="flex flex-col gap-2">
                   {CITIES.map((c) => (
                     <li key={c} className="body-lg flex items-center gap-3 text-white-60">
