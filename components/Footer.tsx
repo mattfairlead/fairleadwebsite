@@ -48,8 +48,10 @@ const linkCls = "body-sm -my-1 py-1 text-white-40 transition-colors duration-200
  * on a phone, where the full height read as an empty gap) over flat water
  * with a sailboat on the left, then a hairline-segmented footer whose
  * column row carries a fourth column: a compact dot-matrix map of the
- * lower 48 with the four office cities as live dots. No personal emails,
- * no fax. Mailing address small-print only (TODO §9: keep or drop).
+ * lower 48 with the four cities as live dots — "cities", not "offices":
+ * partners flagged the tax-presence exposure of claiming an office in
+ * every state. No personal emails, no fax. Mailing address small-print
+ * only (TODO §9: keep or drop).
  */
 export default function Footer() {
   return (
@@ -69,7 +71,7 @@ export default function Footer() {
         />
         <div className="theme-page absolute bottom-8 left-6 flex items-center gap-2 md:left-10" aria-hidden="true">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
-          <span className="label text-white-40">Four offices · one team</span>
+          <span className="label text-white-40">Four cities · one team</span>
         </div>
       </ImageBand>
 
@@ -101,7 +103,7 @@ export default function Footer() {
             </nav>
 
             <div className="flex flex-col gap-3">
-              <span className="label mb-1 text-white-50">Offices</span>
+              <span className="label mb-1 text-white-50">Where we work</span>
               {CITIES.map((city) => (
                 <span key={city} className="body-sm text-white-40">
                   {city}
