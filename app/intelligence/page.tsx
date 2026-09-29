@@ -86,44 +86,9 @@ export default function IntelligencePage() {
         }
       />
 
-      {/* Demo reel — Phase 1 placeholder until Ryan's footage is cut (§8) */}
+      {/* Solaris capabilities. The demo reel slot lives here once footage is cut (§8). */}
       <SectionReveal className="section container-page">
-        <SectionHead eyebrow="Solaris" title={<>See the platform run.</>} />
-        <div className="group relative mt-14 overflow-hidden" style={{ aspectRatio: "16/9", borderRadius: "3px" }}>
-          {/* TODO(media): embed the Solaris demo reel (mp4 + webm, poster) once cut */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: "radial-gradient(100% 80% at 50% 30%, #0F2A6E 0%, #0A1A4F 50%, #050E2E 100%)",
-            }}
-          />
-          <div
-            className="absolute inset-0 opacity-30"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)",
-              backgroundSize: "64px 64px",
-              maskImage: "radial-gradient(70% 70% at 50% 50%, #000 30%, transparent 100%)",
-              WebkitMaskImage: "radial-gradient(70% 70% at 50% 50%, #000 30%, transparent 100%)",
-            }}
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-5">
-            <span
-              className="flex h-20 w-20 items-center justify-center rounded-full text-gold transition-transform duration-500 group-hover:scale-105"
-              style={{ boxShadow: "inset 0 0 0 1px rgba(213,179,113,0.45), 0 0 60px -12px rgba(213,179,113,0.5)", transitionTimingFunction: "var(--ease-spring)" }}
-              aria-hidden="true"
-            >
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor">
-                <path d="M7 4.5v13l10-6.5z" />
-              </svg>
-            </span>
-            <span className="label text-white-50">Demo reel: coming with the next cut</span>
-          </div>
-          <span className="pointer-events-none absolute left-0 top-0 h-px w-16 bg-gold/70" aria-hidden="true" />
-          <span className="pointer-events-none absolute left-0 top-0 h-16 w-px bg-gold/70" aria-hidden="true" />
-          <span className="pointer-events-none absolute bottom-0 right-0 h-px w-16 bg-gold/70" aria-hidden="true" />
-          <span className="pointer-events-none absolute bottom-0 right-0 h-16 w-px bg-gold/70" aria-hidden="true" />
-        </div>
+        <SectionHead eyebrow="Solaris" title={<>What the platform does, in production.</>} />
         <HairlineFrame columns={2} className="mt-14">
           <ul className="grid md:grid-cols-2">
             {STRAPLINES.map((s, i) => (
@@ -252,7 +217,7 @@ export default function IntelligencePage() {
         <HairlineFrame>
           <div data-cell className="spot flex flex-col items-start justify-center gap-5 p-6 md:p-10">
             <p data-anim="title" className="body-lg text-white-60">
-              Want a deeper demo of Solaris, or a custom solution built for you?
+              Want to see Solaris on your data, or a custom solution built for you?
             </p>
             <Btn href="/contact" arrow>
               Talk to a partner
