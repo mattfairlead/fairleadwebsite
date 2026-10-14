@@ -1,7 +1,7 @@
 /**
- * Resend transactional mail — contact form only (§7). The newsletter
- * signup and the register's emailed links still go through SendGrid
- * (lib/sendgrid.ts); this is scoped to /api/contact.
+ * Resend transactional mail — the contact form (§7) and /bio intake. The
+ * newsletter signup and the register's emailed links still go through
+ * SendGrid (lib/sendgrid.ts).
  *
  * Without RESEND_API_KEY the send is skipped and logged, so preview
  * deploys work before the account is provisioned.
@@ -23,6 +23,8 @@ export async function sendMail(opts: {
   replyTo?: string;
   /** Defaults to CONTACT_TO (the info@ list, comma-separated). Set for mail to a visitor. */
   to?: string;
+  /** Passed through to Resend. `content` is base64. */
+  attachments?: { filename: string; content: string }[];
 }): Promise<{ ok: boolean; skipped?: boolean }> {
   // `||` not `??` — env vars imported with blank values must fall through
   const key = process.env.RESEND_API_KEY || "";
@@ -43,8 +45,10 @@ export async function sendMail(opts: {
       ...(opts.replyTo ? { reply_to: opts.replyTo } : {}),
       subject: opts.subject,
       text: opts.text,
+      ...(opts.attachments?.length ? { attachments: opts.attachments } : {}),
     }),
   });
 
+  if (!res.ok) console.error("[resend] send failed:", res.status, (await res.text().catch(() => "")).slice(0, 500));
   return { ok: res.ok };
 }

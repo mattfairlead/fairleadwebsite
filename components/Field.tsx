@@ -1,8 +1,8 @@
 import clsx from "clsx";
 
 type Base = {
-  label: string;
-  hint?: string;
+  label: React.ReactNode;
+  hint?: React.ReactNode;
   className?: string;
 };
 
