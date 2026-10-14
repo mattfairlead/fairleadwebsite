@@ -28,6 +28,7 @@ export default async function BioPage() {
     specialty: m.specialty,
     bio_md: m.bio_md,
     has_photo: !!m.photo_url,
+    photo_url: m.photo_url,
   }));
   const companies = [...new Set(engagements.filter((e) => !e.anonymized).map((e) => e.company_display))].sort();
 
@@ -43,15 +44,16 @@ export default async function BioPage() {
           </>
         }
       >
-        <ul className="body-md flex flex-col gap-2 text-white-60" data-anim="fade-up">
+        <ul className="body-sm flex flex-wrap gap-2 text-white-60" data-anim="fade-up">
           {[
-            "About 15–20 minutes.",
-            "Saves as you go on this device — close the tab and pick up where you left off.",
-            "Nothing is published until you approve the draft.",
-          ].map((t) => (
-            <li key={t} className="flex items-center gap-3">
-              <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-gold/80" aria-hidden="true" />
-              {t}
+            ["15–20 min", "About 15–20 minutes."],
+            ["Saves as you go", "On this device — close the tab and pick up where you left off."],
+            ["You approve first", "Nothing is published until you approve the draft."],
+          ].map(([t, d]) => (
+            <li key={t} className="inline-flex items-center gap-2 rounded-full bg-white/[0.05] py-2 pl-3 pr-4 ring-1 ring-white/[0.05]" title={d}>
+              <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-gold" aria-hidden="true" />
+              <span className="text-white-80">{t}</span>
+              <span className="sr-only"> — {d}</span>
             </li>
           ))}
         </ul>
