@@ -496,7 +496,7 @@ export default function BioIntakeForm({
     return (
       <div className="bio">
         <div className="bio-panel bio-step-in">
-          <div className="flex flex-col gap-10 p-6 md:p-12">
+          <div className="flex flex-col gap-10 p-4 sm:p-8 md:p-12 max-sm:gap-8">
             <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-end">
               <div className="flex flex-col gap-3">
                 <span className="label flex items-center gap-3 text-white-50">
@@ -527,10 +527,10 @@ export default function BioIntakeForm({
             </div>
             <fieldset className="flex flex-col gap-4">
               <legend className="sr-only">The team</legend>
-              <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3" aria-live="polite">
+              <ul className="grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 xl:grid-cols-3" aria-live="polite">
                 {matches.map((m, i) => (
-                  <li key={m.id} className="bio-rise" style={{ animationDelay: `${Math.min(i * 30, 280)}ms` }}>
-                    <button type="button" className="bio-person group" aria-pressed={b.roster_match === m.id} onClick={() => chooseMember(m)}>
+                  <li key={m.id} className="bio-rise min-w-0" style={{ animationDelay: `${Math.min(i * 30, 280)}ms` }}>
+                    <button type="button" className="bio-person group min-w-0" aria-pressed={b.roster_match === m.id} onClick={() => chooseMember(m)}>
                       <Portrait name={m.name} src={m.photo_url ?? null} size="sm" />
                       <span className="flex min-w-0 flex-col gap-0.5">
                         <span className="body-md truncate text-white-100">{m.name}</span>
@@ -542,7 +542,7 @@ export default function BioIntakeForm({
                     </button>
                   </li>
                 ))}
-                <li className="bio-rise" style={{ animationDelay: `${Math.min(matches.length * 30, 280)}ms` }}>
+                <li className="bio-rise min-w-0" style={{ animationDelay: `${Math.min(matches.length * 30, 280)}ms` }}>
                   <button type="button" className="bio-person bio-person-dashed group" aria-pressed={b.roster_match === "not_listed"} onClick={() => chooseMember(null)}>
                     <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 text-white-60" aria-hidden="true">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -581,7 +581,7 @@ export default function BioIntakeForm({
     return (
       <div className="bio">
         <div className="bio-panel bio-step-in">
-          <div className="flex flex-col gap-10 p-6 md:p-12" role="status" aria-live="polite">
+          <div className="flex flex-col gap-10 p-4 sm:p-8 md:p-12 max-sm:gap-8" role="status" aria-live="polite">
             <div className="flex flex-col gap-6">
               <span className="bio-pop relative flex h-16 w-16 items-center justify-center rounded-full bg-gold text-blue-950" style={{ boxShadow: "0 12px 40px -8px rgba(213,179,113,0.7)" }} aria-hidden="true">
                 <span className="bio-burst" />
@@ -626,7 +626,7 @@ export default function BioIntakeForm({
     return (
       <div ref={rootRef} className="bio flex flex-col gap-8">
         <div className="bio-panel bio-step-in">
-          <div className="flex flex-col gap-8 p-6 md:p-12">
+          <div className="flex flex-col gap-8 p-4 sm:p-8 md:p-12">
             <div className="flex flex-col gap-3">
               <span className="label flex items-center gap-3 text-white-50">
                 <span className="inline-block h-px w-8 bg-gold" aria-hidden="true" />
@@ -709,8 +709,8 @@ export default function BioIntakeForm({
               value={honey}
               onChange={(e) => setHoney(e.target.value)}
             />
-            <div className="flex flex-wrap items-center gap-3">
-              <button type="button" className="btn btn-ghost button" onClick={() => go(SECTIONS[SECTIONS.length - 1].id)} disabled={busy}>
+            <div className="flex flex-wrap items-center gap-3 max-sm:flex-col-reverse max-sm:items-stretch">
+              <button type="button" className="btn btn-ghost button max-sm:min-h-12" onClick={() => go(SECTIONS[SECTIONS.length - 1].id)} disabled={busy}>
                 ← Back
               </button>
               <button type="button" className="btn btn-primary button" onClick={submit} disabled={busy}>
@@ -775,14 +775,8 @@ export default function BioIntakeForm({
   );
 
   const rail = (
-    <nav aria-label="Steps" className="flex flex-col gap-5">
+    <nav aria-label="Steps" className="flex flex-col gap-5 max-lg:gap-3">
       <div className="max-lg:hidden">{ring}</div>
-      <div className="flex items-center justify-between gap-4 lg:hidden">
-        <span className="label text-white-50">{progress === 100 ? "Ready to send" : `Essentials · ${progress}%`}</span>
-        <span className="body-sm tabular text-white-40">
-          Step {stepIndex + 1} of {SECTIONS.length}
-        </span>
-      </div>
       <div className="bio-bar lg:hidden" role="progressbar" aria-label="Essentials answered" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}>
         <div className="bio-bar-fill" style={{ width: `${Math.max(progress, 2)}%` }} />
       </div>
@@ -797,7 +791,7 @@ export default function BioIntakeForm({
                 <span className={clsx("bio-step-dot tabular", complete && "is-done")} aria-hidden="true">
                   {complete ? <CheckGlyph key="c" size={12} stroke={3} className="bio-pop" /> : i + 1}
                 </span>
-                <span className={clsx("bio-step-title whitespace-nowrap", !current && "max-lg:sr-only")}>{sec.title}</span>
+                <span className="bio-step-title whitespace-nowrap max-lg:sr-only">{sec.title}</span>
                 {!complete && (attempted || seen[sec.id]) && (
                   <span className="bio-step-count tabular max-lg:hidden" aria-hidden="true">
                     {n} left
@@ -809,6 +803,13 @@ export default function BioIntakeForm({
           );
         })}
       </ol>
+      <div className="body-sm flex items-baseline justify-between gap-3 lg:hidden" aria-hidden="true">
+        <span className="min-w-0 truncate text-white-80">
+          <span className="text-white-40">Step {stepIndex + 1} of {SECTIONS.length} · </span>
+          {SECTIONS[stepIndex].title}
+        </span>
+        <span className={clsx("tabular shrink-0", progress === 100 ? "text-gold" : "text-white-40")}>{progress === 100 ? "Ready to send" : `${progress}%`}</span>
+      </div>
       <p className="body-sm text-white-40 max-lg:hidden">Jump around in any order. Only Review checks everything.</p>
     </nav>
   );
@@ -844,7 +845,7 @@ export default function BioIntakeForm({
     return (
       <section id={`s-${id}`} aria-labelledby={`h-${id}`} className={clsx("flex flex-col gap-6", leaving ? "bio-step-out" : "bio-step-in")}>
         <div className="bio-panel">
-          <div className="flex flex-col gap-10 p-5 sm:p-8 md:p-12">
+          <div className="flex flex-col gap-10 p-4 sm:p-8 md:p-12 max-sm:gap-8">
             <div className="flex flex-col gap-3">
               <span className="label flex items-center gap-3 text-white-50">
                 <span className="inline-block h-px w-8 bg-gold" aria-hidden="true" />
@@ -872,14 +873,14 @@ export default function BioIntakeForm({
               </span>
             )}
           </p>
-          <div className="flex flex-wrap items-center gap-3">
-            <button type="button" className="btn btn-ghost button" onClick={() => (prevStep ? go(prevStep.id) : setStage("start"))}>
+          <div className="flex flex-wrap items-center gap-3 max-sm:flex-col max-sm:items-stretch">
+            <button type="button" className="btn btn-ghost button max-sm:order-2 max-sm:min-h-12" onClick={() => (prevStep ? go(prevStep.id) : setStage("start"))}>
               ← Back
             </button>
-            <button type="button" className="btn btn-primary button" onClick={() => go(nextStep ? nextStep.id : "review")}>
+            <button type="button" className="btn btn-primary button max-sm:order-1" onClick={() => go(nextStep ? nextStep.id : "review")}>
               {nextStep ? `Next: ${nextStep.title}` : "Review my answers"} {ARROW}
             </button>
-            <span className="body-sm ml-auto flex items-center gap-4 max-sm:ml-0 max-sm:w-full">
+            <span className="body-sm ml-auto flex items-center gap-4 max-sm:order-3 max-sm:ml-0 max-sm:w-full max-sm:justify-center">
               {savedLabel}
               <span className="flex items-center gap-1 text-white-40 max-lg:hidden">
                 <kbd className="bio-kbd">⌘</kbd>
@@ -892,13 +893,13 @@ export default function BioIntakeForm({
     );
   };
 
-  const entryBox = (children: React.ReactNode) => <div className="bio-entry flex flex-col gap-6 p-4 sm:p-6">{children}</div>;
+  const entryBox = (children: React.ReactNode) => <div className="bio-entry flex flex-col gap-6 p-3.5 sm:p-6">{children}</div>;
 
   return (
     <Validity.Provider value={errors}>
     <div
       ref={rootRef}
-      className="bio grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-12 [&_*]:scroll-mt-52 lg:[&_*]:scroll-mt-28"
+      className="bio grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-12 [&_*]:scroll-mt-44 lg:[&_*]:scroll-mt-28"
       onBlurCapture={(e) => {
         const id = (e.target as HTMLElement).id;
         if (id && !touched[id]) setTouched((t) => ({ ...t, [id]: true }));
@@ -971,7 +972,7 @@ export default function BioIntakeForm({
               {member && <Portrait name={member.name} src={member.photo_url ?? null} size="sm" className="!h-10 !w-10" />}
               <span className="body-md flex min-w-0 flex-1 flex-col text-white-80">
                 <span>{b.roster_match === "not_listed" ? "Not on the website yet" : member ? member.name : "Not matched to the roster"}</span>
-                <span className="body-sm text-white-40">{b.roster_match === "not_listed" ? "Starting fresh" : member ? "Matched on the website — details filled in below" : "Pick yourself to prefill"}</span>
+                <span className="body-sm text-white-40">{b.roster_match === "not_listed" ? "Starting fresh" : member ? "Matched on the website" : "Pick yourself to prefill"}</span>
               </span>
               <button
                 type="button"
@@ -1046,7 +1047,7 @@ export default function BioIntakeForm({
                 onChange={(v) => update((x) => (x.basics.title_specialization = v))}
               />
             )}
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
               <YearField path="basics.year_joined_fairlead" label="Year you joined Fairlead" required value={b.year_joined_fairlead} error={err("basics.year_joined_fairlead")} onChange={(v) => update((x) => (x.basics.year_joined_fairlead = v))} />
               <YearField path="basics.career_start_year" label="Year your career started" required value={b.career_start_year} error={err("basics.career_start_year")} onChange={(v) => update((x) => (x.basics.career_start_year = v))} />
             </div>
@@ -1396,7 +1397,7 @@ export default function BioIntakeForm({
                         error={err(`${p}.title`)}
                         onChange={(v) => set((x) => (x.title = v))}
                       />
-                      <div className="grid gap-4 md:grid-cols-2">
+                      <div className="grid grid-cols-2 gap-3 md:gap-4">
                         <YearField path={`${p}.start_year`} label="Start year" value={pr.start_year} error={err(`${p}.start_year`)} onChange={(v) => set((x) => (x.start_year = v))} />
                         {SHOW.endYear(pr) && <YearField path={`${p}.end_year`} label="End year" value={pr.end_year} error={err(`${p}.end_year`)} onChange={(v) => set((x) => (x.end_year = v))} />}
                       </div>

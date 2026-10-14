@@ -120,7 +120,7 @@ export default function ReviewSummary({
           <section
             key={s.id}
             aria-labelledby={`rv-${s.id}`}
-            className="bio-rise bio-entry flex flex-col gap-5 p-5 md:p-7"
+            className="bio-rise bio-entry flex flex-col gap-5 p-4 sm:p-5 md:p-7"
             style={{ animationDelay: `${Math.min(i * 40, 280)}ms` }}
           >
             <div className="flex items-center justify-between gap-4">
@@ -138,7 +138,7 @@ export default function ReviewSummary({
               </button>
             </div>
             {rows.length ? (
-              <dl className="grid gap-x-8 gap-y-2 sm:grid-cols-[11rem_minmax(0,1fr)]">
+              <dl className="grid gap-x-8 gap-y-2 sm:grid-cols-[11rem_minmax(0,1fr)] max-sm:gap-y-1">
                 {rows.map(([k, v], j) => (
                   <div key={j} className="contents">
                     <dt className="body-sm text-white-40 max-sm:mt-2 max-sm:empty:hidden">{k}</dt>
