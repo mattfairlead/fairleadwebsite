@@ -164,6 +164,8 @@ export default function BioIntakeForm({
   const [announce, setAnnounce] = useState("");
   const [step, setStep] = useState<SectionId>("basics");
   const [seen, setSeen] = useState<Partial<Record<SectionId, true>>>({});
+  const [tried, setTried] = useState<Partial<Record<SectionId, true>>>({});
+  const [shake, setShake] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [filter, setFilter] = useState("");
@@ -292,6 +294,7 @@ export default function BioIntakeForm({
       const blocked = SECTIONS.find((sec) => bySection[sec.id] > 0);
       if (blocked) {
         setAttempted(true);
+        setTried((v) => ({ ...v, [blocked.id]: true }));
         setAnnounce(`${errorCount} ${errorCount === 1 ? "answer needs" : "answers need"} attention. Taking you to the first one.`);
         setStep(blocked.id);
         setStage("form");
@@ -318,6 +321,33 @@ export default function BioIntakeForm({
     }, 140);
   }
 
+  /**
+   * Next. Unlike the rail and Back (free to use), Next checks the current
+   * step first: anything missing is highlighted, listed under the buttons
+   * and the first one takes focus — nobody finds out at Review.
+   */
+  function advance() {
+    const left = bySection[step];
+    if (left > 0) {
+      setSeen((v) => ({ ...v, [step]: true }));
+      setTried((v) => ({ ...v, [step]: true }));
+      setShake((n) => n + 1);
+      setAnnounce(`${left} ${left === 1 ? "answer is" : "answers are"} still needed on this step. Taking you to the first one.`);
+      setFocusFirst((n) => n + 1);
+      return;
+    }
+    setAnnounce("");
+    go(nextStep ? nextStep.id : "review");
+  }
+
+  /** Scroll to and focus the control for one data path (the "still needed" list). */
+  function focusPath(path: string) {
+    const el = document.getElementById(fid(path));
+    if (!el) return;
+    el.scrollIntoView({ block: "center", behavior: "smooth" });
+    el.focus({ preventScroll: true });
+  }
+
   function chooseMember(m: RosterMember | null) {
     setDraft((prev) => {
       if (m) return prefillFromRoster(prev, m);
@@ -339,6 +369,7 @@ export default function BioIntakeForm({
     setConfirmReset(false);
     setStep("basics");
     setSeen({});
+    setTried({});
     setFilter("");
     setSaveState("idle");
     writeSaved({ v: 1, draft: null, last_submission_id: lastId });
@@ -387,6 +418,7 @@ export default function BioIntakeForm({
         setAttempted(false);
         setTouched({});
         setSeen({});
+        setTried({});
         setStep("basics");
         setStage("done");
         return;
@@ -810,7 +842,7 @@ export default function BioIntakeForm({
         </span>
         <span className={clsx("tabular shrink-0", progress === 100 ? "text-gold" : "text-white-40")}>{progress === 100 ? "Ready to send" : `${progress}%`}</span>
       </div>
-      <p className="body-sm text-white-40 max-lg:hidden">Jump around in any order. Only Review checks everything.</p>
+      <p className="body-sm text-white-40 max-lg:hidden">Each step checks itself before you move on. Jump back any time.</p>
     </nav>
   );
 
@@ -842,6 +874,8 @@ export default function BioIntakeForm({
   const sectionFrame = (id: SectionId, children: React.ReactNode) => {
     if (id !== step) return null;
     const left = bySection[id];
+    const refused = !!tried[id] && left > 0;
+    const needed = refused ? Object.entries(errors).filter(([path]) => sectionOf(path) === id) : [];
     return (
       <section id={`s-${id}`} aria-labelledby={`h-${id}`} className={clsx("flex flex-col gap-6", leaving ? "bio-step-out" : "bio-step-in")}>
         <div className="bio-panel">
@@ -867,17 +901,40 @@ export default function BioIntakeForm({
                 <CheckGlyph size={14} />
                 {id === "extras" ? "All set — review whenever you’re ready." : "This step is done."}
               </span>
+            ) : refused ? (
+              <span key="refused" className="bio-saved inline-flex items-center gap-2 text-gold">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.75" />
+                  <path d="M12 7.5v5.5M12 16.25v.25" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+                {left === 1 ? "One answer is still needed before you move on." : `${left} answers are still needed before you move on.`}
+              </span>
             ) : (
               <span className="text-white-40">
-                {left} {left === 1 ? "thing" : "things"} still to answer here — fine to come back to it.
+                {left} {left === 1 ? "answer" : "answers"} still needed on this step.
               </span>
             )}
           </p>
+          {refused && (
+            <div className="bio-note bio-note-gold bio-rise flex flex-col gap-3 p-4">
+              <span className="label text-gold">Still needed</span>
+              <ul className="flex flex-col gap-1.5">
+                {needed.map(([path, msg]) => (
+                  <li key={path} className="body-sm flex gap-3 text-white-80">
+                    <span className="mt-[0.45rem] inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-gold/80" aria-hidden="true" />
+                    <button type="button" className="link-underline text-left" onClick={() => focusPath(path)}>
+                      {msg}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div className="flex flex-wrap items-center gap-3 max-sm:flex-col max-sm:items-stretch">
             <button type="button" className="btn btn-ghost button max-sm:order-2 max-sm:min-h-12" onClick={() => (prevStep ? go(prevStep.id) : setStage("start"))}>
               ← Back
             </button>
-            <button type="button" className="btn btn-primary button max-sm:order-1" onClick={() => go(nextStep ? nextStep.id : "review")}>
+            <button key={shake} type="button" className={clsx("btn btn-primary button max-sm:order-1", shake > 0 && refused && "bio-shake")} onClick={advance}>
               {nextStep ? `Next: ${nextStep.title}` : "Review my answers"} {ARROW}
             </button>
             <span className="body-sm ml-auto flex items-center gap-4 max-sm:order-3 max-sm:ml-0 max-sm:w-full max-sm:justify-center">
@@ -907,7 +964,7 @@ export default function BioIntakeForm({
       onKeyDown={(e) => {
         if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
           e.preventDefault();
-          go(nextStep ? nextStep.id : "review");
+          advance();
         }
       }}
     >
