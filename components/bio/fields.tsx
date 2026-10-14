@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutEffect, useRef } from "react";
 import clsx from "clsx";
 import Field from "@/components/Field";
 import { countWords } from "@/lib/bio/schema";
@@ -23,11 +24,17 @@ export function ErrorText({ path, error }: { path: string; error?: string }) {
   );
 }
 
-/** Keep the first `n` words; stop typing at the cap (§6.10). */
-export function capWords(s: string, n: number): string {
-  if (countWords(s) <= n) return s;
-  const m = s.match(new RegExp(`^\\s*(?:\\S+\\s+){${n - 1}}\\S+`));
-  return m ? m[0] : s;
+/**
+ * Stop typing at the word cap (§6.10). Already at the cap, a change that
+ * adds a word is refused outright — trimming it instead would eat the
+ * space and glue every further keystroke onto the last word. Under the cap
+ * (a long paste), keep the first `n` words.
+ */
+export function capWords(next: string, n: number, prev = ""): string {
+  if (countWords(next) <= n) return next;
+  if (countWords(prev) >= n) return prev;
+  const m = next.match(new RegExp(`^\\s*(?:\\S+\\s+){${n - 1}}\\S+`));
+  return m ? m[0] : next;
 }
 
 export function TextField({
@@ -60,6 +67,23 @@ export function TextField({
   className?: string;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 }) {
+  // A word-limited phrase wraps and grows instead of scrolling sideways in
+  // a one-line input; it still behaves like one line (Enter adds nothing).
+  // Every box grows with its text, so nothing hides behind an inner scroll.
+  const grow = !textarea && !!words;
+  const ref = useRef<HTMLTextAreaElement>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const fit = () => {
+      el.style.height = "auto";
+      el.style.height = `${el.scrollHeight + 1}px`; // + the 1px underline
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, [value]);
+
   const n = words ? countWords(value) : value.length;
   const cap = words ?? chars;
   const atCap = cap != null && n >= cap;
@@ -83,16 +107,29 @@ export function TextField({
     "aria-invalid": error ? true : undefined,
     "aria-describedby": error ? eid(path) : undefined,
     "data-invalid": error ? "" : undefined,
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      onChange(words ? capWords(e.target.value, words) : e.target.value),
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const v = grow ? e.target.value.replace(/[\r\n]+/g, " ") : e.target.value;
+      onChange(words ? capWords(v, words, value) : v);
+    },
     onBlur: normalize ? () => onChange(normalize(value)) : undefined,
     maxLength: chars,
   };
 
   return (
     <div className={clsx("flex flex-col gap-2", className)}>
-      {textarea ? (
-        <Field as="textarea" label={label} hint={hint} rows={3} {...common} />
+      {grow ? (
+        <Field
+          as="textarea"
+          label={label}
+          hint={hint}
+          rows={1}
+          ref={ref}
+          style={{ height: "auto", overflow: "hidden" }}
+          onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
+          {...common}
+        />
+      ) : textarea ? (
+        <Field as="textarea" label={label} hint={hint} rows={3} ref={ref} style={{ height: "auto", minHeight: "7rem", overflow: "hidden" }} {...common} />
       ) : (
         <Field label={label} hint={hint} {...inputProps} {...common} />
       )}

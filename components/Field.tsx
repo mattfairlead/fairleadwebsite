@@ -7,7 +7,7 @@ type Base = {
 };
 
 type InputProps = Base & { as?: "input" } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "className">;
-type TextareaProps = Base & { as: "textarea" } & Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "className">;
+type TextareaProps = Base & { as: "textarea"; ref?: React.Ref<HTMLTextAreaElement> } & Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "className">;
 
 /**
  * Underline field — §5.3 / §5.9. Label above, 1px resting rule, and a gold
