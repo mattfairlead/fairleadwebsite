@@ -1476,3 +1476,84 @@ html[data-theme="light"] .text-gold-glow {
   box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb), 0.3);
   color: var(--color-gold-soft);
 }
+
+/* ==========================================================================
+   Bio intake (/bio) — step transitions, completion pops, the send burst.
+   The global reduced-motion rule above stills all of it.
+   ========================================================================== */
+
+.bio-step-in {
+  animation: bio-step-in 0.5s var(--ease-out-expo) both;
+}
+.bio-step-out {
+  animation: bio-step-out 0.14s ease-in both;
+}
+@keyframes bio-step-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@keyframes bio-step-out {
+  to {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* List items rising in; set animation-delay per item (≤ 280ms total) */
+.bio-rise {
+  animation: bio-step-in 0.45s var(--ease-out-expo) both;
+}
+
+/* A check or badge arriving — spring scale */
+.bio-pop {
+  animation: bio-pop 0.5s var(--ease-spring) both;
+}
+@keyframes bio-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+.bio-progress-fill {
+  transition: width 0.7s var(--ease-out-expo);
+  box-shadow: 0 0 12px rgba(var(--gold-rgb), 0.55);
+}
+
+/* Sent: rings radiating from the check */
+.bio-burst {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb), 0.7);
+  animation: bio-burst 1.4s var(--ease-out-expo) both;
+  pointer-events: none;
+}
+@keyframes bio-burst {
+  from {
+    opacity: 0.9;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+
+.bio-saved {
+  animation: bio-saved 0.4s var(--ease-out-expo) both;
+}
+@keyframes bio-saved {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+}
+
+/* Headings that receive focus when a step or screen changes: the move is
+   announced, but a focus box around a heading reads as a glitch. */
+.bio-heading:focus-visible {
+  outline: none;
+}

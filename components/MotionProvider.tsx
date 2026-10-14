@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { useGSAP } from "@gsap/react";
 import { guardWrapperScroll, initSmoother, interceptHashLinks, registerGsap, trackSpotlight } from "@/lib/motion";
 
@@ -14,35 +15,46 @@ import { guardWrapperScroll, initSmoother, interceptHashLinks, registerGsap, tra
  *
  * Per-route reveals are wired by app/template.tsx, which remounts on every
  * navigation — so new pages animate in, not just the first one.
+ *
+ * Routes in NATIVE_SCROLL_ROUTES get the browser's own scrolling: on a long
+ * form the smoother's lag fights focus scrolling, and its transformed
+ * content breaks `position: sticky`. Leaving such a route boots it again.
  */
+const NATIVE_SCROLL_ROUTES = ["/bio"];
 export default function MotionProvider({ children }: { children: React.ReactNode }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname() ?? "";
+  const native = NATIVE_SCROLL_ROUTES.some((r) => pathname === r || pathname.startsWith(`${r}/`));
 
   useGSAP(
     () => {
       registerGsap();
-      let cancelled = false;
-      let smoother: ReturnType<typeof initSmoother> = null;
       const stopSpot = trackSpotlight(document.body);
       const stopHash = interceptHashLinks(document.body);
       const stopGuard = wrapperRef.current ? guardWrapperScroll(wrapperRef.current) : () => {};
 
-      const ready = document.fonts?.ready ?? Promise.resolve();
-      ready.then(() => {
-        if (cancelled) return;
-        smoother = initSmoother();
-      });
-
       return () => {
-        cancelled = true;
         stopSpot();
         stopHash();
         stopGuard();
-        smoother?.kill();
       };
     },
     { scope: wrapperRef }
   );
+
+  useEffect(() => {
+    if (native) return;
+    let cancelled = false;
+    let smoother: ReturnType<typeof initSmoother> = null;
+    const ready = document.fonts?.ready ?? Promise.resolve();
+    ready.then(() => {
+      if (!cancelled) smoother = initSmoother();
+    });
+    return () => {
+      cancelled = true;
+      smoother?.kill();
+    };
+  }, [native]);
 
   return (
     <div className="page-wrapper" ref={wrapperRef}>

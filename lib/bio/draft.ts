@@ -197,6 +197,8 @@ export interface Saved {
   v: 1;
   draft: Draft | null;
   last_submission_id: string | null;
+  /** The step the person was on, so a return visit resumes there. */
+  step?: string;
 }
 
 export function readSaved(): Saved {
@@ -207,7 +209,12 @@ export function readSaved(): Saved {
     const s = JSON.parse(raw) as Partial<Saved>;
     if (s?.v !== 1) return blank;
     const draft = s.draft && typeof s.draft === "object" && s.draft.data ? s.draft : null;
-    return { v: 1, draft, last_submission_id: typeof s.last_submission_id === "string" ? s.last_submission_id : null };
+    return {
+      v: 1,
+      draft,
+      last_submission_id: typeof s.last_submission_id === "string" ? s.last_submission_id : null,
+      step: typeof s.step === "string" ? s.step : undefined,
+    };
   } catch {
     return blank;
   }
