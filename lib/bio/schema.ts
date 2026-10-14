@@ -63,6 +63,8 @@ export interface RosterMember {
   specialty: string;
   bio_md: string;
   has_photo: boolean;
+  /** /api/team/photo/[id]?v=… — for the roster tiles on the start screen only; never sent. */
+  photo_url?: string | null;
 }
 
 export interface Basics {

@@ -120,15 +120,20 @@ export default function ReviewSummary({
           <section
             key={s.id}
             aria-labelledby={`rv-${s.id}`}
-            className="bio-rise flex flex-col gap-5 rounded-xl bg-blue-900/30 p-5 ring-1 ring-white/10 md:p-8"
+            className="bio-rise bio-entry flex flex-col gap-5 p-5 md:p-7"
             style={{ animationDelay: `${Math.min(i * 40, 280)}ms` }}
           >
             <div className="flex items-center justify-between gap-4">
               <h3 id={`rv-${s.id}`} className="label flex items-center gap-3 text-white-60">
-                <span className="tabular text-gold">{i + 1}</span>
+                <span className="tabular flex h-7 w-7 items-center justify-center rounded-full bg-gold text-xs font-semibold text-blue-950" aria-hidden="true">
+                  {i + 1}
+                </span>
                 {s.title}
               </h3>
-              <button type="button" className="chip button" onClick={() => onEdit(s.id)} aria-label={`Edit ${s.title}`}>
+              <button type="button" className="bio-chip button" onClick={() => onEdit(s.id)} aria-label={`Edit ${s.title}`}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="mr-1.5">
+                  <path d="M4 20h4l10.5-10.5a2.1 2.1 0 00-3-3L5 17v3z" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round" />
+                </svg>
                 Edit
               </button>
             </div>
@@ -154,7 +159,7 @@ export default function ReviewSummary({
 
 function Notes({ items }: { items: string[] }) {
   return (
-    <div className="flex flex-col gap-2 rounded-lg bg-gold/[0.06] p-4 ring-1 ring-gold/20">
+    <div className="bio-note bio-note-gold flex flex-col gap-2 p-4">
       <span className="label text-gold">Worth a second look</span>
       <ul className="flex flex-col gap-1.5">
         {items.map((w) => (

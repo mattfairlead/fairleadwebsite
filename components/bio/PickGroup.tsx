@@ -1,10 +1,10 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useContext, useId, useRef, useState } from "react";
 import clsx from "clsx";
 import { OTHER } from "@/lib/bio/options";
 import { cleanText, fixedSpelling, matchOption, suggestOption } from "@/lib/bio/normalize";
-import { eid, ErrorText, fid } from "@/components/bio/fields";
+import { Chip, eid, ErrorText, fid, Legend, Validity } from "@/components/bio/fields";
 
 /**
  * A chip group with the §6.0 Other… behavior, single or multi.
@@ -57,11 +57,13 @@ export default function PickGroup({
   const [text, setText] = useState("");
   const uid = useId();
   const otherId = fid(`${path}_custom`);
+  const allErrors = useContext(Validity);
 
   const otherOn = values.includes(OTHER) || custom.length > 0;
   const standard = values.filter((v) => v !== OTHER && !custom.includes(v));
   const chosen = standard.length + custom.length;
   const full = multiple && max != null && chosen >= max;
+  const done = chosen > 0 && !error && !customError && !allErrors[path] && !allErrors[`${path}_custom`];
 
   function emit(nextStandard: string[], nextCustom: string[], on: boolean, nextStash?: string[]) {
     const vals = [...nextStandard, ...nextCustom];
@@ -136,89 +138,86 @@ export default function PickGroup({
     : null;
 
   const chip = (opt: string, i: number) => (
-    <button
+    <Chip
       key={opt}
       id={i === 0 ? fid(path) : undefined}
-      type="button"
-      className="chip button disabled:cursor-not-allowed disabled:opacity-40"
-      aria-pressed={standard.includes(opt)}
+      pressed={standard.includes(opt)}
       disabled={!standard.includes(opt) && !!full}
       data-invalid={error && i === 0 ? "" : undefined}
       onClick={() => toggleStandard(opt)}
     >
       {opt}
-    </button>
+    </Chip>
   );
 
   const otherChip = open && (
-    <button
-      type="button"
-      className="chip button disabled:cursor-not-allowed disabled:opacity-40"
-      aria-pressed={otherOn}
-      aria-expanded={otherOn}
-      aria-controls={otherOn ? otherId : undefined}
-      disabled={!otherOn && !!full}
-      onClick={toggleOther}
-    >
+    <Chip pressed={otherOn} aria-expanded={otherOn} aria-controls={otherOn ? otherId : undefined} disabled={!otherOn && !!full} onClick={toggleOther}>
       {OTHER}
-    </button>
+    </Chip>
   );
 
   const describedBy = [error && eid(path), customError && eid(`${path}_custom`)].filter(Boolean).join(" ") || undefined;
   let index = 0;
 
   return (
-    <fieldset className="flex flex-col gap-3" aria-describedby={describedBy}>
-      <legend className="mb-3 flex w-full flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <span className="label text-white-50">{legend}</span>
-        {(hint || countLine) && (
-          <span className="body-sm text-white-40">
-            {hint}
-            {hint && countLine ? " · " : ""}
-            {countLine && <span className={clsx("tabular", full && "text-gold")}>{countLine}</span>}
-          </span>
-        )}
-      </legend>
+    <fieldset className="bio-group" aria-describedby={describedBy}>
+      <Legend
+        done={done}
+        hint={
+          hint || countLine ? (
+            <>
+              {hint}
+              {hint && countLine ? " · " : ""}
+              {countLine && <span className={clsx("tabular", full && "text-gold")}>{countLine}</span>}
+            </>
+          ) : undefined
+        }
+      >
+        {legend}
+      </Legend>
 
       {groups ? (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
           {groups.map((g) => (
-            <div key={g.heading} className="flex flex-col gap-2">
+            <div key={g.heading} className="flex flex-col gap-2.5">
               <span className="body-sm text-white-40">{g.heading}</span>
-              <div className="flex flex-wrap gap-2">{g.options.map((o) => chip(o, index++))}</div>
+              <div className="bio-chips">{g.options.map((o) => chip(o, index++))}</div>
             </div>
           ))}
-          {open && <div className="flex flex-wrap gap-2">{otherChip}</div>}
+          {open && <div className="bio-chips">{otherChip}</div>}
         </div>
       ) : (
-        <div className="flex flex-wrap gap-2">
+        <div className="bio-chips">
           {options.map((o) => chip(o, index++))}
           {otherChip}
         </div>
       )}
 
       {otherOn && (
-        <div className="flex flex-col gap-2 pt-2">
+        <div className="bio-rise flex flex-col gap-3 pt-1">
           {multiple && custom.length > 0 && (
-            <ul className="flex flex-wrap gap-2" aria-label="Your own entries">
+            <ul className="bio-chips" aria-label="Your own entries">
               {custom.map((c) => (
                 <li key={c}>
-                  <button type="button" className="chip button" aria-pressed="true" onClick={() => removeCustom(c)} aria-label={`Remove ${c}`}>
-                    {c} <span aria-hidden="true">×</span>
-                  </button>
+                  <Chip pressed onClick={() => removeCustom(c)} aria-label={`Remove ${c}`}>
+                    {c}
+                    <span className="bio-chip-x" aria-hidden="true">
+                      ×
+                    </span>
+                  </Chip>
                 </li>
               ))}
             </ul>
           )}
-          <label className="field-wrap flex flex-col gap-2">
-            <span className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <span className="label text-white-50">Other — please specify</span>
-              {multiple && <span className="body-sm text-white-40">Enter or comma adds it</span>}
+          <label className={clsx("bio-field", current && "is-filled", customError && "is-invalid")}>
+            <span className="bio-field-head">
+              <span className="bio-field-label label">Other — please specify</span>
+              {multiple && <span className="bio-field-meta body-sm">Enter or comma adds it</span>}
             </span>
             <input
               ref={inputRef}
               id={otherId}
-              className="field"
+              className="bio-input"
               value={current}
               maxLength={60}
               aria-invalid={customError ? true : undefined}
@@ -250,12 +249,14 @@ export default function PickGroup({
             />
           </label>
           {suggestion && (
-            <p id={`${uid}-sugg`} className="body-sm text-white-60" aria-live="polite">
-              Did you mean{" "}
-              <button type="button" className="link-underline font-semibold text-gold" onMouseDown={(e) => e.preventDefault()} onClick={() => acceptSuggestion(suggestion)}>
-                {suggestion}
-              </button>
-              ?
+            <p id={`${uid}-sugg`} className="bio-field-foot body-sm text-white-60" aria-live="polite">
+              <span>
+                Did you mean{" "}
+                <button type="button" className="link-underline font-semibold text-gold" onMouseDown={(e) => e.preventDefault()} onClick={() => acceptSuggestion(suggestion)}>
+                  {suggestion}
+                </button>
+                ?
+              </span>
             </p>
           )}
           <ErrorText path={`${path}_custom`} error={customError} />

@@ -1478,12 +1478,780 @@ html[data-theme="light"] .text-gold-glow {
 }
 
 /* ==========================================================================
-   Bio intake (/bio) — step transitions, completion pops, the send burst.
-   The global reduced-motion rule above stills all of it.
+   Bio intake (/bio) — its own surface system.
+
+   The rest of the site writes on underlines; the intake is a working
+   document, so its controls are filled: a tone lifted off the blue, no
+   border, a gold ring that only arrives with focus. Three depths, each a
+   step lighter than the one it sits in —
+
+     page (blue-950) → panel (.bio-panel) → well (.bio-entry) → field
+
+   — so a field always reads as "the thing you type into" wherever it is.
+   Everything is scoped under .bio so the contact and newsletter forms keep
+   their underlines. The global reduced-motion rule stills all of it.
    ========================================================================== */
 
+.bio {
+  --bio-panel: rgba(12, 28, 82, 0.5);
+  --bio-panel-ring: rgba(255, 255, 255, 0.07);
+  --bio-well: rgba(5, 14, 46, 0.42);
+  --bio-field: rgba(255, 255, 255, 0.055);
+  --bio-field-hover: rgba(255, 255, 255, 0.075);
+  --bio-field-focus: rgba(255, 255, 255, 0.09);
+  --bio-field-ring: rgba(255, 255, 255, 0.04);
+  --bio-radius-panel: 1.5rem;
+  --bio-radius-well: 1.125rem;
+  --bio-radius-field: 0.875rem;
+}
+
+/* ---------- Panels: the step card, review cards, the finish ---------- */
+
+.bio-panel {
+  position: relative;
+  border-radius: var(--bio-radius-panel);
+  background: var(--bio-panel);
+  box-shadow:
+    inset 0 0 0 1px var(--bio-panel-ring),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 40px 90px -50px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(var(--gold-rgb), 0.03);
+}
+/* A faint gold light from the top-left corner: a panel reads lit, not flat */
+.bio-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(60% 40% at 0% 0%, rgba(var(--gold-rgb), 0.07) 0%, rgba(var(--gold-rgb), 0) 100%);
+}
+.bio-panel > * {
+  position: relative;
+}
+
+/* An inset well — one repeater entry (an engagement, a role, a degree) */
+.bio-entry {
+  position: relative;
+  border-radius: var(--bio-radius-well);
+  background: var(--bio-well);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+}
+.bio-entry.is-leaving {
+  animation: bio-entry-out 0.18s ease-in both;
+}
+@keyframes bio-entry-out {
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+}
+
+/* A quiet surface for notes (welcome back, your current bio, the next steps) */
+.bio-note {
+  border-radius: var(--bio-radius-well);
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+.bio-note-gold {
+  background: rgba(var(--gold-rgb), 0.06);
+  box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb), 0.18);
+}
+
+/* ---------- Fields ---------- */
+
+.bio-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.875rem 1.125rem 0.9375rem;
+  border-radius: var(--bio-radius-field);
+  background: var(--bio-field);
+  box-shadow:
+    inset 0 0 0 1px var(--bio-field-ring),
+    0 0 0 0 rgba(var(--gold-rgb), 0);
+  cursor: text;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.45s var(--ease-out-expo),
+    transform 0.45s var(--ease-out-expo);
+}
+.bio-field:hover {
+  background: var(--bio-field-hover);
+}
+.bio-field:focus-within {
+  background: var(--bio-field-focus);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--gold-rgb), 0.55),
+    0 0 0 4px rgba(var(--gold-rgb), 0.09),
+    0 18px 40px -24px rgba(var(--gold-rgb), 0.5);
+}
+.bio-field.is-invalid {
+  background: rgba(var(--gold-rgb), 0.06);
+  box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb), 0.32);
+}
+.bio-field.is-invalid:focus-within {
+  background: var(--bio-field-focus);
+}
+
+.bio-field-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  min-height: 0.75rem;
+  padding-right: 1.5rem; /* room for the check */
+}
+.bio-field-label {
+  color: var(--color-white-50);
+  transition: color 0.2s ease;
+}
+.bio-field:focus-within .bio-field-label {
+  color: var(--color-gold);
+}
+.bio-field.is-filled:not(:focus-within) .bio-field-label {
+  color: var(--color-white-60);
+}
+.bio-field-meta {
+  color: var(--color-white-40);
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+.bio-field.is-capped .bio-field-meta {
+  color: var(--color-gold);
+}
+
+.bio-input {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-white-100);
+  font-size: 1.1875rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  caret-color: var(--color-gold);
+}
+.bio-input:focus-visible {
+  outline: none; /* the wrapper's ring is the focus indicator */
+}
+.bio-input::placeholder {
+  color: var(--color-white-20);
+  transition: color 0.2s ease;
+}
+.bio-field:focus-within .bio-input::placeholder {
+  color: var(--color-white-40);
+}
+textarea.bio-input {
+  resize: none;
+  overflow: hidden;
+  display: block;
+}
+.bio-input:-webkit-autofill,
+.bio-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-white-100);
+  box-shadow: 0 0 0 1000px #121f52 inset;
+  transition: background-color 9999s ease-out;
+  border-radius: 4px;
+}
+.bio-input::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+/* The check that arrives when a field is filled in and valid */
+.bio-field-check {
+  position: absolute;
+  top: 0.8125rem;
+  right: 1rem;
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-gold);
+  opacity: 0;
+  transform: scale(0.4);
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.5s var(--ease-spring);
+}
+.bio-field.is-valid .bio-field-check {
+  opacity: 1;
+  transform: scale(1);
+}
+.bio-field:focus-within .bio-field-check {
+  opacity: 0.55;
+}
+
+/* Hint or error below a field, inset to the text */
+.bio-field-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  padding: 0 0.25rem;
+  color: var(--color-white-40);
+}
+.bio-hint {
+  color: var(--color-white-40);
+  font-style: italic;
+}
+.bio-error {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--color-gold);
+  animation: bio-saved 0.3s var(--ease-out-expo) both;
+}
+.bio-error svg {
+  flex-shrink: 0;
+  margin-top: 0.1875rem;
+}
+
+/* ---------- Groups: a question with chips under it ---------- */
+
+.bio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-width: 0;
+}
+.bio-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 0.875rem;
+}
+.bio-legend-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-white-60);
+}
+.bio-legend-check {
+  display: inline-flex;
+  color: var(--color-gold);
+  animation: bio-pop 0.5s var(--ease-spring) both;
+}
+.bio-legend-meta {
+  color: var(--color-white-40);
+}
+.bio-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Chips: filled like the fields, gold when chosen, a check that unfolds */
+.bio-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: var(--radius-pill);
+  background: var(--bio-field);
+  color: var(--color-white-80);
+  box-shadow: inset 0 0 0 1px var(--bio-field-ring);
+  cursor: pointer;
+  white-space: nowrap;
+  transform: translateZ(0);
+  transition:
+    transform 0.4s var(--ease-spring),
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.3s ease;
+}
+.bio-chip:hover {
+  background: var(--bio-field-hover);
+  color: var(--color-white-100);
+  transform: translateY(-1px);
+}
+.bio-chip:active {
+  transform: scale(0.96);
+  transition-duration: 0.08s;
+}
+.bio-chip[aria-pressed="true"] {
+  background: var(--color-gold);
+  color: var(--color-blue-950);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--gold-rgb), 0.6),
+    0 10px 24px -12px rgba(var(--gold-rgb), 0.7);
+}
+.bio-chip[aria-pressed="true"]:hover {
+  background: var(--color-gold-soft);
+}
+.bio-chip:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+  transform: none;
+}
+.bio-chip-check {
+  display: inline-flex;
+  width: 0;
+  margin-right: 0;
+  opacity: 0;
+  transform: scale(0.3);
+  transition:
+    width 0.3s var(--ease-out-expo),
+    margin 0.3s var(--ease-out-expo),
+    opacity 0.15s ease,
+    transform 0.45s var(--ease-spring);
+}
+.bio-chip[aria-pressed="true"] .bio-chip-check {
+  width: 0.875rem;
+  margin-right: 0.375rem;
+  opacity: 1;
+  transform: scale(1);
+}
+/* Chips that only wrap very long labels (leadership modes) */
+.bio-chip-wrap {
+  white-space: normal;
+  text-align: left;
+  padding-block: 0.5rem;
+  line-height: 1.25;
+}
+/* The small × chip for a typed entry */
+.bio-chip-x {
+  margin-left: 0.375rem;
+  opacity: 0.6;
+}
+.bio-chip:hover .bio-chip-x {
+  opacity: 1;
+}
+
+/* Small round icon button (move, remove) */
+.bio-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--bio-field);
+  color: var(--color-white-60);
+  box-shadow: inset 0 0 0 1px var(--bio-field-ring);
+  cursor: pointer;
+  transition:
+    transform 0.4s var(--ease-spring),
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.bio-icon-btn:hover {
+  background: var(--bio-field-hover);
+  color: var(--color-white-100);
+  transform: translateY(-1px);
+}
+.bio-icon-btn:active {
+  transform: scale(0.92);
+  transition-duration: 0.08s;
+}
+.bio-icon-btn-danger:hover {
+  color: var(--color-gold);
+  box-shadow: inset 0 0 0 1px rgba(var(--gold-rgb), 0.45);
+}
+
+/* ---------- Switch (yes/no booleans) ---------- */
+
+.bio-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.75rem 1rem 0.75rem 1.125rem;
+  border-radius: var(--bio-radius-field);
+  background: var(--bio-field);
+  color: var(--color-white-80);
+  box-shadow: inset 0 0 0 1px var(--bio-field-ring);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.3s ease;
+}
+.bio-switch-row:hover {
+  background: var(--bio-field-hover);
+  color: var(--color-white-100);
+}
+.bio-switch-row[aria-checked="true"] {
+  color: var(--color-white-100);
+}
+.bio-switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 1.625rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.25s ease;
+}
+.bio-switch-thumb {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: var(--color-white-100);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  transition: transform 0.45s var(--ease-spring);
+}
+.bio-switch-row:active .bio-switch-thumb {
+  transform: scaleX(1.15);
+  transform-origin: left center;
+}
+.bio-switch-row[aria-checked="true"] .bio-switch {
+  background: var(--color-gold);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.1),
+    0 8px 20px -10px rgba(var(--gold-rgb), 0.7);
+}
+.bio-switch-row[aria-checked="true"] .bio-switch-thumb {
+  transform: translateX(1.125rem);
+}
+.bio-switch-row[aria-checked="true"]:active .bio-switch-thumb {
+  transform: translateX(1rem) scaleX(1.15);
+  transform-origin: right center;
+}
+
+/* ---------- Add tile ---------- */
+
+.bio-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0 1.25rem;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: var(--bio-radius-field);
+  background: transparent;
+  color: var(--color-white-60);
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    color 0.2s ease,
+    transform 0.4s var(--ease-spring);
+}
+.bio-add:hover {
+  border-color: rgba(var(--gold-rgb), 0.55);
+  background: rgba(var(--gold-rgb), 0.05);
+  color: var(--color-gold);
+}
+.bio-add:active {
+  transform: scale(0.985);
+  transition-duration: 0.08s;
+}
+.bio-add:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+  border-style: solid;
+  transform: none;
+}
+.bio-add-plus {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bio-field);
+  box-shadow: inset 0 0 0 1px var(--bio-field-ring);
+  transition:
+    transform 0.5s var(--ease-spring),
+    background-color 0.2s ease;
+}
+.bio-add:hover .bio-add-plus {
+  transform: rotate(90deg);
+  background: rgba(var(--gold-rgb), 0.15);
+}
+
+/* ---------- Upload tile ---------- */
+
+.bio-drop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: var(--bio-radius-well);
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease;
+}
+.bio-drop:hover,
+.bio-drop:focus-within,
+.bio-drop.is-over {
+  border-color: rgba(var(--gold-rgb), 0.55);
+  background: rgba(var(--gold-rgb), 0.05);
+}
+.bio-drop.has-file {
+  border-style: solid;
+  border-color: rgba(var(--gold-rgb), 0.3);
+}
+.bio-drop input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ---------- The roster: who are you? ---------- */
+
+.bio-person {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 0.75rem;
+  border-radius: var(--bio-radius-well);
+  background: var(--bio-field);
+  color: var(--color-white-80);
+  box-shadow: inset 0 0 0 1px var(--bio-field-ring);
+  text-align: left;
+  cursor: pointer;
+  transform: translateZ(0);
+  transition:
+    transform 0.45s var(--ease-spring),
+    background-color 0.2s ease,
+    box-shadow 0.3s ease,
+    color 0.2s ease;
+}
+.bio-person:hover,
+.bio-person:focus-visible {
+  background: var(--bio-field-hover);
+  color: var(--color-white-100);
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--gold-rgb), 0.45),
+    0 18px 40px -22px rgba(var(--gold-rgb), 0.45);
+}
+.bio-person:active {
+  transform: scale(0.98);
+  transition-duration: 0.08s;
+}
+.bio-person .portrait {
+  --portrait-size: 3rem;
+}
+.bio-person .portrait-monogram {
+  font-size: 0.875rem;
+}
+.bio-person-dashed {
+  background: transparent;
+  box-shadow: none;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+}
+.bio-person-dashed:hover,
+.bio-person-dashed:focus-visible {
+  background: rgba(var(--gold-rgb), 0.05);
+  border-color: rgba(var(--gold-rgb), 0.55);
+  box-shadow: none;
+}
+
+/* ---------- The rail: progress ring + the six steps ---------- */
+
+.bio-ring {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  flex-shrink: 0;
+}
+.bio-ring svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+.bio-ring-track {
+  stroke: rgba(255, 255, 255, 0.1);
+}
+.bio-ring-fill {
+  stroke: var(--color-gold);
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(var(--gold-rgb), 0.55));
+  transition: stroke-dashoffset 0.9s var(--ease-out-expo);
+}
+.bio-ring-num {
+  color: var(--color-white-100);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.bio-ring.is-done .bio-ring-num {
+  color: var(--color-gold);
+}
+
+.bio-rail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+/* The thread between the step dots */
+.bio-rail::before {
+  content: "";
+  position: absolute;
+  top: 1.25rem;
+  bottom: 1.25rem;
+  left: calc(0.75rem + 0.875rem);
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.bio-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  color: var(--color-white-60);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+.bio-step:hover {
+  color: var(--color-white-100);
+  background: rgba(255, 255, 255, 0.04);
+}
+.bio-step[aria-current="step"] {
+  color: var(--color-white-100);
+  background: var(--bio-field);
+  box-shadow: inset 0 0 0 1px var(--bio-field-ring);
+}
+.bio-step-dot {
+  position: relative;
+  display: inline-flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-blue-950);
+  color: var(--color-white-50);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  font-size: 0.75rem;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.5s var(--ease-spring);
+}
+.bio-step[aria-current="step"] .bio-step-dot {
+  color: var(--color-gold);
+  box-shadow:
+    inset 0 0 0 1px var(--color-gold),
+    0 0 0 4px rgba(var(--gold-rgb), 0.12);
+}
+.bio-step-dot.is-done,
+.bio-step[aria-current="step"] .bio-step-dot.is-done {
+  background: var(--color-gold);
+  color: var(--color-blue-950);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--gold-rgb), 0.6),
+    0 6px 16px -8px rgba(var(--gold-rgb), 0.8);
+}
+.bio-step:hover .bio-step-dot {
+  transform: scale(1.08);
+}
+.bio-step-count {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--color-gold);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+}
+.bio-step-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Phones: the rail is a row of dots under a thin bar */
+@media (max-width: 1023px) {
+  .bio-rail {
+    flex-direction: row;
+    gap: 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0.125rem;
+    margin: -0.125rem;
+  }
+  .bio-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .bio-rail::before {
+    display: none;
+  }
+  .bio-step {
+    width: auto;
+    flex-shrink: 0;
+    padding: 0.375rem 0.625rem;
+  }
+}
+
+.bio-bar {
+  height: 0.25rem;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+}
+.bio-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--color-gold-pressed), var(--color-gold), var(--color-gold-soft));
+  box-shadow: 0 0 12px rgba(var(--gold-rgb), 0.55);
+  transition: width 0.9s var(--ease-out-expo);
+}
+
+/* Keyboard hint */
+.bio-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.375rem;
+  height: 1.375rem;
+  padding: 0 0.375rem;
+  border-radius: 0.375rem;
+  background: var(--bio-field);
+  box-shadow:
+    inset 0 0 0 1px var(--bio-field-ring),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  color: var(--color-white-50);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+/* ---------- Motion: steps, lists, the finish ---------- */
+
 .bio-step-in {
-  animation: bio-step-in 0.5s var(--ease-out-expo) both;
+  animation: bio-step-in 0.55s var(--ease-out-expo) both;
 }
 .bio-step-out {
   animation: bio-step-out 0.14s ease-in both;
@@ -1491,7 +2259,7 @@ html[data-theme="light"] .text-gold-glow {
 @keyframes bio-step-in {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(14px) scale(0.992);
   }
 }
 @keyframes bio-step-out {
@@ -1515,11 +2283,6 @@ html[data-theme="light"] .text-gold-glow {
     opacity: 0;
     transform: scale(0.4);
   }
-}
-
-.bio-progress-fill {
-  transition: width 0.7s var(--ease-out-expo);
-  box-shadow: 0 0 12px rgba(var(--gold-rgb), 0.55);
 }
 
 /* Sent: rings radiating from the check */

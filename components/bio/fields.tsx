@@ -1,24 +1,45 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { createContext, useContext, useLayoutEffect, useRef } from "react";
 import clsx from "clsx";
-import Field from "@/components/Field";
 import { countWords } from "@/lib/bio/schema";
 
 /**
- * Small inputs for /bio, all built on the site's own pieces: the underline
- * <Field>, `.chip` toggles, `.label`. Every control gets an id derived from
- * its data path (fid), and its error an id the control points at, so the
- * form can focus the first problem and screen readers hear why.
+ * The intake's controls. Every one is a filled surface lifted a tone off
+ * the blue — no borders, a gold ring only on focus — so the thing you type
+ * into is always obvious (the `.bio-*` recipes in globals.css). Each gets
+ * an id derived from its data path (fid) and its error an id the control
+ * points at, so the form can focus the first problem and screen readers
+ * hear why.
+ *
+ * A field that is filled in and valid grows a small gold check. Validity
+ * comes from <Validity>, which the form wraps everything in with the full
+ * error map (visible or not), so a check never shows on a value the review
+ * step would bounce.
  */
 
 export const fid = (path: string) => `f-${path.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
 export const eid = (path: string) => `e-${path.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
 
+export const Validity = createContext<Record<string, string>>({});
+const useValid = (path: string) => !useContext(Validity)[path];
+
+export function CheckGlyph({ size = 14, className, stroke = 2.5 }: { size?: number; className?: string; stroke?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function ErrorText({ path, error }: { path: string; error?: string }) {
   if (!error) return null;
   return (
-    <span id={eid(path)} className="body-sm text-gold">
+    <span id={eid(path)} className="bio-error body-sm">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.75" />
+        <path d="M12 7.5v5.5M12 16.25v.25" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      </svg>
       {error}
     </span>
   );
@@ -77,7 +98,7 @@ export function TextField({
     if (!el) return;
     const fit = () => {
       el.style.height = "auto";
-      el.style.height = `${el.scrollHeight + 1}px`; // + the 1px underline
+      el.style.height = `${el.scrollHeight}px`;
     };
     fit();
     window.addEventListener("resize", fit);
@@ -87,18 +108,11 @@ export function TextField({
   const n = words ? countWords(value) : value.length;
   const cap = words ?? chars;
   const atCap = cap != null && n >= cap;
-  const hint =
-    example || cap ? (
-      <span className="flex flex-wrap items-baseline gap-x-3">
-        {example && <span className="italic">{example}</span>}
-        {cap != null && (
-          <span className={clsx("tabular", atCap ? "text-gold" : "text-white-40")}>
-            {n}/{cap}
-            {words ? " words" : ""}
-          </span>
-        )}
-      </span>
-    ) : undefined;
+  // Word caps are part of the brief, so they always show; a character cap
+  // only surfaces once it is close enough to matter.
+  const showCount = cap != null && (!!words || n >= cap * 0.7);
+  const filled = value.trim().length > 0;
+  const valid = useValid(path) && !error;
 
   const common = {
     id: fid(path),
@@ -107,6 +121,7 @@ export function TextField({
     "aria-invalid": error ? true : undefined,
     "aria-describedby": error ? eid(path) : undefined,
     "data-invalid": error ? "" : undefined,
+    className: "bio-input",
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const v = grow ? e.target.value.replace(/[\r\n]+/g, " ") : e.target.value;
       onChange(words ? capWords(v, words, value) : v);
@@ -116,24 +131,33 @@ export function TextField({
   };
 
   return (
-    <div className={clsx("flex flex-col gap-2", className)}>
-      {grow ? (
-        <Field
-          as="textarea"
-          label={label}
-          hint={hint}
-          rows={1}
-          ref={ref}
-          style={{ height: "auto", overflow: "hidden" }}
-          onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
-          {...common}
-        />
-      ) : textarea ? (
-        <Field as="textarea" label={label} hint={hint} rows={3} ref={ref} style={{ height: "auto", minHeight: "7rem", overflow: "hidden" }} {...common} />
-      ) : (
-        <Field label={label} hint={hint} {...inputProps} {...common} />
+    <div className={clsx("flex min-w-0 flex-col gap-2", className)}>
+      <label className={clsx("bio-field", filled && "is-filled", filled && valid && "is-valid", error && "is-invalid", atCap && "is-capped")}>
+        <span className="bio-field-head">
+          <span className="bio-field-label label">{label}</span>
+          {showCount && (
+            <span className="bio-field-meta tabular body-sm">
+              {n}/{cap}
+              {words ? " words" : ""}
+            </span>
+          )}
+        </span>
+        {grow ? (
+          <textarea rows={1} ref={ref} onKeyDown={(e) => e.key === "Enter" && e.preventDefault()} {...common} />
+        ) : textarea ? (
+          <textarea rows={3} ref={ref} style={{ minHeight: "5.5rem" }} {...common} />
+        ) : (
+          <input {...inputProps} {...common} />
+        )}
+        <span className="bio-field-check">
+          <CheckGlyph size={16} />
+        </span>
+      </label>
+      {(example || error) && (
+        <p className="bio-field-foot body-sm">
+          {error ? <ErrorText path={path} error={error} /> : <span className="bio-hint">{example}</span>}
+        </p>
       )}
-      <ErrorText path={path} error={error} />
     </div>
   );
 }
@@ -153,27 +177,76 @@ export function YearField({
   error?: string;
   required?: boolean;
 }) {
+  const filled = value != null;
+  const valid = useValid(path) && !error;
   return (
-    <div className="flex flex-col gap-2">
-      <Field
-        id={fid(path)}
-        label={label}
-        value={value == null ? "" : String(value)}
-        inputMode="numeric"
-        autoComplete="off"
-        placeholder="YYYY"
-        maxLength={4}
-        required={required}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={error ? eid(path) : undefined}
-        data-invalid={error ? "" : undefined}
-        onChange={(e) => {
-          const digits = e.target.value.replace(/\D/g, "").slice(0, 4);
-          onChange(digits ? Number(digits) : null);
-        }}
-      />
-      <ErrorText path={path} error={error} />
+    <div className="flex min-w-0 flex-col gap-2">
+      <label className={clsx("bio-field", filled && "is-filled", filled && valid && "is-valid", error && "is-invalid")}>
+        <span className="bio-field-head">
+          <span className="bio-field-label label">{label}</span>
+        </span>
+        <input
+          id={fid(path)}
+          className="bio-input tabular"
+          value={value == null ? "" : String(value)}
+          inputMode="numeric"
+          autoComplete="off"
+          placeholder="YYYY"
+          maxLength={4}
+          required={required}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? eid(path) : undefined}
+          data-invalid={error ? "" : undefined}
+          onChange={(e) => {
+            const digits = e.target.value.replace(/\D/g, "").slice(0, 4);
+            onChange(digits ? Number(digits) : null);
+          }}
+        />
+        <span className="bio-field-check">
+          <CheckGlyph size={16} />
+        </span>
+      </label>
+      {error && (
+        <p className="bio-field-foot body-sm">
+          <ErrorText path={path} error={error} />
+        </p>
+      )}
     </div>
+  );
+}
+
+/** One chip. `pressed` paints it gold and unfolds the check. */
+export function Chip({
+  pressed,
+  children,
+  className,
+  wrap,
+  ...rest
+}: { pressed: boolean; wrap?: boolean } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type">) {
+  return (
+    <button type="button" className={clsx("bio-chip button", wrap && "bio-chip-wrap", className)} aria-pressed={pressed} {...rest}>
+      <span className="bio-chip-check">
+        <CheckGlyph size={14} stroke={3} />
+      </span>
+      {children}
+    </button>
+  );
+}
+
+/** The question above a chip group — with a gold check once it is answered. */
+export function Legend({ children, hint, done }: { children: React.ReactNode; hint?: React.ReactNode; done?: boolean }) {
+  return (
+    <legend className="bio-legend">
+      <span className="bio-legend-text label">
+        {children}
+        {done && (
+          <span className="bio-legend-check">
+            <CheckGlyph size={12} stroke={3} />
+          </span>
+        )}
+      </span>
+      {hint && <span className="bio-legend-meta body-sm">{hint}</span>}
+    </legend>
   );
 }
 
@@ -197,25 +270,25 @@ export function ChoiceChips<V extends string>({
   error?: string;
   allowClear?: boolean;
 }) {
+  const valid = useValid(path) && !error;
+  const wrap = options.some((o) => o.label.length > 22);
   return (
-    <fieldset className="flex flex-col gap-3" aria-describedby={error ? eid(path) : undefined}>
-      <legend className="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <span className="label text-white-50">{legend}</span>
-        {hint && <span className="body-sm text-white-40">{hint}</span>}
-      </legend>
-      <div className="flex flex-wrap gap-2">
+    <fieldset className="bio-group" aria-describedby={error ? eid(path) : undefined}>
+      <Legend hint={hint} done={!!value && valid}>
+        {legend}
+      </Legend>
+      <div className="bio-chips">
         {options.map((o, i) => (
-          <button
+          <Chip
             key={o.value}
             id={i === 0 ? fid(path) : undefined}
-            type="button"
-            className="chip button"
-            aria-pressed={value === o.value}
+            pressed={value === o.value}
+            wrap={wrap}
             data-invalid={error && i === 0 ? "" : undefined}
             onClick={() => onChange(value === o.value && allowClear ? "" : o.value)}
           >
             {o.label}
-          </button>
+          </Chip>
         ))}
       </div>
       <ErrorText path={path} error={error} />
@@ -228,7 +301,7 @@ export const YES_NO = [
   { value: "no", label: "No" },
 ] as const;
 
-/** A yes/no toggle bound to a boolean. */
+/** A yes/no question bound to a boolean. */
 export function YesNo({
   path,
   legend,
@@ -245,6 +318,7 @@ export function YesNo({
   return <ChoiceChips path={path} legend={legend} hint={hint} options={YES_NO} value={value ? "yes" : "no"} onChange={(v) => onChange(v === "yes")} />;
 }
 
+/** A labelled switch — a whole row you can tap. */
 export function Check({
   path,
   label,
@@ -257,54 +331,65 @@ export function Check({
   onChange: (v: boolean) => void;
 }) {
   return (
-    <label className="body-md inline-flex cursor-pointer items-center gap-3 self-start text-white-80">
-      <input
-        id={fid(path)}
-        type="checkbox"
-        className="h-4 w-4 shrink-0 cursor-pointer"
-        style={{ accentColor: "var(--color-gold)" }}
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-      />
-      {label}
-    </label>
+    <button type="button" id={fid(path)} role="switch" aria-checked={checked} className="bio-switch-row body-md" onClick={() => onChange(!checked)}>
+      <span>{label}</span>
+      <span className="bio-switch" aria-hidden="true">
+        <span className="bio-switch-thumb" />
+      </span>
+    </button>
   );
 }
 
-/** Header row of one repeater entry: "Engagement 2" + move/remove controls. */
+const Chevron = ({ up }: { up?: boolean }) => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ transform: up ? "rotate(180deg)" : undefined }}>
+    <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/** Header row of one repeater entry: a numbered badge, the kind, and the move/remove controls. */
 export function EntryHead({
   title,
+  index,
   onRemove,
   onUp,
   onDown,
   removeLabel,
 }: {
   title: string;
+  index: number;
   onRemove?: () => void;
   onUp?: () => void;
   onDown?: () => void;
   removeLabel: string;
 }) {
+  const name = `${title} ${index + 1}`;
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3">
-      <span className="label flex items-center gap-3 text-white-60">
-        <span className="inline-block h-px w-6 bg-gold" aria-hidden="true" />
-        {title}
+    <div className="flex items-center justify-between gap-3">
+      <span className="flex items-center gap-3">
+        <span className="tabular flex h-7 w-7 items-center justify-center rounded-full bg-gold text-xs font-semibold text-blue-950" aria-hidden="true">
+          {index + 1}
+        </span>
+        <span className="label text-white-60">
+          {title}
+          <span className="sr-only"> {index + 1}</span>
+        </span>
       </span>
-      <span className="flex flex-wrap gap-2">
+      <span className="flex gap-1.5">
         {onUp && (
-          <button type="button" className="chip button" onClick={onUp} aria-label={`Move ${title} up`}>
-            ↑
+          <button type="button" className="bio-icon-btn" onClick={onUp} aria-label={`Move ${name} up`}>
+            <Chevron up />
           </button>
         )}
         {onDown && (
-          <button type="button" className="chip button" onClick={onDown} aria-label={`Move ${title} down`}>
-            ↓
+          <button type="button" className="bio-icon-btn" onClick={onDown} aria-label={`Move ${name} down`}>
+            <Chevron />
           </button>
         )}
         {onRemove && (
-          <button type="button" className="chip button" onClick={onRemove} aria-label={removeLabel}>
-            Remove
+          <button type="button" className="bio-icon-btn bio-icon-btn-danger" onClick={onRemove} aria-label={removeLabel}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" />
+            </svg>
           </button>
         )}
       </span>
@@ -318,15 +403,36 @@ export function AddButton({ onClick, children, disabled, path, error }: { onClic
       <button
         type="button"
         id={path ? fid(path) : undefined}
-        className="btn btn-ghost button self-start"
+        className="bio-add button"
         onClick={onClick}
         disabled={disabled}
         aria-describedby={error && path ? eid(path) : undefined}
         data-invalid={error ? "" : undefined}
       >
-        <span aria-hidden="true">+</span> {children}
+        <span className="bio-add-plus" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+        </span>
+        {children}
       </button>
       {path && <ErrorText path={path} error={error} />}
+    </div>
+  );
+}
+
+/** A small uppercase heading over a cluster of questions inside a step. */
+export function Cluster({ title, children, hint }: { title: string; hint?: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <span className="label flex items-center gap-3 text-white-60">
+          <span className="inline-block h-px w-6 bg-gold" aria-hidden="true" />
+          {title}
+        </span>
+        {hint && <span className="body-sm text-white-40">{hint}</span>}
+      </div>
+      {children}
     </div>
   );
 }
