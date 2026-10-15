@@ -421,6 +421,67 @@ export function AddButton({ onClick, children, disabled, path, error }: { onClic
   );
 }
 
+/**
+ * The escape hatch on a required question: "Not sure? Leave it for Matt."
+ * `value` is null while the question is answered normally and the note
+ * (possibly "") once it has been left open. As a link it sits under a
+ * field; as a switch it heads a whole list ("nothing to list here").
+ */
+export function LeaveForMatt({
+  path,
+  prompt,
+  hint,
+  value,
+  onChange,
+  variant = "link",
+  example,
+}: {
+  path: string;
+  /** The link text, or the switch row's label. */
+  prompt: string;
+  /** Under the switch row, or in the open box: what happens next. */
+  hint?: string;
+  value: string | null;
+  onChange: (v: string | null) => void;
+  variant?: "link" | "switch";
+  example?: string;
+}) {
+  const open = value != null;
+  const note = (
+    <div className="bio-note bio-note-gold bio-rise flex flex-col gap-3 p-4">
+      <div className="flex items-start justify-between gap-3">
+        <span className="label flex items-center gap-2 text-gold">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 20h16M4 4h16M9 4v3a3 3 0 006 0V4M9 20v-3a3 3 0 016 0v3" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          Left for Matt
+        </span>
+        {variant === "link" && (
+          <button type="button" className="link-underline body-sm text-white-50" onClick={() => onChange(null)}>
+            I can answer this
+          </button>
+        )}
+      </div>
+      <p className="body-sm text-white-60">{hint ?? "Matt will ask you before he drafts. Anything you do know helps:"}</p>
+      <TextField path={`open_questions.${path}`} label="What you do know (optional)" value={value ?? ""} chars={400} example={example} onChange={(v) => onChange(v)} />
+    </div>
+  );
+  if (variant === "switch") {
+    return (
+      <div className="flex flex-col gap-3">
+        <Check path={`open_questions.${path}.switch`} label={prompt} checked={open} onChange={(on) => onChange(on ? "" : null)} />
+        {open && note}
+      </div>
+    );
+  }
+  if (open) return note;
+  return (
+    <button type="button" className="link-underline body-sm self-start px-1 text-white-40 hover:text-gold" onClick={() => onChange("")}>
+      {prompt}
+    </button>
+  );
+}
+
 /** A small uppercase heading over a cluster of questions inside a step. */
 export function Cluster({ title, children, hint }: { title: string; hint?: React.ReactNode; children: React.ReactNode }) {
   return (

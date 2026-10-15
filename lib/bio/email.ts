@@ -8,7 +8,7 @@
 
 import { CAN_NAME, CONCURRENT_ROLE_TYPES, HEADSHOT_CHOICES, LEADERSHIP_MODES, PRONOUNS } from "./options";
 import { fullName, type BioFile } from "./build";
-import type { BioIntakeData } from "./schema";
+import { OPEN_QUESTIONS, type BioIntakeData } from "./schema";
 
 export const JSON_BEGIN = "----- BEGIN BIO JSON -----";
 export const JSON_END = "----- END BIO JSON -----";
@@ -135,7 +135,13 @@ export function newNames(d: BioIntakeData): string[] {
 export function emailSubject(file: BioFile): string {
   const d = file.data;
   const title = d.basics.title + (d.basics.title_specialization ? `, ${d.basics.title_specialization}` : "");
-  return `Bio intake — ${fullName(d)}, ${title}${file.submission.revision_of ? " (revision)" : ""}`;
+  const open = d.open_questions.length;
+  return `Bio intake — ${fullName(d)}, ${title}${file.submission.revision_of ? " (revision)" : ""}${open ? ` · ${open} open ${open === 1 ? "question" : "questions"}` : ""}`;
+}
+
+/** What the person left for Matt, as "- label: note" lines. */
+export function openQuestionLines(d: BioIntakeData): string[] {
+  return d.open_questions.map((q) => `- ${OPEN_QUESTIONS[q.field]}${q.note ? `: ${q.note}` : " (nothing added)"}`);
 }
 
 /** The full body Matt receives. `json` is the pretty-printed file, identical to the attachment. */
@@ -147,6 +153,7 @@ export function renderEmail(file: BioFile, json: string, opts: { headshot?: stri
   const text = [
     `${fullName(d)} submitted a bio intake${s.revision_of ? ` (a revision of ${s.revision_of})` : ""}.`,
     `Attached: the JSON file${opts.headshot ? ` and a headshot (${opts.headshot})` : ""}. Drop the file into Claude and send “Generate bios.”`,
+    ...(d.open_questions.length ? ["", "OPEN QUESTIONS — ASK BEFORE DRAFTING", "", ...openQuestionLines(d)] : []),
     "",
     renderSummary(d),
     "",

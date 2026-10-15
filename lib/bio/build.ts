@@ -5,11 +5,12 @@
  *   sanitize (server only) → normalizeData → prune → validate → finalize → buildBioJson
  */
 
-import { BIO_GENERATOR_V1 } from "./generator";
+import { BIO_GENERATOR_V2 } from "./generator";
 import { LIMITS } from "./options";
 import { isNewEmployer, isNewInstitution, normalizeData } from "./normalize";
 import {
   emptyData,
+  isOpenQuestionField,
   movesOut,
   prune,
   SCHEMA_ID,
@@ -33,7 +34,7 @@ export interface SubmissionMeta {
 
 export interface BioFile {
   schema: typeof SCHEMA_ID;
-  instructions: typeof BIO_GENERATOR_V1;
+  instructions: typeof BIO_GENERATOR_V2;
   submission: SubmissionMeta;
   data: BioIntakeData;
 }
@@ -93,7 +94,7 @@ export function prepare(raw: BioIntakeData, ctx: ValidateContext = {}): { data: 
 }
 
 export function buildBioJson(data: BioIntakeData, meta: SubmissionMeta): BioFile {
-  return { schema: SCHEMA_ID, instructions: BIO_GENERATOR_V1, submission: meta, data };
+  return { schema: SCHEMA_ID, instructions: BIO_GENERATOR_V2, submission: meta, data };
 }
 
 export function slugifyName(s: string): string {
@@ -255,6 +256,10 @@ export function sanitize(input: unknown): BioIntakeData {
     do_not_mention: str(x.do_not_mention),
     notes_to_matt: str(x.notes_to_matt, 4000),
   };
+
+  d.open_questions = objs(i.open_questions)
+    .map((q) => ({ field: str(q.field, 60), note: str(q.note, 1000) }))
+    .filter((q): q is BioIntakeData["open_questions"][number] => isOpenQuestionField(q.field));
 
   return d;
 }

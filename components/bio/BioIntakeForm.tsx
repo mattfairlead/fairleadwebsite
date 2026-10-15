@@ -6,7 +6,7 @@ import Portrait from "@/components/Portrait";
 import { ARROW } from "@/components/Btn";
 import PickGroup from "@/components/bio/PickGroup";
 import ReviewSummary from "@/components/bio/ReviewSummary";
-import { AddButton, Check, CheckGlyph, ChoiceChips, Cluster, EntryHead, ErrorText, fid, TextField, Validity, YearField, YesNo } from "@/components/bio/fields";
+import { AddButton, Check, CheckGlyph, ChoiceChips, Cluster, EntryHead, ErrorText, fid, LeaveForMatt, TextField, Validity, YearField, YesNo } from "@/components/bio/fields";
 import {
   AFFILIATION_ROLES,
   AFFILIATION_TYPES,
@@ -35,7 +35,7 @@ import {
   TITLES,
 } from "@/lib/bio/options";
 import { canonicalEmployer, canonicalInstitution, cleanText, employerDescriptor, normEmail, normLabel, normLinkedIn, normName } from "@/lib/bio/normalize";
-import { SECTIONS, SHOW, sectionOf, type FieldErrors, type RosterMember, type SectionId } from "@/lib/bio/schema";
+import { isBlankEngagement, isBlankPriorRole, SECTIONS, SHOW, sectionOf, type FieldErrors, type OpenQuestionField, type RosterMember, type SectionId } from "@/lib/bio/schema";
 import { bioFilename, buildBioJson, prefillFor, prepare, type BioFile } from "@/lib/bio/build";
 import { JSON_BEGIN, JSON_END } from "@/lib/bio/email";
 import {
@@ -248,6 +248,14 @@ export default function BioIntakeForm({
         if (s !== undefined) dr.stash[o.skey] = s;
       }),
   });
+
+  /** An open question's note, or null while the question is answered normally. */
+  const openNote = (field: OpenQuestionField): string | null => draft.data.open_questions.find((q) => q.field === field)?.note ?? null;
+  const setOpen = (field: OpenQuestionField, note: string | null) =>
+    update((x) => {
+      x.open_questions = x.open_questions.filter((q) => q.field !== field);
+      if (note != null) x.open_questions.push({ field, note });
+    });
 
   /** Mutate one keyed repeater entry. */
   const entry = <T,>(list: (d: DraftData) => Keyed<T>[], k: string, fn: (e: Keyed<T>, d: DraftData) => void) =>
@@ -859,7 +867,9 @@ export default function BioIntakeForm({
   const stepCopy: Record<SectionId, { title: string; intro: React.ReactNode }> = {
     basics: {
       title: firstName ? `Hi, ${firstName}. First, the basics.` : "First, the basics.",
-      intro: member ? "We’ve filled in what the website says. Fix anything that’s off and fill the gaps." : "Who you are and how the bio should refer to you.",
+      intro: member
+        ? "We’ve filled in what the website says. Fix anything that’s off and fill the gaps. Not sure about something? Every required question has a “leave it for Matt” link."
+        : "Who you are and how the bio should refer to you. Not sure about something? Every required question has a “leave it for Matt” link.",
     },
     role: { title: "What you do at Fairlead", intro: "Mostly tapping, not typing. Pick from the lists; use Other… only when nothing fits." },
     work: {
@@ -1108,7 +1118,11 @@ export default function BioIntakeForm({
               <YearField path="basics.year_joined_fairlead" label="Year you joined Fairlead" required value={b.year_joined_fairlead} error={err("basics.year_joined_fairlead")} onChange={(v) => update((x) => (x.basics.year_joined_fairlead = v))} />
               <YearField path="basics.career_start_year" label="Year your career started" required value={b.career_start_year} error={err("basics.career_start_year")} onChange={(v) => update((x) => (x.basics.career_start_year = v))} />
             </div>
-            <p className="body-sm -mt-4 px-1 text-white-40">We turn the start year into “more than N years” when the bio is written, so it never goes stale.</p>
+            <p className="body-sm -mt-4 px-1 text-white-40">We turn the start year into “more than N years” when the bio is written, so it never goes stale. A best guess is fine.</p>
+            <div className="-mt-4 flex flex-col gap-3">
+              <LeaveForMatt path="basics.year_joined_fairlead" prompt="Not sure when you joined? Leave it for Matt" value={openNote("basics.year_joined_fairlead")} onChange={(v) => setOpen("basics.year_joined_fairlead", v)} example="e.g. “Started on projects in 2019, formally in 2020”" />
+              <LeaveForMatt path="basics.career_start_year" prompt="Not sure when your career started? Leave it for Matt" value={openNote("basics.career_start_year")} onChange={(v) => setOpen("basics.career_start_year", v)} example="e.g. “First finance job was around 1998”" />
+            </div>
             <div className="grid gap-4 md:grid-cols-2">
               <TextField path="basics.location" label="City" example="e.g. Houston" value={b.location} chars={LIMITS.short} normalize={sentence} error={err("basics.location")} onChange={(v) => update((x) => (x.basics.location = v))} inputProps={{ autoComplete: "address-level2" }} />
               <TextField
@@ -1146,6 +1160,7 @@ export default function BioIntakeForm({
                 },
               })}
             />
+            <LeaveForMatt path="fairlead_role.service_lines" prompt="None of these fit? Leave it for Matt" value={openNote("fairlead_role.service_lines")} onChange={(v) => setOpen("fairlead_role.service_lines", v)} example="e.g. “I run the back office rather than client work”" />
             {SHOW.supportingAreas(r) && (
               <PickGroup
                 legend="Supporting services"
@@ -1214,6 +1229,7 @@ export default function BioIntakeForm({
                 })}
               />
               {member?.specialty && <p className="body-sm text-white-40">On the website today: {member.specialty}</p>}
+              <LeaveForMatt path="fairlead_role.focus_areas" prompt="Can’t find three that fit? Leave it for Matt" value={openNote("fairlead_role.focus_areas")} onChange={(v) => setOpen("fairlead_role.focus_areas", v)} example="e.g. “Mostly scheduling, onboarding and vendor management”" />
             </div>
             <PickGroup
               legend="Sectors"
@@ -1258,6 +1274,7 @@ export default function BioIntakeForm({
               error={err("fairlead_role.value_statement")}
               onChange={(v) => update((x) => (x.fairlead_role.value_statement = v))}
             />
+            <LeaveForMatt path="fairlead_role.value_statement" prompt="Hard to put into words, or doesn’t apply to your role? Leave it for Matt" value={openNote("fairlead_role.value_statement")} onChange={(v) => setOpen("fairlead_role.value_statement", v)} example="e.g. “I keep the firm running so the partners can be in the field”" />
           </>
         )}
 
@@ -1265,7 +1282,17 @@ export default function BioIntakeForm({
         {sectionFrame(
           "work",
           <>
-            {d.recent_engagements.map((e, i) => {
+            <LeaveForMatt
+              variant="switch"
+              path="recent_engagements"
+              prompt="I don’t have a Fairlead engagement to list yet"
+              hint="New, between engagements, or not client-facing? Matt will write around it. Anything worth knowing:"
+              value={openNote("recent_engagements")}
+              onChange={(v) => setOpen("recent_engagements", v)}
+              example="e.g. “Joined in September — first engagement starts next month”"
+            />
+            {(openNote("recent_engagements") == null || d.recent_engagements.some((e) => !isBlankEngagement(e))) &&
+            d.recent_engagements.map((e, i) => {
               const p = `recent_engagements.${i}`;
               const set = (fn: (x: Keyed<typeof e>) => void) => entry((x) => x.recent_engagements, e._k, fn);
               const pub = e.can_name_publicly === "yes";
@@ -1382,14 +1409,16 @@ export default function BioIntakeForm({
                 </div>
               );
             })}
-            <AddButton
-              path="recent_engagements"
-              error={err("recent_engagements")}
-              disabled={d.recent_engagements.length >= LIMITS.engagements}
-              onClick={() => update((x) => x.recent_engagements.push(newEngagement()))}
-            >
-              Add an engagement
-            </AddButton>
+            {openNote("recent_engagements") == null && (
+              <AddButton
+                path="recent_engagements"
+                error={err("recent_engagements")}
+                disabled={d.recent_engagements.length >= LIMITS.engagements}
+                onClick={() => update((x) => x.recent_engagements.push(newEngagement()))}
+              >
+                Add an engagement
+              </AddButton>
+            )}
             <datalist id="bio-companies">
               {companies.map((c) => (
                 <option key={c} value={c} />
@@ -1402,7 +1431,17 @@ export default function BioIntakeForm({
         {sectionFrame(
           "career",
           <>
-            {d.prior_roles.map((pr, i) => {
+            <LeaveForMatt
+              variant="switch"
+              path="prior_roles"
+              prompt="No roles before Fairlead to list"
+              hint="Came straight from school, or not sure what counts? Matt will sort it out. Anything worth knowing:"
+              value={openNote("prior_roles")}
+              onChange={(v) => setOpen("prior_roles", v)}
+              example="e.g. “Internships only, at two banks”"
+            />
+            {(openNote("prior_roles") == null || d.prior_roles.some((p) => !isBlankPriorRole(p))) &&
+            d.prior_roles.map((pr, i) => {
               const p = `prior_roles.${i}`;
               const set = (fn: (x: Keyed<typeof pr>, dd: DraftData) => void) => entry((x) => x.prior_roles, pr._k, fn);
               return (
@@ -1501,9 +1540,11 @@ export default function BioIntakeForm({
                 </div>
               );
             })}
-            <AddButton path="prior_roles" error={err("prior_roles")} disabled={d.prior_roles.length >= LIMITS.prior_roles} onClick={() => update((x) => x.prior_roles.push(newPriorRole()))}>
-              Add a role
-            </AddButton>
+            {openNote("prior_roles") == null && (
+              <AddButton path="prior_roles" error={err("prior_roles")} disabled={d.prior_roles.length >= LIMITS.prior_roles} onClick={() => update((x) => x.prior_roles.push(newPriorRole()))}>
+                Add a role
+              </AddButton>
+            )}
             <TextField
               path="earlier_career"
               label="Earlier career, in a sentence (optional)"
