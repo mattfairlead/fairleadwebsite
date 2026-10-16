@@ -1,12 +1,14 @@
 /**
- * BIO_GENERATOR_V1 — the `instructions` block copied into every intake file
+ * BIO_GENERATOR_V2 — the `instructions` block copied into every intake file
  * (PRD §7). This file is the source of truth: /api/bio and the page's
  * Download fallback both copy it in, so a file always carries the rules it
- * was written against. Changing a word here means bumping to v2.
+ * was written against. Changing a word here means bumping the version.
+ *
+ * v2: `data.open_questions` — questions the person left for Matt.
  */
 
-export const BIO_GENERATOR_V1 = {
-  version: "bio-generator/v1",
+export const BIO_GENERATOR_V2 = {
+  version: "bio-generator/v2",
   task: "Write this person's Fairlead Advisors bio in the exact formats in `outputs`, following every rule in `style`. Return ONLY the JSON object described in `return_format`. If several of these files are provided, return an array with one object per file, in the order given.",
   outputs: {
     card: "Line 1: '{Full name}' + ', {active credentials}' if any. Line 2: Fairlead title (+ ', {title_specialization}'). Line 3: focus_areas joined with ', '. This is the deck slide format.",
@@ -32,6 +34,7 @@ export const BIO_GENERATOR_V1 = {
     "Do not mention outside_firm or anything in do_not_mention.",
     "Title comes from data.basics.title exactly; never describe the person with a different title.",
     "Use only facts present in `data`. Do not add employers, degrees, numbers, or clients. If something essential is missing, say so in `flags` rather than filling the gap.",
+    "`data.open_questions` lists required questions the person could not answer, each with anything they did know in `note`. Never fill one in from other fields or outside knowledge: write around the gap, and list each in `flags` as 'open question: {field} - {note}'.",
     "American English, Oxford comma, '$1.9 billion' / '$300 million' in prose, 'MW' for megawatts, no exclamation marks, no first person.",
   ],
   return_format: {

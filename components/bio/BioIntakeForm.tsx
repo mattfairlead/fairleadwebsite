@@ -6,7 +6,7 @@ import Portrait from "@/components/Portrait";
 import { ARROW } from "@/components/Btn";
 import PickGroup from "@/components/bio/PickGroup";
 import ReviewSummary from "@/components/bio/ReviewSummary";
-import { AddButton, Check, CheckGlyph, ChoiceChips, Cluster, EntryHead, ErrorText, fid, TextField, Validity, YearField, YesNo } from "@/components/bio/fields";
+import { AddButton, Check, CheckGlyph, ChoiceChips, Cluster, EntryHead, ErrorText, fid, LeaveForMatt, TextField, Validity, YearField, YesNo } from "@/components/bio/fields";
 import {
   AFFILIATION_ROLES,
   AFFILIATION_TYPES,
@@ -35,7 +35,7 @@ import {
   TITLES,
 } from "@/lib/bio/options";
 import { canonicalEmployer, canonicalInstitution, cleanText, employerDescriptor, normEmail, normLabel, normLinkedIn, normName } from "@/lib/bio/normalize";
-import { SECTIONS, SHOW, sectionOf, type FieldErrors, type RosterMember, type SectionId } from "@/lib/bio/schema";
+import { isBlankEngagement, isBlankPriorRole, SECTIONS, SHOW, sectionOf, type FieldErrors, type OpenQuestionField, type RosterMember, type SectionId } from "@/lib/bio/schema";
 import { bioFilename, buildBioJson, prefillFor, prepare, type BioFile } from "@/lib/bio/build";
 import { JSON_BEGIN, JSON_END } from "@/lib/bio/email";
 import {
@@ -164,6 +164,8 @@ export default function BioIntakeForm({
   const [announce, setAnnounce] = useState("");
   const [step, setStep] = useState<SectionId>("basics");
   const [seen, setSeen] = useState<Partial<Record<SectionId, true>>>({});
+  const [tried, setTried] = useState<Partial<Record<SectionId, true>>>({});
+  const [shake, setShake] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [filter, setFilter] = useState("");
@@ -247,6 +249,14 @@ export default function BioIntakeForm({
       }),
   });
 
+  /** An open question's note, or null while the question is answered normally. */
+  const openNote = (field: OpenQuestionField): string | null => draft.data.open_questions.find((q) => q.field === field)?.note ?? null;
+  const setOpen = (field: OpenQuestionField, note: string | null) =>
+    update((x) => {
+      x.open_questions = x.open_questions.filter((q) => q.field !== field);
+      if (note != null) x.open_questions.push({ field, note });
+    });
+
   /** Mutate one keyed repeater entry. */
   const entry = <T,>(list: (d: DraftData) => Keyed<T>[], k: string, fn: (e: Keyed<T>, d: DraftData) => void) =>
     update((d) => {
@@ -292,6 +302,7 @@ export default function BioIntakeForm({
       const blocked = SECTIONS.find((sec) => bySection[sec.id] > 0);
       if (blocked) {
         setAttempted(true);
+        setTried((v) => ({ ...v, [blocked.id]: true }));
         setAnnounce(`${errorCount} ${errorCount === 1 ? "answer needs" : "answers need"} attention. Taking you to the first one.`);
         setStep(blocked.id);
         setStage("form");
@@ -318,6 +329,33 @@ export default function BioIntakeForm({
     }, 140);
   }
 
+  /**
+   * Next. Unlike the rail and Back (free to use), Next checks the current
+   * step first: anything missing is highlighted, listed under the buttons
+   * and the first one takes focus — nobody finds out at Review.
+   */
+  function advance() {
+    const left = bySection[step];
+    if (left > 0) {
+      setSeen((v) => ({ ...v, [step]: true }));
+      setTried((v) => ({ ...v, [step]: true }));
+      setShake((n) => n + 1);
+      setAnnounce(`${left} ${left === 1 ? "answer is" : "answers are"} still needed on this step. Taking you to the first one.`);
+      setFocusFirst((n) => n + 1);
+      return;
+    }
+    setAnnounce("");
+    go(nextStep ? nextStep.id : "review");
+  }
+
+  /** Scroll to and focus the control for one data path (the "still needed" list). */
+  function focusPath(path: string) {
+    const el = document.getElementById(fid(path));
+    if (!el) return;
+    el.scrollIntoView({ block: "center", behavior: "smooth" });
+    el.focus({ preventScroll: true });
+  }
+
   function chooseMember(m: RosterMember | null) {
     setDraft((prev) => {
       if (m) return prefillFromRoster(prev, m);
@@ -339,6 +377,7 @@ export default function BioIntakeForm({
     setConfirmReset(false);
     setStep("basics");
     setSeen({});
+    setTried({});
     setFilter("");
     setSaveState("idle");
     writeSaved({ v: 1, draft: null, last_submission_id: lastId });
@@ -387,6 +426,7 @@ export default function BioIntakeForm({
         setAttempted(false);
         setTouched({});
         setSeen({});
+        setTried({});
         setStep("basics");
         setStage("done");
         return;
@@ -496,7 +536,7 @@ export default function BioIntakeForm({
     return (
       <div className="bio">
         <div className="bio-panel bio-step-in">
-          <div className="flex flex-col gap-10 p-6 md:p-12">
+          <div className="flex flex-col gap-10 p-4 sm:p-8 md:p-12 max-sm:gap-8">
             <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-end">
               <div className="flex flex-col gap-3">
                 <span className="label flex items-center gap-3 text-white-50">
@@ -527,10 +567,10 @@ export default function BioIntakeForm({
             </div>
             <fieldset className="flex flex-col gap-4">
               <legend className="sr-only">The team</legend>
-              <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3" aria-live="polite">
+              <ul className="grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 xl:grid-cols-3" aria-live="polite">
                 {matches.map((m, i) => (
-                  <li key={m.id} className="bio-rise" style={{ animationDelay: `${Math.min(i * 30, 280)}ms` }}>
-                    <button type="button" className="bio-person group" aria-pressed={b.roster_match === m.id} onClick={() => chooseMember(m)}>
+                  <li key={m.id} className="bio-rise min-w-0" style={{ animationDelay: `${Math.min(i * 30, 280)}ms` }}>
+                    <button type="button" className="bio-person group min-w-0" aria-pressed={b.roster_match === m.id} onClick={() => chooseMember(m)}>
                       <Portrait name={m.name} src={m.photo_url ?? null} size="sm" />
                       <span className="flex min-w-0 flex-col gap-0.5">
                         <span className="body-md truncate text-white-100">{m.name}</span>
@@ -542,7 +582,7 @@ export default function BioIntakeForm({
                     </button>
                   </li>
                 ))}
-                <li className="bio-rise" style={{ animationDelay: `${Math.min(matches.length * 30, 280)}ms` }}>
+                <li className="bio-rise min-w-0" style={{ animationDelay: `${Math.min(matches.length * 30, 280)}ms` }}>
                   <button type="button" className="bio-person bio-person-dashed group" aria-pressed={b.roster_match === "not_listed"} onClick={() => chooseMember(null)}>
                     <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/5 text-white-60" aria-hidden="true">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -581,7 +621,7 @@ export default function BioIntakeForm({
     return (
       <div className="bio">
         <div className="bio-panel bio-step-in">
-          <div className="flex flex-col gap-10 p-6 md:p-12" role="status" aria-live="polite">
+          <div className="flex flex-col gap-10 p-4 sm:p-8 md:p-12 max-sm:gap-8" role="status" aria-live="polite">
             <div className="flex flex-col gap-6">
               <span className="bio-pop relative flex h-16 w-16 items-center justify-center rounded-full bg-gold text-blue-950" style={{ boxShadow: "0 12px 40px -8px rgba(213,179,113,0.7)" }} aria-hidden="true">
                 <span className="bio-burst" />
@@ -626,7 +666,7 @@ export default function BioIntakeForm({
     return (
       <div ref={rootRef} className="bio flex flex-col gap-8">
         <div className="bio-panel bio-step-in">
-          <div className="flex flex-col gap-8 p-6 md:p-12">
+          <div className="flex flex-col gap-8 p-4 sm:p-8 md:p-12">
             <div className="flex flex-col gap-3">
               <span className="label flex items-center gap-3 text-white-50">
                 <span className="inline-block h-px w-8 bg-gold" aria-hidden="true" />
@@ -709,8 +749,8 @@ export default function BioIntakeForm({
               value={honey}
               onChange={(e) => setHoney(e.target.value)}
             />
-            <div className="flex flex-wrap items-center gap-3">
-              <button type="button" className="btn btn-ghost button" onClick={() => go(SECTIONS[SECTIONS.length - 1].id)} disabled={busy}>
+            <div className="flex flex-wrap items-center gap-3 max-sm:flex-col-reverse max-sm:items-stretch">
+              <button type="button" className="btn btn-ghost button max-sm:min-h-12" onClick={() => go(SECTIONS[SECTIONS.length - 1].id)} disabled={busy}>
                 ← Back
               </button>
               <button type="button" className="btn btn-primary button" onClick={submit} disabled={busy}>
@@ -775,14 +815,8 @@ export default function BioIntakeForm({
   );
 
   const rail = (
-    <nav aria-label="Steps" className="flex flex-col gap-5">
+    <nav aria-label="Steps" className="flex flex-col gap-5 max-lg:gap-3">
       <div className="max-lg:hidden">{ring}</div>
-      <div className="flex items-center justify-between gap-4 lg:hidden">
-        <span className="label text-white-50">{progress === 100 ? "Ready to send" : `Essentials · ${progress}%`}</span>
-        <span className="body-sm tabular text-white-40">
-          Step {stepIndex + 1} of {SECTIONS.length}
-        </span>
-      </div>
       <div className="bio-bar lg:hidden" role="progressbar" aria-label="Essentials answered" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}>
         <div className="bio-bar-fill" style={{ width: `${Math.max(progress, 2)}%` }} />
       </div>
@@ -797,7 +831,7 @@ export default function BioIntakeForm({
                 <span className={clsx("bio-step-dot tabular", complete && "is-done")} aria-hidden="true">
                   {complete ? <CheckGlyph key="c" size={12} stroke={3} className="bio-pop" /> : i + 1}
                 </span>
-                <span className={clsx("bio-step-title whitespace-nowrap", !current && "max-lg:sr-only")}>{sec.title}</span>
+                <span className="bio-step-title whitespace-nowrap max-lg:sr-only">{sec.title}</span>
                 {!complete && (attempted || seen[sec.id]) && (
                   <span className="bio-step-count tabular max-lg:hidden" aria-hidden="true">
                     {n} left
@@ -809,7 +843,14 @@ export default function BioIntakeForm({
           );
         })}
       </ol>
-      <p className="body-sm text-white-40 max-lg:hidden">Jump around in any order. Only Review checks everything.</p>
+      <div className="body-sm flex items-baseline justify-between gap-3 lg:hidden" aria-hidden="true">
+        <span className="min-w-0 truncate text-white-80">
+          <span className="text-white-40">Step {stepIndex + 1} of {SECTIONS.length} · </span>
+          {SECTIONS[stepIndex].title}
+        </span>
+        <span className={clsx("tabular shrink-0", progress === 100 ? "text-gold" : "text-white-40")}>{progress === 100 ? "Ready to send" : `${progress}%`}</span>
+      </div>
+      <p className="body-sm text-white-40 max-lg:hidden">Each step checks itself before you move on. Jump back any time.</p>
     </nav>
   );
 
@@ -826,7 +867,9 @@ export default function BioIntakeForm({
   const stepCopy: Record<SectionId, { title: string; intro: React.ReactNode }> = {
     basics: {
       title: firstName ? `Hi, ${firstName}. First, the basics.` : "First, the basics.",
-      intro: member ? "We’ve filled in what the website says. Fix anything that’s off and fill the gaps." : "Who you are and how the bio should refer to you.",
+      intro: member
+        ? "We’ve filled in what the website says. Fix anything that’s off and fill the gaps. Not sure about something? Every required question has a “leave it for Matt” link."
+        : "Who you are and how the bio should refer to you. Not sure about something? Every required question has a “leave it for Matt” link.",
     },
     role: { title: "What you do at Fairlead", intro: "Mostly tapping, not typing. Pick from the lists; use Other… only when nothing fits." },
     work: {
@@ -841,10 +884,12 @@ export default function BioIntakeForm({
   const sectionFrame = (id: SectionId, children: React.ReactNode) => {
     if (id !== step) return null;
     const left = bySection[id];
+    const refused = !!tried[id] && left > 0;
+    const needed = refused ? Object.entries(errors).filter(([path]) => sectionOf(path) === id) : [];
     return (
       <section id={`s-${id}`} aria-labelledby={`h-${id}`} className={clsx("flex flex-col gap-6", leaving ? "bio-step-out" : "bio-step-in")}>
         <div className="bio-panel">
-          <div className="flex flex-col gap-10 p-5 sm:p-8 md:p-12">
+          <div className="flex flex-col gap-10 p-4 sm:p-8 md:p-12 max-sm:gap-8">
             <div className="flex flex-col gap-3">
               <span className="label flex items-center gap-3 text-white-50">
                 <span className="inline-block h-px w-8 bg-gold" aria-hidden="true" />
@@ -866,20 +911,43 @@ export default function BioIntakeForm({
                 <CheckGlyph size={14} />
                 {id === "extras" ? "All set — review whenever you’re ready." : "This step is done."}
               </span>
+            ) : refused ? (
+              <span key="refused" className="bio-saved inline-flex items-center gap-2 text-gold">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.75" />
+                  <path d="M12 7.5v5.5M12 16.25v.25" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+                {left === 1 ? "One answer is still needed before you move on." : `${left} answers are still needed before you move on.`}
+              </span>
             ) : (
               <span className="text-white-40">
-                {left} {left === 1 ? "thing" : "things"} still to answer here — fine to come back to it.
+                {left} {left === 1 ? "answer" : "answers"} still needed on this step.
               </span>
             )}
           </p>
-          <div className="flex flex-wrap items-center gap-3">
-            <button type="button" className="btn btn-ghost button" onClick={() => (prevStep ? go(prevStep.id) : setStage("start"))}>
+          {refused && (
+            <div className="bio-note bio-note-gold bio-rise flex flex-col gap-3 p-4">
+              <span className="label text-gold">Still needed</span>
+              <ul className="flex flex-col gap-1.5">
+                {needed.map(([path, msg]) => (
+                  <li key={path} className="body-sm flex gap-3 text-white-80">
+                    <span className="mt-[0.45rem] inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-gold/80" aria-hidden="true" />
+                    <button type="button" className="link-underline text-left" onClick={() => focusPath(path)}>
+                      {msg}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <div className="flex flex-wrap items-center gap-3 max-sm:flex-col max-sm:items-stretch">
+            <button type="button" className="btn btn-ghost button max-sm:order-2 max-sm:min-h-12" onClick={() => (prevStep ? go(prevStep.id) : setStage("start"))}>
               ← Back
             </button>
-            <button type="button" className="btn btn-primary button" onClick={() => go(nextStep ? nextStep.id : "review")}>
+            <button key={shake} type="button" className={clsx("btn btn-primary button max-sm:order-1", shake > 0 && refused && "bio-shake")} onClick={advance}>
               {nextStep ? `Next: ${nextStep.title}` : "Review my answers"} {ARROW}
             </button>
-            <span className="body-sm ml-auto flex items-center gap-4 max-sm:ml-0 max-sm:w-full">
+            <span className="body-sm ml-auto flex items-center gap-4 max-sm:order-3 max-sm:ml-0 max-sm:w-full max-sm:justify-center">
               {savedLabel}
               <span className="flex items-center gap-1 text-white-40 max-lg:hidden">
                 <kbd className="bio-kbd">⌘</kbd>
@@ -892,13 +960,13 @@ export default function BioIntakeForm({
     );
   };
 
-  const entryBox = (children: React.ReactNode) => <div className="bio-entry flex flex-col gap-6 p-4 sm:p-6">{children}</div>;
+  const entryBox = (children: React.ReactNode) => <div className="bio-entry flex flex-col gap-6 p-3.5 sm:p-6">{children}</div>;
 
   return (
     <Validity.Provider value={errors}>
     <div
       ref={rootRef}
-      className="bio grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-12 [&_*]:scroll-mt-52 lg:[&_*]:scroll-mt-28"
+      className="bio grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-12 [&_*]:scroll-mt-44 lg:[&_*]:scroll-mt-28"
       onBlurCapture={(e) => {
         const id = (e.target as HTMLElement).id;
         if (id && !touched[id]) setTouched((t) => ({ ...t, [id]: true }));
@@ -906,7 +974,7 @@ export default function BioIntakeForm({
       onKeyDown={(e) => {
         if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
           e.preventDefault();
-          go(nextStep ? nextStep.id : "review");
+          advance();
         }
       }}
     >
@@ -971,7 +1039,7 @@ export default function BioIntakeForm({
               {member && <Portrait name={member.name} src={member.photo_url ?? null} size="sm" className="!h-10 !w-10" />}
               <span className="body-md flex min-w-0 flex-1 flex-col text-white-80">
                 <span>{b.roster_match === "not_listed" ? "Not on the website yet" : member ? member.name : "Not matched to the roster"}</span>
-                <span className="body-sm text-white-40">{b.roster_match === "not_listed" ? "Starting fresh" : member ? "Matched on the website — details filled in below" : "Pick yourself to prefill"}</span>
+                <span className="body-sm text-white-40">{b.roster_match === "not_listed" ? "Starting fresh" : member ? "Matched on the website" : "Pick yourself to prefill"}</span>
               </span>
               <button
                 type="button"
@@ -1046,11 +1114,15 @@ export default function BioIntakeForm({
                 onChange={(v) => update((x) => (x.basics.title_specialization = v))}
               />
             )}
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
               <YearField path="basics.year_joined_fairlead" label="Year you joined Fairlead" required value={b.year_joined_fairlead} error={err("basics.year_joined_fairlead")} onChange={(v) => update((x) => (x.basics.year_joined_fairlead = v))} />
               <YearField path="basics.career_start_year" label="Year your career started" required value={b.career_start_year} error={err("basics.career_start_year")} onChange={(v) => update((x) => (x.basics.career_start_year = v))} />
             </div>
-            <p className="body-sm -mt-4 px-1 text-white-40">We turn the start year into “more than N years” when the bio is written, so it never goes stale.</p>
+            <p className="body-sm -mt-4 px-1 text-white-40">We turn the start year into “more than N years” when the bio is written, so it never goes stale. A best guess is fine.</p>
+            <div className="-mt-4 flex flex-col gap-3">
+              <LeaveForMatt path="basics.year_joined_fairlead" prompt="Not sure when you joined? Leave it for Matt" value={openNote("basics.year_joined_fairlead")} onChange={(v) => setOpen("basics.year_joined_fairlead", v)} example="e.g. “Started on projects in 2019, formally in 2020”" />
+              <LeaveForMatt path="basics.career_start_year" prompt="Not sure when your career started? Leave it for Matt" value={openNote("basics.career_start_year")} onChange={(v) => setOpen("basics.career_start_year", v)} example="e.g. “First finance job was around 1998”" />
+            </div>
             <div className="grid gap-4 md:grid-cols-2">
               <TextField path="basics.location" label="City" example="e.g. Houston" value={b.location} chars={LIMITS.short} normalize={sentence} error={err("basics.location")} onChange={(v) => update((x) => (x.basics.location = v))} inputProps={{ autoComplete: "address-level2" }} />
               <TextField
@@ -1088,6 +1160,7 @@ export default function BioIntakeForm({
                 },
               })}
             />
+            <LeaveForMatt path="fairlead_role.service_lines" prompt="None of these fit? Leave it for Matt" value={openNote("fairlead_role.service_lines")} onChange={(v) => setOpen("fairlead_role.service_lines", v)} example="e.g. “I run the back office rather than client work”" />
             {SHOW.supportingAreas(r) && (
               <PickGroup
                 legend="Supporting services"
@@ -1156,6 +1229,7 @@ export default function BioIntakeForm({
                 })}
               />
               {member?.specialty && <p className="body-sm text-white-40">On the website today: {member.specialty}</p>}
+              <LeaveForMatt path="fairlead_role.focus_areas" prompt="Can’t find three that fit? Leave it for Matt" value={openNote("fairlead_role.focus_areas")} onChange={(v) => setOpen("fairlead_role.focus_areas", v)} example="e.g. “Mostly scheduling, onboarding and vendor management”" />
             </div>
             <PickGroup
               legend="Sectors"
@@ -1200,6 +1274,7 @@ export default function BioIntakeForm({
               error={err("fairlead_role.value_statement")}
               onChange={(v) => update((x) => (x.fairlead_role.value_statement = v))}
             />
+            <LeaveForMatt path="fairlead_role.value_statement" prompt="Hard to put into words, or doesn’t apply to your role? Leave it for Matt" value={openNote("fairlead_role.value_statement")} onChange={(v) => setOpen("fairlead_role.value_statement", v)} example="e.g. “I keep the firm running so the partners can be in the field”" />
           </>
         )}
 
@@ -1207,7 +1282,17 @@ export default function BioIntakeForm({
         {sectionFrame(
           "work",
           <>
-            {d.recent_engagements.map((e, i) => {
+            <LeaveForMatt
+              variant="switch"
+              path="recent_engagements"
+              prompt="I don’t have a Fairlead engagement to list yet"
+              hint="New, between engagements, or not client-facing? Matt will write around it. Anything worth knowing:"
+              value={openNote("recent_engagements")}
+              onChange={(v) => setOpen("recent_engagements", v)}
+              example="e.g. “Joined in September — first engagement starts next month”"
+            />
+            {(openNote("recent_engagements") == null || d.recent_engagements.some((e) => !isBlankEngagement(e))) &&
+            d.recent_engagements.map((e, i) => {
               const p = `recent_engagements.${i}`;
               const set = (fn: (x: Keyed<typeof e>) => void) => entry((x) => x.recent_engagements, e._k, fn);
               const pub = e.can_name_publicly === "yes";
@@ -1324,14 +1409,16 @@ export default function BioIntakeForm({
                 </div>
               );
             })}
-            <AddButton
-              path="recent_engagements"
-              error={err("recent_engagements")}
-              disabled={d.recent_engagements.length >= LIMITS.engagements}
-              onClick={() => update((x) => x.recent_engagements.push(newEngagement()))}
-            >
-              Add an engagement
-            </AddButton>
+            {openNote("recent_engagements") == null && (
+              <AddButton
+                path="recent_engagements"
+                error={err("recent_engagements")}
+                disabled={d.recent_engagements.length >= LIMITS.engagements}
+                onClick={() => update((x) => x.recent_engagements.push(newEngagement()))}
+              >
+                Add an engagement
+              </AddButton>
+            )}
             <datalist id="bio-companies">
               {companies.map((c) => (
                 <option key={c} value={c} />
@@ -1344,7 +1431,17 @@ export default function BioIntakeForm({
         {sectionFrame(
           "career",
           <>
-            {d.prior_roles.map((pr, i) => {
+            <LeaveForMatt
+              variant="switch"
+              path="prior_roles"
+              prompt="No roles before Fairlead to list"
+              hint="Came straight from school, or not sure what counts? Matt will sort it out. Anything worth knowing:"
+              value={openNote("prior_roles")}
+              onChange={(v) => setOpen("prior_roles", v)}
+              example="e.g. “Internships only, at two banks”"
+            />
+            {(openNote("prior_roles") == null || d.prior_roles.some((p) => !isBlankPriorRole(p))) &&
+            d.prior_roles.map((pr, i) => {
               const p = `prior_roles.${i}`;
               const set = (fn: (x: Keyed<typeof pr>, dd: DraftData) => void) => entry((x) => x.prior_roles, pr._k, fn);
               return (
@@ -1396,7 +1493,7 @@ export default function BioIntakeForm({
                         error={err(`${p}.title`)}
                         onChange={(v) => set((x) => (x.title = v))}
                       />
-                      <div className="grid gap-4 md:grid-cols-2">
+                      <div className="grid grid-cols-2 gap-3 md:gap-4">
                         <YearField path={`${p}.start_year`} label="Start year" value={pr.start_year} error={err(`${p}.start_year`)} onChange={(v) => set((x) => (x.start_year = v))} />
                         {SHOW.endYear(pr) && <YearField path={`${p}.end_year`} label="End year" value={pr.end_year} error={err(`${p}.end_year`)} onChange={(v) => set((x) => (x.end_year = v))} />}
                       </div>
@@ -1443,9 +1540,11 @@ export default function BioIntakeForm({
                 </div>
               );
             })}
-            <AddButton path="prior_roles" error={err("prior_roles")} disabled={d.prior_roles.length >= LIMITS.prior_roles} onClick={() => update((x) => x.prior_roles.push(newPriorRole()))}>
-              Add a role
-            </AddButton>
+            {openNote("prior_roles") == null && (
+              <AddButton path="prior_roles" error={err("prior_roles")} disabled={d.prior_roles.length >= LIMITS.prior_roles} onClick={() => update((x) => x.prior_roles.push(newPriorRole()))}>
+                Add a role
+              </AddButton>
+            )}
             <TextField
               path="earlier_career"
               label="Earlier career, in a sentence (optional)"

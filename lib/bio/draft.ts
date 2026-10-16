@@ -209,6 +209,7 @@ export function readSaved(): Saved {
     const s = JSON.parse(raw) as Partial<Saved>;
     if (s?.v !== 1) return blank;
     const draft = s.draft && typeof s.draft === "object" && s.draft.data ? s.draft : null;
+    if (draft && !Array.isArray(draft.data.open_questions)) draft.data.open_questions = [];
     return {
       v: 1,
       draft,

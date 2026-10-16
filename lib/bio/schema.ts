@@ -158,6 +158,33 @@ export interface Affiliation {
   type_custom: string;
 }
 
+/**
+ * A required question the person could not answer, left for Matt on
+ * purpose (with anything they did know). Lifts the block on that field —
+ * or, for a list, on the whole list — and is reported everywhere the
+ * answers go: the review, the email and the generator's flags.
+ */
+export interface OpenQuestion {
+  field: OpenQuestionField;
+  note: string;
+}
+
+/** The questions that can be left open, and how Matt sees each one. */
+export const OPEN_QUESTIONS = {
+  "basics.year_joined_fairlead": "Year joined Fairlead",
+  "basics.career_start_year": "Career start year",
+  "fairlead_role.service_lines": "Service lines",
+  "fairlead_role.focus_areas": "Focus areas",
+  "fairlead_role.value_statement": "The “I help portfolio companies…” sentence",
+  recent_engagements: "Recent Fairlead work (nothing to list)",
+  prior_roles: "Roles before Fairlead (nothing to list)",
+} as const;
+export type OpenQuestionField = keyof typeof OPEN_QUESTIONS;
+export const isOpenQuestionField = (f: string): f is OpenQuestionField => Object.prototype.hasOwnProperty.call(OPEN_QUESTIONS, f);
+/** Open questions on these lift every error inside the list, not just the list's own. */
+const LIST_QUESTIONS: readonly string[] = ["recent_engagements", "prior_roles"];
+const NOTE_CHARS = 400;
+
 export interface BioIntakeData {
   basics: Basics;
   fairlead_role: FairleadRole;
@@ -180,6 +207,7 @@ export interface BioIntakeData {
     do_not_mention: string;
     notes_to_matt: string;
   };
+  open_questions: OpenQuestion[];
   warnings: string[];
 }
 
@@ -256,8 +284,18 @@ export function emptyData(): BioIntakeData {
       do_not_mention: "",
       notes_to_matt: "",
     },
+    open_questions: [],
     warnings: [],
   };
+}
+
+/** An engagement entry nobody has touched (the form always shows one). */
+export function isBlankEngagement(e: Engagement): boolean {
+  return !e.company && !e.descriptor && !e.engagement_status && !e.engagement_type && !e.your_role && !e.what_you_did && !e.result && e.year == null && !e.sponsor && !e.sector;
+}
+
+export function isBlankPriorRole(p: PriorRole): boolean {
+  return !p.employer && !p.employer_descriptor && !p.title && p.start_year == null && p.end_year == null && !p.highlight;
 }
 
 /* ==========================================================================
@@ -350,6 +388,18 @@ export function prune(input: BioIntakeData): BioIntakeData {
     d.extras.languages = [];
     d.extras.languages_custom = [];
   }
+
+  // Open questions: known fields only, one each, notes capped. A list left
+  // open drops the untouched entries the form shows by default.
+  const seen = new Set<string>();
+  d.open_questions = (d.open_questions ?? []).filter((q) => {
+    if (!q || !isOpenQuestionField(q.field) || seen.has(q.field)) return false;
+    seen.add(q.field);
+    q.note = (q.note ?? "").trim().slice(0, NOTE_CHARS);
+    return true;
+  });
+  if (seen.has("recent_engagements")) d.recent_engagements = d.recent_engagements.filter((e) => !isBlankEngagement(e));
+  if (seen.has("prior_roles")) d.prior_roles = d.prior_roles.filter((p) => !isBlankPriorRole(p));
   return d;
 }
 
@@ -381,7 +431,13 @@ export function validate(d: BioIntakeData, ctx: ValidateContext = {}): { errors:
   const errors: FieldErrors = {};
   const warnings: string[] = [];
   const year = (ctx.now ?? new Date()).getUTCFullYear();
+  // A question left for Matt no longer blocks: its own path, and for a
+  // list every path inside it. Other… text boxes (*_custom) still must be
+  // filled, since the person chose them.
+  const open = new Set<string>(d.open_questions.map((q) => q.field));
+  const lifted = (path: string) => open.has(path) || [...open].some((f) => LIST_QUESTIONS.includes(f) && path.startsWith(`${f}.`));
   const err = (path: string, msg: string) => {
+    if (lifted(path)) return;
     if (!errors[path]) errors[path] = msg;
   };
 

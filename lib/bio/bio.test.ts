@@ -9,7 +9,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { bioFilename, buildBioJson, prepare, sanitize, type SubmissionMeta } from "./build";
 import { renderEmail, JSON_BEGIN, JSON_END } from "./email";
-import { BIO_GENERATOR_V1 } from "./generator";
+import { BIO_GENERATOR_V2 } from "./generator";
 import { cleanText, fixedSpelling, normLinkedIn, normName, suggestOption } from "./normalize";
 import { FOCUS_AREAS, SECTORS } from "./options";
 import { emptyData, emptyEngagement, SCHEMA_ID, type BioIntakeData, type RosterMember } from "./schema";
@@ -244,6 +244,44 @@ test("each hard requirement blocks submission", () => {
   }
 });
 
+test("a question left for Matt stops blocking and is reported", () => {
+  const d = minimal();
+  d.basics.career_start_year = null;
+  d.fairlead_role.focus_areas = [];
+  d.recent_engagements = [emptyEngagement()];
+  d.prior_roles = [];
+  // Still blocked without the escape…
+  const before = prepare(d, { now: NOW }).errors;
+  assert.ok(before["basics.career_start_year"] && before["fairlead_role.focus_areas"] && before["recent_engagements.0.descriptor"] && before["prior_roles"]);
+  // …and clear once each is left open. Unknown fields are dropped; the untouched engagement goes.
+  d.open_questions = [
+    { field: "basics.career_start_year", note: "  Around 2003, I think " },
+    { field: "fairlead_role.focus_areas", note: "" },
+    { field: "recent_engagements", note: "Not client-facing" },
+    { field: "prior_roles", note: "" },
+    { field: "basics.email" as never, note: "cannot be left open" },
+  ];
+  const { data } = ok(d);
+  assert.deepEqual(
+    data.open_questions.map((q) => q.field),
+    ["basics.career_start_year", "fairlead_role.focus_areas", "recent_engagements", "prior_roles"]
+  );
+  assert.equal(data.open_questions[0].note, "Around 2003, I think");
+  assert.deepEqual(data.recent_engagements, []);
+  // Other… text is still required even on a field left open.
+  const e = minimal();
+  e.fairlead_role.focus_areas = ["Other…"];
+  e.open_questions = [{ field: "fairlead_role.focus_areas", note: "" }];
+  assert.ok(prepare(e, { now: NOW }).errors["fairlead_role.focus_areas_custom"]);
+  // The email leads with them and says so in the subject.
+  const file = buildBioJson(data, META);
+  const mail = renderEmail(file, JSON.stringify(file));
+  assert.match(mail.subject, /4 open questions$/);
+  assert.match(mail.text, /OPEN QUESTIONS — ASK BEFORE DRAFTING\n\n- Career start year: Around 2003, I think\n- Focus areas \(nothing added\)/);
+  // The server never trusts the field name.
+  assert.deepEqual(sanitize({ open_questions: [{ field: "basics.email", note: "x" }, { field: "prior_roles", note: 7 }] }).open_questions, [{ field: "prior_roles", note: "" }]);
+});
+
 test("new hires may list no prior roles (soft warning instead)", () => {
   const d = minimal();
   d.basics.roster_match = "not_listed";
@@ -462,8 +500,8 @@ test("buildBioJson: schema, verbatim instructions, parseable, filename", () => {
   const parsed = JSON.parse(JSON.stringify(file, null, 2));
   assert.equal(parsed.schema, SCHEMA_ID);
   assert.equal(parsed.schema, "fairlead.bio-intake/v1");
-  assert.deepEqual(parsed.instructions, JSON.parse(JSON.stringify(BIO_GENERATOR_V1)));
-  assert.equal(parsed.instructions.version, "bio-generator/v1");
+  assert.deepEqual(parsed.instructions, JSON.parse(JSON.stringify(BIO_GENERATOR_V2)));
+  assert.equal(parsed.instructions.version, "bio-generator/v2");
   assert.equal(parsed.submission.submission_id, META.submission_id);
   assert.equal(bioFilename(file), "bio_alex-macdonald_20261015-1542.json");
 });

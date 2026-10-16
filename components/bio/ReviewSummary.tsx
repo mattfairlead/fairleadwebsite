@@ -1,7 +1,7 @@
 "use client";
 
 import { CAN_NAME, CONCURRENT_ROLE_TYPES, HEADSHOT_CHOICES, LEADERSHIP_MODES, PRONOUNS } from "@/lib/bio/options";
-import { SECTIONS, type BioIntakeData, type SectionId } from "@/lib/bio/schema";
+import { OPEN_QUESTIONS, SECTIONS, sectionOf, type BioIntakeData, type SectionId } from "@/lib/bio/schema";
 
 /**
  * The review screen's answers: one card per step, each with an Edit button
@@ -112,6 +112,29 @@ export default function ReviewSummary({
   const general = warnings.filter((w) => !warningSection(w));
   return (
     <div className="flex flex-col gap-4">
+      {data.open_questions.length > 0 && (
+        <section aria-labelledby="rv-open" className="bio-rise bio-note bio-note-gold flex flex-col gap-4 p-4 sm:p-5 md:p-7">
+          <div className="flex flex-col gap-1">
+            <h3 id="rv-open" className="label text-gold">
+              Left for Matt
+            </h3>
+            <p className="body-sm text-white-60">He’ll ask you about these before drafting. They don’t stop you sending.</p>
+          </div>
+          <ul className="flex flex-col gap-2">
+            {data.open_questions.map((q) => (
+              <li key={q.field} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                <span className="flex min-w-0 flex-col">
+                  <span className="body-md text-white-100">{OPEN_QUESTIONS[q.field]}</span>
+                  {q.note && <span className="body-sm text-white-60">“{q.note}”</span>}
+                </span>
+                <button type="button" className="bio-chip button" onClick={() => onEdit(sectionOf(q.field))} aria-label={`Edit ${OPEN_QUESTIONS[q.field]}`}>
+                  Answer it
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       {general.length > 0 && <Notes items={general} />}
       {SECTIONS.map((s, i) => {
         const rows = rowsFor(s.id, data).filter(([, v]) => v && v.trim());
@@ -120,7 +143,7 @@ export default function ReviewSummary({
           <section
             key={s.id}
             aria-labelledby={`rv-${s.id}`}
-            className="bio-rise bio-entry flex flex-col gap-5 p-5 md:p-7"
+            className="bio-rise bio-entry flex flex-col gap-5 p-4 sm:p-5 md:p-7"
             style={{ animationDelay: `${Math.min(i * 40, 280)}ms` }}
           >
             <div className="flex items-center justify-between gap-4">
@@ -138,7 +161,7 @@ export default function ReviewSummary({
               </button>
             </div>
             {rows.length ? (
-              <dl className="grid gap-x-8 gap-y-2 sm:grid-cols-[11rem_minmax(0,1fr)]">
+              <dl className="grid gap-x-8 gap-y-2 sm:grid-cols-[11rem_minmax(0,1fr)] max-sm:gap-y-1">
                 {rows.map(([k, v], j) => (
                   <div key={j} className="contents">
                     <dt className="body-sm text-white-40 max-sm:mt-2 max-sm:empty:hidden">{k}</dt>
