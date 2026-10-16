@@ -59,6 +59,14 @@ export default function ContactPage() {
                 </ul>
               </div>
               <div className="flex flex-col gap-2">
+                <span className="label text-white-50">Mail</span>
+                <address className="body-lg not-italic text-white-60">
+                  1302 Waugh Drive, Unit 388
+                  <br />
+                  Houston, TX 77019-3908
+                </address>
+              </div>
+              <div className="flex flex-col gap-2">
                 <span className="label text-white-50">Elsewhere</span>
                 <a
                   href="https://www.linkedin.com/company/fairlead-advisors-llc"

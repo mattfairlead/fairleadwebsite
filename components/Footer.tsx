@@ -51,8 +51,8 @@ const linkCls = "body-sm -my-1 py-1 text-white-40 transition-colors duration-200
  * column row carries a fourth column: a compact dot-matrix map of the
  * lower 48 with the four cities as live dots — "cities", not "offices":
  * partners flagged the tax-presence exposure of claiming an office in
- * every state. No personal emails, no fax. Mailing address small-print
- * only (TODO §9: keep or drop).
+ * every state. No personal emails, no fax. The mailing address is small
+ * print in the bottom bar only.
  */
 export default function Footer() {
   return (
@@ -137,7 +137,9 @@ export default function Footer() {
             <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-6">
               <span className="body-sm text-white-40">© {new Date().getFullYear()} Fairlead Advisors</span>
               <span className="label text-white-40">Operating inside portfolios since 2010</span>
-              {/* TODO(§9): mailing address small print — keep or drop, pending decision */}
+              <address className="body-sm not-italic text-white-40">
+                1302 Waugh Drive, Unit 388, Houston, TX 77019-3908
+              </address>
             </div>
           </div>
         </div>
