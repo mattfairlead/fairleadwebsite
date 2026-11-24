@@ -170,7 +170,7 @@ The page that proves the "AI" half without shouting. Title: **Custom AI solution
 - Source data: Matt's March 2026 Engagement Summary (five engagement categories) — import as CSV.
 
 ### 4.5 Team `/team`
-- **Partners** (Adam Carte, Renee Sass, Charles Abbott, Jason Salgo) — photo, 2-sentence role, expandable full bio.
+- **Partners** (Adam Carte, Renee Sass, Jason Salgo) — photo, 2-sentence role, expandable full bio.
 - **Team** — grid of cards (photo, name, title, one-line specialty). Click → drawer with full bio. Pulled from Supabase `team` table so members can self-edit via the marketing hub (per June 4 meeting).
 - Standardize titles, fix typos, one photo aspect ratio, one credential format ("CPA," "P.E.," "CFA").
 - Respect opt-outs; `visible` boolean in the table.
